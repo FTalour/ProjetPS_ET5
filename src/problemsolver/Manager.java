@@ -23,7 +23,7 @@ import ui.Afficheur;
 public class Manager{
     private File fichier;
     private Probleme probleme;
-    private Solveur<Probleme<?, ?>> solveur;
+    private Solveur solveur;
     private boolean minimiser;
     Donnees donnees;
     
@@ -51,6 +51,8 @@ public class Manager{
         }catch(Exception e){
         	Afficheur.erreurFataleDialog(e);
         }
+		probleme.setUseHeuristique(false);
+		probleme.setUseStochastique(false);
         solveur.setProbleme(probleme);
         solveur.init();
         

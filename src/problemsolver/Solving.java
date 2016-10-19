@@ -11,27 +11,23 @@ import ui.Afficheur;
 import ui.GraphFrame;
 
 public class Solving extends Thread {
-	private Solveur solveur;
-	private boolean min;
+	private final Solveur solveur;
+	private final boolean min;
 	
 	public Solving(Solveur s, boolean m) {
 		solveur = s;
 		min = m;
 	}
 	
+        @Override
 	public void run(){
 		try {
 			Donnees d =solveur.resoudre(min);
-			SwingUtilities.invokeLater(new Runnable(){
-
-				@Override
-				public void run() {
-					ProblemSolver.getMainFrame().getGFrame().showDonnees(GraphFrame.TAB_SOLUTION, d, Color.BLACK);
-					Afficheur.erreurDialog("Terminé en "+ProblemSolver.getMainFrame().getClock());
-					ProblemSolver.getMainFrame().stopClock();
-				}
-				
-			});
+			SwingUtilities.invokeLater(() -> {
+                            ProblemSolver.getMainFrame().getGFrame().showDonnees(GraphFrame.TAB_SOLUTION, d, Color.BLACK);
+                            Afficheur.infoDialog("Terminé en "+ProblemSolver.getMainFrame().getClock());
+                            ProblemSolver.getMainFrame().stopClock();
+                        });
 		} catch (ErreurDonneesException e) {
 			Afficheur.erreurFataleDialog(e);
 		}

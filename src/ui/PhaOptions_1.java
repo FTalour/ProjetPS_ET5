@@ -42,14 +42,6 @@ public class PhaOptions extends javax.swing.JDialog {
 
         boutonOK = new javax.swing.JButton();
         boutonAnnuler = new javax.swing.JButton();
-        boutonAvance = new javax.swing.JButton();
-        panelAvance = new javax.swing.JPanel();
-        spinnerVar = new javax.swing.JSpinner();
-        sliderVar = new javax.swing.JSlider();
-        spinnerDet = new javax.swing.JSpinner();
-        sliderDet = new javax.swing.JSlider();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         spinnerScenar = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
@@ -74,90 +66,15 @@ public class PhaOptions extends javax.swing.JDialog {
             }
         });
 
-        boutonAvance.setText("Avancé ↓");
-        boutonAvance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonAvanceActionPerformed(evt);
-            }
-        });
-
-        panelAvance.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        spinnerVar.setModel(new javax.swing.SpinnerNumberModel(20, 1, 100, 1));
-        spinnerVar.setRequestFocusEnabled(false);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderVar, org.jdesktop.beansbinding.ELProperty.create("${value}"), spinnerVar, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        sliderVar.setMinimum(1);
-        sliderVar.setToolTipText("");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinnerVar, org.jdesktop.beansbinding.ELProperty.create("${value}"), sliderVar, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        spinnerDet.setModel(new javax.swing.SpinnerNumberModel(20, 1, 100, 1));
-        spinnerDet.setRequestFocusEnabled(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderDet, org.jdesktop.beansbinding.ELProperty.create("${value}"), spinnerDet, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        sliderDet.setMinimum(1);
-        sliderDet.setToolTipText("");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinnerDet, org.jdesktop.beansbinding.ELProperty.create("${value}"), sliderDet, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        jLabel3.setText("Pourcentage de variation:");
-
-        jLabel4.setText("Pourcentage de déterministe:");
-
-        javax.swing.GroupLayout panelAvanceLayout = new javax.swing.GroupLayout(panelAvance);
-        panelAvance.setLayout(panelAvanceLayout);
-        panelAvanceLayout.setHorizontalGroup(
-            panelAvanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelAvanceLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelAvanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelAvanceLayout.createSequentialGroup()
-                        .addComponent(spinnerDet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sliderDet, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(panelAvanceLayout.createSequentialGroup()
-                        .addComponent(spinnerVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sliderVar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(panelAvanceLayout.createSequentialGroup()
-                        .addGroup(panelAvanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        panelAvanceLayout.setVerticalGroup(
-            panelAvanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelAvanceLayout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelAvanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spinnerVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sliderVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelAvanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spinnerDet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sliderDet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         spinnerScenar.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
         spinnerScenar.setRequestFocusEnabled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderScenar, org.jdesktop.beansbinding.ELProperty.create("${value}"), spinnerScenar, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderScenar, org.jdesktop.beansbinding.ELProperty.create("${value}"), spinnerScenar, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        jLabel1.setText("Quantité de scénarios:");
+        jLabel1.setText("Quantité d'échantillons:");
 
         sliderScenar.setMajorTickSpacing(100);
         sliderScenar.setMaximum(500);
@@ -184,7 +101,7 @@ public class PhaOptions extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 24, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(sliderScenar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -220,11 +137,7 @@ public class PhaOptions extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelAvance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(boutonAvance)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(boutonOK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -235,11 +148,7 @@ public class PhaOptions extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(boutonAvance)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelAvance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(boutonOK)
                     .addComponent(boutonAnnuler))
@@ -261,36 +170,16 @@ public class PhaOptions extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_boutonAnnulerActionPerformed
 
-    private void boutonAvanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAvanceActionPerformed
-        if(panelAvance.isVisible()){
-            panelAvance.setVisible(false);
-            boutonAvance.setText("Avance ↓");
-            pack();
-        }else{
-            panelAvance.setVisible(true);
-            boutonAvance.setText("Avance ↑");
-            pack();
-        }
-    }//GEN-LAST:event_boutonAvanceActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boutonAnnuler;
-    private javax.swing.JButton boutonAvance;
     private javax.swing.JButton boutonOK;
     private javax.swing.JComboBox<String> comboBoxSolveurs;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JPanel panelAvance;
-    private javax.swing.JSlider sliderDet;
     private javax.swing.JSlider sliderScenar;
-    private javax.swing.JSlider sliderVar;
-    private javax.swing.JSpinner spinnerDet;
     private javax.swing.JSpinner spinnerScenar;
-    private javax.swing.JSpinner spinnerVar;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -300,6 +189,10 @@ public class PhaOptions extends javax.swing.JDialog {
             switch(comboBoxSolveurs.getItemAt(comboBoxSolveurs.getSelectedIndex())){
                 case "recuit":
                     second = new Recuit();
+                    break;
+                case "PHA":
+                    break;
+                case "SAA":
                     break;
                 default:
                     second = null;

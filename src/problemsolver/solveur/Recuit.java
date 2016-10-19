@@ -37,7 +37,7 @@ public class Recuit extends Solveur<Probleme>{
     		while(i<n*n){
     			Donnees xPrime = getProbleme().voisinage(x);
     			double deltaF = getProbleme().callFonctionObjectif(d, xPrime) - getProbleme().callFonctionObjectif(d, x);
-    			if (deltaF < 0 == minimiser){
+    			if ((deltaF < 0) == minimiser){
     				x = xPrime;
     				if (getProbleme().callFonctionObjectif(d, x) < fMin){
     					fMin = getProbleme().callFonctionObjectif(d, x);
@@ -49,8 +49,6 @@ public class Recuit extends Solveur<Probleme>{
     			}
     			i = i + 1;
     		}
-    		if(getAffiche())
-    			criticalGraph(x, "Temperature: "+T+"\nTour optimal: "+xMeilleur);
         	T = 0.85 * T;
     	}
     	return xMeilleur;

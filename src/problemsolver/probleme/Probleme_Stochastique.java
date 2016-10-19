@@ -58,5 +58,11 @@ public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees
         return tr;
     }
     
+    public U solutionInitial() throws ErreurDonneesException{
+    	if(getHeuristique() && getTr() != null)
+    		return solutionInitialHeur(getTr());
+    	else
+    		return solutionInitialBase();
+    }
     
 }

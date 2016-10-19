@@ -64,6 +64,7 @@ public class PhiLambda extends Penalites<Circuit_TourReference, Circuit>{
 
 
 	@Override
+
 	public boolean ajuster(Circuit_TourReference tr, Circuit solution) {
 		ArrayList<Arete> tour = solution.getParcourt();
 		boolean ret = true;
@@ -90,6 +91,7 @@ public class PhiLambda extends Penalites<Circuit_TourReference, Circuit>{
 			phi.put(a, lastPhi*ALPHA);
 		}
 		return ret;
+
 	}
 
 }

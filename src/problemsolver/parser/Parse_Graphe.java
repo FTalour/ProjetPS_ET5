@@ -7,10 +7,12 @@ package problemsolver.parser;
 
 import java.io.BufferedReader;
 import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,13 +21,13 @@ import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.Noeud;
 import problemsolver.exceptions.ErreurDonneesException;
 import ui.Afficheur;
-import mdsj.MDSJ;
 
 /**
  *
  * @author Clément
  */
 public class Parse_Graphe extends Parser<Graphe_Complet>{
+
 
     @Override
     public Graphe_Complet Parse(File f) throws ErreurDonneesException, IOException, NullPointerException{
@@ -35,6 +37,7 @@ public class Parse_Graphe extends Parser<Graphe_Complet>{
     	
     	int numPoint = 0;
     	Noeud nAct = null;
+
     	String s;
     	while ((s = in.readLine()) != null){
     		if(s.contains("<vertex>")){ // Nouveau point x
@@ -72,13 +75,6 @@ public class Parse_Graphe extends Parser<Graphe_Complet>{
 
     }
     
-    private void RepartitionNoeudsMDSJ(Graphe_Complet g){
-    	double[][] x;
-    	x = MDSJ.classicalScaling(g.getDoubleArray(), 2);
-    	
-    	g.setCoordonnees(x);
-    }
-    
     private void RepartitionNoeuds(Graphe_Complet g){
     	int n = g.getListNoeuds().size();
     	double[][] x = new double[2][n];
@@ -95,4 +91,5 @@ public class Parse_Graphe extends Parser<Graphe_Complet>{
     	
     	g.setCoordonnees(x);
     }
+
 }

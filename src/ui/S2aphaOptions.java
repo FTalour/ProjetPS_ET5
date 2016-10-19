@@ -13,13 +13,13 @@ import problemsolver.solveur.Solveur;
  *
  * @author Clément
  */
-public class PhaOptions extends javax.swing.JDialog {
+public class S2aphaOptions extends javax.swing.JDialog {
     private boolean OKpressed;
     /**
      * Creates new form NewJFrame
      * @param parent
      */
-    public PhaOptions(java.awt.Frame parent) {
+    public S2aphaOptions(java.awt.Frame parent) {
         super(parent, true);
         initComponents();
         OKpressed = false;
@@ -57,6 +57,9 @@ public class PhaOptions extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         comboBoxSolveurs = new javax.swing.JComboBox<>();
+        sliderScenar1 = new javax.swing.JSlider();
+        spinnerScenar1 = new javax.swing.JSpinner();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -174,6 +177,18 @@ public class PhaOptions extends javax.swing.JDialog {
         comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit" }));
         comboBoxSolveurs.setSelectedItem("Recuit");
 
+        sliderScenar1.setMajorTickSpacing(100);
+        sliderScenar1.setMaximum(500);
+        sliderScenar1.setMinimum(1);
+        sliderScenar1.setMinorTickSpacing(25);
+        sliderScenar1.setPaintTicks(true);
+        sliderScenar1.setToolTipText("");
+
+        spinnerScenar1.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
+        spinnerScenar1.setRequestFocusEnabled(false);
+
+        jLabel5.setText("Quantité d'échantillons:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -189,16 +204,26 @@ public class PhaOptions extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(sliderScenar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(comboBoxSolveurs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(spinnerScenar)
+                            .addComponent(sliderScenar1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(spinnerScenar1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(spinnerScenar))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel5))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spinnerScenar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sliderScenar1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spinnerScenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,14 +307,17 @@ public class PhaOptions extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel panelAvance;
     private javax.swing.JSlider sliderDet;
     private javax.swing.JSlider sliderScenar;
+    private javax.swing.JSlider sliderScenar1;
     private javax.swing.JSlider sliderVar;
     private javax.swing.JSpinner spinnerDet;
     private javax.swing.JSpinner spinnerScenar;
+    private javax.swing.JSpinner spinnerScenar1;
     private javax.swing.JSpinner spinnerVar;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

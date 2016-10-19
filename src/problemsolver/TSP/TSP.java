@@ -15,9 +15,9 @@ import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.Noeud;
 import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.Circuit_TourReference;
+import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.parser.Parse_Graphe;
-import problemsolver.parser.Parse_Graphe_SAX;
 import problemsolver.probleme.DonneesScenario;
 import problemsolver.probleme.PhiLambda;
 import problemsolver.probleme.Probleme_Stochastique;
@@ -28,8 +28,11 @@ import problemsolver.probleme.Probleme_Stochastique;
  */
 public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>{
 
+	private HashSet<Noeud> intouchable;
+	
     public TSP() {
-        super(new Parse_Graphe_SAX());
+        super(new Parse_Graphe());
+        intouchable = new HashSet<Noeud>();
     }
     
     @Override
@@ -46,6 +49,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
     			valeurPhi += Math.pow((0 - this.getTr().getValeur(a)) * this.getDs().getPenalites(gC).getPhi(a), 2);
     		}
     	}
+
     	valeurTotale += valeurPhi/2;
     	return valeurTotale;
     }
@@ -82,8 +86,8 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
     }
 
     @Override
-    public Circuit_Hamiltonien solutionInitial() throws ErreurDonneesException {
-        ArrayList<Noeud> parcourt = new ArrayList<Noeud>();
+    public Circuit_Hamiltonien solutionInitialBase() throws ErreurDonneesException {
+    	ArrayList<Noeud> parcourt = new ArrayList<Noeud>();
         for(Noeud n:getJeu().getListNoeuds()){
         	parcourt.add(n);
         }
@@ -91,7 +95,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
     }
 
     @Override
-    public Circuit_Hamiltonien voisinage(Circuit_Hamiltonien solution) {
+    public Circuit_Hamiltonien voisinageBase(Circuit_Hamiltonien solution) {
     	int a, b;
     	do{
 	    	a = (int) (Math.random()*solution.getNombreNoeuds());
@@ -107,6 +111,81 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	@Override
 	public int getTaille() {
 		return this.getJeu().getListNoeuds().size();
+	}
+
+	@Override
+	public Circuit_Hamiltonien solutionInitialHeur(TourReference tr) throws ErreurDonneesException {
+		Circuit_Hamiltonien ret = solutionInitialBase();
+		Circuit_TourReference tor = (Circuit_TourReference) tr;
+		for(Arete a:tor.getKeySet()){
+			if(tor.getValeur(a) == 1.){
+				if(!ret.getParcourt().contains(a)){
+					int b = ret.getNoeudPlace(a.getNoeudA());
+					int c = ret.getNoeudPlace(a.getNoeudB());
+					if(b+1 < ret.getNombreNoeuds())
+						ret.swapNoeud(c, b+1);
+					else
+						ret.swapNoeud(c, b-1);
+					intouchable.add(a.getNoeudA());
+					intouchable.add(a.getNoeudB());
+				}
+			}
+		}
+		for(Arete a:tor.getKeySet()){
+			if(tor.getValeur(a) == 0.){
+				if(!ret.getParcourt().contains(a)){
+					int n = 0;
+					if(intouchable.contains(a.getNoeudA()))
+						n = ret.getNoeudPlace(a.getNoeudB());
+					else
+						n = ret.getNoeudPlace(a.getNoeudA());
+					
+					ret = voisinageHeur(ret, n);
+				}
+			}
+		}
+	return ret;
+	}
+	
+
+	@Override
+	public Circuit_Hamiltonien voisinageHeur(Circuit_Hamiltonien solution) {
+		int a, b;
+    	
+		do{
+			do{
+		
+	    	a = (int) (Math.random()*solution.getNombreNoeuds());
+	    	b = (int) (Math.random()*solution.getNombreNoeuds());
+			
+			}while(a == b && !intouchable.contains(solution.getOrdre().get(a)) && !intouchable.contains(solution.getOrdre().get(b)));
+		}while(getTr().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
+    			&& getTr().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
+    	
+    	Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
+    	ret.swapNoeud(a, b);
+    	
+        return ret;
+	}
+	
+	public Circuit_Hamiltonien voisinageHeur(Circuit_Hamiltonien solution, int a) {
+		int b;
+    	
+		do{
+			do{
+		
+	    	b = (int) (Math.random()*solution.getNombreNoeuds());
+			
+			}while(a == b && !intouchable.contains(solution.getOrdre().get(b)));
+		}while(getTr().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
+    			&& getTr().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
+    	
+    	Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
+    	ret.swapNoeud(a, b);
+    	
+    	
+        
+		return ret;
 	}
     
 }

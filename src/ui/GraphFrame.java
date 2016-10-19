@@ -11,8 +11,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +21,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import problemsolver.ProblemSolver;
 import problemsolver.donnees.Donnees;
@@ -40,7 +36,7 @@ public class GraphFrame extends javax.swing.JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int TAB_DONNEES = 0, TAB_RESOLUTION = 1, TAB_SOLUTION = 2;
+	public static final int TAB_DONNEES = 0, TAB_SOLUTION = 1;
     
     /**
      * Creates new form GraphFrame
@@ -64,10 +60,6 @@ public class GraphFrame extends javax.swing.JFrame {
         graphDonnees = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaDonnees = new javax.swing.JTextArea();
-        panelResolution = new javax.swing.JSplitPane();
-        graphResolution = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        textAreaResolution = new javax.swing.JTextArea();
         panelSolution = new javax.swing.JSplitPane();
         graphSolution = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -126,42 +118,6 @@ public class GraphFrame extends javax.swing.JFrame {
         panelDonnees.setBottomComponent(jScrollPane1);
 
         panel.addTab("Données", panelDonnees);
-
-        panelResolution.setDividerLocation(200);
-        panelResolution.setDividerSize(3);
-        panelResolution.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        panelResolution.setResizeWeight(1.0);
-        panelResolution.setContinuousLayout(true);
-
-        graphResolution.setBackground(new java.awt.Color(255, 255, 255));
-        graphResolution.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                graphResolutionComponentResized(evt);
-            }
-        });
-
-        javax.swing.GroupLayout graphResolutionLayout = new javax.swing.GroupLayout(graphResolution);
-        graphResolution.setLayout(graphResolutionLayout);
-        graphResolutionLayout.setHorizontalGroup(
-            graphResolutionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        graphResolutionLayout.setVerticalGroup(
-            graphResolutionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        panelResolution.setLeftComponent(graphResolution);
-
-        textAreaResolution.setEditable(false);
-        textAreaResolution.setColumns(20);
-        textAreaResolution.setLineWrap(true);
-        textAreaResolution.setRows(4);
-        jScrollPane2.setViewportView(textAreaResolution);
-
-        panelResolution.setRightComponent(jScrollPane2);
-
-        panel.addTab("Resolution", panelResolution);
 
         panelSolution.setDividerLocation(200);
         panelSolution.setDividerSize(3);
@@ -249,19 +205,7 @@ public class GraphFrame extends javax.swing.JFrame {
         }
         repaint();
     }
-    
-    private void graphSolutionComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_graphSolutionComponentResized
-        graphComponentResized(graphSolution);
-    }//GEN-LAST:event_graphSolutionComponentResized
-    
-    private void graphResolutionComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_graphResolutionComponentResized
-        graphComponentResized(graphResolution);
-    }//GEN-LAST:event_graphResolutionComponentResized
-
-    private void graphDonneesComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_graphDonneesComponentResized
-        graphComponentResized(graphDonnees);
-    }//GEN-LAST:event_graphDonneesComponentResized
-
+        
     private void boutonImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonImageActionPerformed
         try{
             JFileChooser jfc;
@@ -350,6 +294,14 @@ public class GraphFrame extends javax.swing.JFrame {
         } catch (IGotItException ex) {}
     }//GEN-LAST:event_boutonTexteActionPerformed
 
+    private void graphSolutionComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_graphSolutionComponentResized
+        graphComponentResized(graphSolution);
+    }//GEN-LAST:event_graphSolutionComponentResized
+
+    private void graphDonneesComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_graphDonneesComponentResized
+        graphComponentResized(graphDonnees);
+    }//GEN-LAST:event_graphDonneesComponentResized
+
     public BufferedImage createImage(JPanel panel) {
 
     int w = panel.getWidth();
@@ -365,17 +317,13 @@ public class GraphFrame extends javax.swing.JFrame {
     private javax.swing.JButton boutonImage;
     private javax.swing.JButton boutonTexte;
     private javax.swing.JPanel graphDonnees;
-    private javax.swing.JPanel graphResolution;
     private javax.swing.JPanel graphSolution;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane panel;
     private javax.swing.JSplitPane panelDonnees;
-    private javax.swing.JSplitPane panelResolution;
     private javax.swing.JSplitPane panelSolution;
     private javax.swing.JTextArea textAreaDonnees;
-    private javax.swing.JTextArea textAreaResolution;
     private javax.swing.JTextArea textAreaSolution;
     // End of variables declaration//GEN-END:variables
 
@@ -401,8 +349,6 @@ public class GraphFrame extends javax.swing.JFrame {
         switch(index){
             case(TAB_DONNEES):
                 return graphDonnees;
-            case(TAB_RESOLUTION):
-                return graphResolution;
             case(TAB_SOLUTION):
                 return graphSolution;
             default:
@@ -414,8 +360,6 @@ public class GraphFrame extends javax.swing.JFrame {
         switch(index){
             case(TAB_DONNEES):
                 return textAreaDonnees;
-            case(TAB_RESOLUTION):
-                return textAreaResolution;
             case(TAB_SOLUTION):
                 return textAreaSolution;
             default:

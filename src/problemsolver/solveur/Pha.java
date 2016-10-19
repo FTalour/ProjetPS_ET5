@@ -6,6 +6,8 @@
 package problemsolver.solveur;
 
 import java.util.ArrayList;
+import problemsolver.donnees.Graphe;
+import problemsolver.donnees.solutions.TourReference;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -42,6 +44,7 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 
     @SuppressWarnings("unchecked")
     @Override
+
 	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser) throws ErreurDonneesException{
 			double t = 0;
 		    boolean b;
@@ -67,22 +70,29 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 				getProbleme().getTr().calculer(listSolution.values());
 				b = true;
 				for(Donnees d:listSolution.keySet()){
-					//Si b = false, on le laisse à false, sinon on le met à la valeur de retour du truc. On met le calcul avant pour l'exécuter
-					//peut importe la valeur de b.
 					b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
 					getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 				}
 			}while(!b);
-			Afficheur.erreurDialog("Terminé en "+t+" tours");
+			Afficheur.infoDialog("Terminé en "+t+" tours");
 			return getProbleme().getTr();
 	}
+
     
     @Override
     public String toString(){
+        return "Moyenne des données déterministes "+donneesString();
+    }
+    
+    public String donneesString(){
         if(variation == DEFVAR && pourcentDet == DEFPER)
-            return "Pha ("+nombreScenarios+" scenarios, avec "+secondSolveur+")";
+                return "("+nombreScenarios+" scenarios, avec "+secondSolveur+")";
         else
-            return "Pha ("+nombreScenarios+" scenarios, variation "+variation+"% et "+pourcentDet+"% déterminisne, avec "+secondSolveur+")";
+            return "("+nombreScenarios+" scenarios, variation "+variation+"% et "+pourcentDet+"% déterminisne, avec "+secondSolveur+")";
+    }
+
+    public Solveur<Probleme> getSolveur() {
+        return secondSolveur;
     }
 
 	@Override

@@ -11,10 +11,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.Thread.State;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -89,6 +87,9 @@ public class MainFrame extends javax.swing.JFrame {
         menuSolveur = new javax.swing.JMenu();
         menuItemRecuit = new javax.swing.JMenuItem();
         menuItemPHA = new javax.swing.JMenuItem();
+        menuItemPHA1 = new javax.swing.JMenuItem();
+        menuItemPHA2 = new javax.swing.JMenuItem();
+        menuItemTourPha = new javax.swing.JMenuItem();
         menuMinMax = new javax.swing.JMenu();
         menuItemMin = new javax.swing.JCheckBoxMenuItem();
         menuItemMax = new javax.swing.JCheckBoxMenuItem();
@@ -122,11 +123,7 @@ public class MainFrame extends javax.swing.JFrame {
         boutonDemarrer.setText("Démarrer");
         boutonDemarrer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-					boutonDemarrerActionPerformed(evt);
-				} catch (ErreurDonneesException e) {
-					Afficheur.erreurFataleDialog(e);
-				}
+                boutonDemarrerActionPerformed(evt);
             }
         });
 
@@ -226,6 +223,30 @@ public class MainFrame extends javax.swing.JFrame {
         });
         menuSolveur.add(menuItemPHA);
 
+        menuItemPHA1.setText("SAA");
+        menuItemPHA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemPHA1ActionPerformed(evt);
+            }
+        });
+        menuSolveur.add(menuItemPHA1);
+
+        menuItemPHA2.setText("S2APHA");
+        menuItemPHA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemPHA2ActionPerformed(evt);
+            }
+        });
+        menuSolveur.add(menuItemPHA2);
+
+        menuItemTourPha.setText("Tour référence");
+        menuItemTourPha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemTourPhaActionPerformed(evt);
+            }
+        });
+        menuSolveur.add(menuItemTourPha);
+
         menuMinMax.setText("Minimiser/Maximiser");
 
         menuItemMin.setSelected(true);
@@ -322,22 +343,27 @@ public class MainFrame extends javax.swing.JFrame {
             updateFichier(new File(textFieldFichier.getText()));
     }//GEN-LAST:event_textFieldFichierActionPerformed
 
-    private void boutonDemarrerActionPerformed(java.awt.event.ActionEvent evt) throws ErreurDonneesException {//GEN-FIRST:event_boutonDemarrerActionPerformed
-    	startClock();
-    	new Thread(){
-    		public void run(){
-    			bolocks();
-    		}
-    	}.start();
-    	new Thread(){
-    		public void run(){
-    			try {
-					manager.demarrer();
-				} catch (ErreurDonneesException e) {
-					Afficheur.erreurDialog("Erreur dans les données");
-				}
-    		}
-    	}.start();
+    private void boutonDemarrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonDemarrerActionPerformed
+    	try{
+            startClock();
+            new Thread(){
+                    public void run(){
+                            bolocks();
+                    }
+            }.start();
+            new Thread(){
+                    public void run(){
+                            try {
+                                            manager.demarrer();
+                                    } catch (ErreurDonneesException e) {
+                                            Afficheur.erreurDialog("Erreur dans les données");
+                                    }
+                    }
+            }.start();
+        }catch(Exception e){
+            stopClock();
+            Afficheur.erreurFataleDialog(e);
+        }
     }//GEN-LAST:event_boutonDemarrerActionPerformed
 
     public synchronized void startClock(){
@@ -365,16 +391,16 @@ public class MainFrame extends javax.swing.JFrame {
         updateLabelSolveur();
     }//GEN-LAST:event_menuItemMinActionPerformed
 
-    private void menuItemPHAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemPHAActionPerformed
+    private void menuItemPHAActionPerformed(java.awt.event.ActionEvent evt) {                                            
         PhaOptions optPha = new PhaOptions(this);
         optPha.setLocationRelativeTo(null);
         optPha.setVisible(true);
-        Pha pha = optPha.getPha();
-        if(pha != null){
-            manager.setSolveur(pha);
+        Pha mt = optPha.getPha();
+        if(mt != null){
+            manager.setSolveur(new RecuitPha(mt));
         }
         updateLabelSolveur();
-    }//GEN-LAST:event_menuItemPHAActionPerformed
+    }                                           
 
     private void menuItemTSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemTSPActionPerformed
         manager.setProbleme(new TSP());
@@ -386,7 +412,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void bolocks(){
 		new Thread(new Runnable(){
-
 			@Override
 			public void run() {
 				try{
@@ -398,14 +423,16 @@ public class MainFrame extends javax.swing.JFrame {
 						}
 					});
 				} catch (FileNotFoundException | NullPointerException e) {
+                                    stopClock();
 					Afficheur.erreurDialog("Fichier introuvable");
 				} catch (ErreurDonneesException e) {
+                                    stopClock();
 					Afficheur.erreurDialog("Erreur dans les données");
-					e.printStackTrace();
 				} catch (IOException e) {
+                                    stopClock();
 					Afficheur.erreurDialog("Erreur de lecture du fichier");
-					e.printStackTrace();
 				} catch (Exception e){
+                                    stopClock();
 					Afficheur.erreurFataleDialog(e);
 				}
 			}
@@ -417,6 +444,25 @@ public class MainFrame extends javax.swing.JFrame {
         gFrame.setLocationRelativeTo(null);
         gFrame.setVisible(true);
     }//GEN-LAST:event_menuItemVisionneuseActionPerformed
+
+    private void menuItemTourPhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemTourPhaActionPerformed
+        PhaOptions optPha = new PhaOptions(this);
+        optPha.setLocationRelativeTo(null);
+        optPha.setVisible(true);
+        Pha pha = optPha.getPha();
+        if(pha != null){
+            manager.setSolveur(pha);
+        }
+        updateLabelSolveur();
+    }//GEN-LAST:event_menuItemTourPhaActionPerformed
+
+    private void menuItemPHA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemPHA1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuItemPHA1ActionPerformed
+
+    private void menuItemPHA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemPHA2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuItemPHA2ActionPerformed
 
     private void updateLabelSolveur(){
         String txt = (manager.isMinimiser())?"minimiser":"maximiser";
@@ -462,8 +508,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem menuItemMax;
     private javax.swing.JCheckBoxMenuItem menuItemMin;
     private javax.swing.JMenuItem menuItemPHA;
+    private javax.swing.JMenuItem menuItemPHA1;
+    private javax.swing.JMenuItem menuItemPHA2;
     private javax.swing.JMenuItem menuItemRecuit;
     private javax.swing.JMenuItem menuItemTSP;
+    private javax.swing.JMenuItem menuItemTourPha;
     private javax.swing.JMenuItem menuItemVisionneuse;
     private javax.swing.JMenu menuMinMax;
     private javax.swing.JMenu menuProbleme;

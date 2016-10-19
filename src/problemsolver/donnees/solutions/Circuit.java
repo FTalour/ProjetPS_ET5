@@ -75,6 +75,7 @@ public class Circuit extends Donnees{
     	lA = this.getParcourt();
     	for(Arete a:lA){
     		distance = distance + a.getPoids();
+    		
     	}
     	return distance;
     }
@@ -125,6 +126,10 @@ public class Circuit extends Donnees{
     	else{
     		Collections.swap(ordre, a, b);
     	}
+    }
+    
+    public int getNoeudPlace(Noeud n){
+    	return ordre.indexOf(n);
     }
     
     @Override

@@ -39,4 +39,8 @@ public class DonneesScenario<T extends Donnees, U extends Donnees, V extends Pen
     public HashSet<U> getDonneesDeterministes(){
         return donneesDeterministes;
     }
+    
+    
+    
+    
 }

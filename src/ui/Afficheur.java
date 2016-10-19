@@ -32,6 +32,10 @@ public class Afficheur {
         JOptionPane.showMessageDialog(ProblemSolver.getMainFrame(), s, "Erreur", JOptionPane.WARNING_MESSAGE);
     }
     
+    public static void infoDialog(String s){
+        JOptionPane.showMessageDialog(ProblemSolver.getMainFrame(), s, "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     public static void erreurFataleDialog(Exception ex){
         JOptionPane.showMessageDialog(ProblemSolver.getMainFrame(), exceptionDial(ex, true), "Erreur fatale", JOptionPane.ERROR_MESSAGE);
     }
