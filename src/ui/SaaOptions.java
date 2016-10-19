@@ -13,13 +13,13 @@ import problemsolver.solveur.Solveur;
  *
  * @author Clément
  */
-public class PhaOptions extends javax.swing.JDialog {
+public class SaaOptions extends javax.swing.JDialog {
     private boolean OKpressed;
     /**
      * Creates new form NewJFrame
      * @param parent
      */
-    public PhaOptions(java.awt.Frame parent) {
+    public SaaOptions(java.awt.Frame parent) {
         super(parent, true);
         initComponents();
         OKpressed = false;
