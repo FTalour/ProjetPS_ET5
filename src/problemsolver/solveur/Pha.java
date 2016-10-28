@@ -5,18 +5,13 @@
  */
 package problemsolver.solveur;
 
-import java.util.ArrayList;
-import problemsolver.donnees.Graphe;
-import problemsolver.donnees.solutions.TourReference;
 import java.util.HashMap;
 import java.util.Set;
 
-import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
-import problemsolver.donnees.solutions.TourReference;
 import ui.Afficheur;
 
 /**

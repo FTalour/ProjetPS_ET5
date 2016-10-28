@@ -3,14 +3,18 @@ package problemsolver.solveur;
 import java.util.ArrayList;
 
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
+import problemsolver.probleme.DonneesScenario;
+import problemsolver.probleme.Penalites;
+import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
 
 public class SAA extends Solveur<Probleme_Stochastique> {
 	int nombreEchantillons;
-	ArrayList<Echantillon> listeEchantillon;
-	Echantillon EchRef;
-	Solveur solveurSecondaire;
+	private ArrayList<ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?,?>,? extends Donnees>>>> listeEchantillon;
+	private ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?,?>,? extends Donnees>>> EchRef;
+	Solveur<Probleme<?,?>> solveurSecondaire;
 	
 	@Override
 	public Donnees resoudre(Donnees donnees, Donnees solution, boolean minimiser) throws ErreurDonneesException {
