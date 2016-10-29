@@ -9,6 +9,7 @@ import java.util.Set;
 import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
 import problemsolver.donnees.solutions.Circuit;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.DonneesScenario;
@@ -47,13 +48,14 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 
 	@Override
 	public Donnees resoudre(Donnees donnees, Donnees solInit, boolean minimiser) throws ErreurDonneesException {
-		double t = 0;
 		boolean b;
 		secondSolveur.setProbleme(getProbleme());
 		secondSolveur.setAffiche(false);
 		secondSolveur.init();
-		HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
+		HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees> listSolution = new HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees>();
 
+		// prépartition du problème
+		
 		getProbleme().initialiserScenarios(variation, pourcentDet,
 				nombreEchantillons * nombreScenarios + tailleEchantillonRef);
 		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
@@ -67,6 +69,8 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		HashMap maHashMap;
 		ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>> mon_echantillon = null;
 
+		// mise sous forme d'echantillons
+		
 		for (i = 0; i < nombreEchantillons; i++) {
 			mon_echantillon = null;
 			for (j = 0; j < nombreScenarios; j++) {
@@ -86,31 +90,54 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			EchRef = mon_echantillon;
 		}
 
-		// TODO listeEchantillon contient tous les echantillons hors référence
-		// TODO EchRef contient l'echantillon référence
-
-		// TODO verifié que le saa est appelé pour la première solution
+		// listeEchantillon contient tous les echantillons hors référence
+		// EchRef contient l'echantillon référence
 		
 		//pour chaque echantillon on calcule une solution initiale avec le SAA
 		for (ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>> echantillon : listeEchantillon) { 
 			for (DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> donneesScenario : echantillon) {
-				for(Donnees scen : donneesScenario.getScenarios()) {
-					listSolution.put(scen, secondSolveur.resoudre(scen, solInit, minimiser)); // SAA
+				for(Donnees scen : donneesScenario.getScenarios()) { // resolution par echantillon
+					listSolution.put(donneesScenario.getScenarios(), secondSolveur.resoudre(donneesScenario.getScenarios(), solInit, minimiser)); // SAA
 				}
 			}
 		}
 		
-		getProbleme().getTr().calculer(listSolution.values());
-		getProbleme().setUseStochastique(true);
+		// stockage des valeurs intiatiales
+		Donnees xBest; // meilleur solution
+		double vBest=0; // valeur de la meilleur solution
+		for (Donnees maSolutionInitiale : listSolution.values()) {
+			double v = ((Circuit) maSolutionInitiale).distanceTotale(); // renvoi la ditance du circuit
+			if (v > vBest) {
+				vBest = v;
+				xBest=maSolutionInitiale;
+			}
+		}
 		
-		do {
-			t++;
+		
+		ArrayList<ArrayList<Donnees>> solution = null; // contient x^mk, les solution des échantillons à l'iteration k
+		double[][] v = null; // valeurs des solutions
+		
+		for (Donnees maSolutionInitiale : listSolution.values()) {
+			solution.add((ArrayList<Donnees>) listSolution.values());
+		}
+		
+		getProbleme().setUseStochastique(true); // le problème est stochastique louololol
+		
+		double epsilon; // seuil de convergence
+		double[] epsilonTab; // seuil de convergence à l'iteration k
+		Donnees[] solEquilibreeTab; // solution equilibree à l'iteration k
+		int k=0, kmax = 1000; // indices d'iterations
+		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax) {
+			k++;
 			listSolution.clear();
-			
 			//TODO la boucle principale du saapha
-		} while (!b);
+			
+			getProbleme().getTr().calculer(listSolution.values());
+			
+			
+		}
 		
-		Afficheur.infoDialog("Terminé en " + t + " tours");
+		Afficheur.infoDialog("Terminé en " + k + " tours");
 		return getProbleme().getTr();
 	}
 
