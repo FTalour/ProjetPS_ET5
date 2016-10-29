@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.parser.Parser;
@@ -44,7 +46,7 @@ public abstract class Probleme<T extends Donnees, U extends Donnees>{
     	else
     		return voisinageBase(solution);
     }
-    public abstract U solutionInitialHeur(TourReference tr) throws ErreurDonneesException;
+    public abstract U solutionInitialHeur(TourReference<? extends Arete, ? extends Circuit> tr) throws ErreurDonneesException;
     public abstract U voisinageHeur(U solution);
     public abstract U solutionInitialBase() throws ErreurDonneesException;
     public abstract U voisinageBase(U solution);

@@ -5,9 +5,9 @@
  */
 package problemsolver.probleme;
 
-import java.util.ArrayList;
-
+import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.parser.Parser;
@@ -19,17 +19,17 @@ import problemsolver.parser.Parser;
  * @param <U> Le type de solution
  * @param <V> Le type de DonneesScenario
  * @param <W> Le tour de référence
- */
-public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees, V extends DonneesScenario, W extends TourReference> extends Probleme<T, U>{
-    private V ds;
-    private W tr;
+ */														
+public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees, V extends DonneesScenario<? extends Donnees, ? extends Donnees, ? extends Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, W extends TourReference<? extends Arete, ? extends Circuit>> extends Probleme<T, U>{
+	private V ds; // Données de scénarios
+	private W tr; // le tour de référence
 
-    public Probleme_Stochastique(Parser<T> p) {
-        super(p);
-    }
-    
-    @Override public double callFonctionObjectif(T donnees, U solution){
-    	if(getStochastique()){
+	public Probleme_Stochastique(Parser<T> p) {
+		super(p);
+	}
+
+	@Override public double callFonctionObjectif(T donnees, U solution){
+		if(getStochastique()){
     		return fonctionObjectifStochastique(donnees, solution);
     	}else{
     		return fonctionObjectif(donnees, solution);
@@ -37,7 +37,7 @@ public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees
     }
     
     protected abstract double fonctionObjectifStochastique(T donnees, U solution);
-    
+
     public void initialiserScenarios(double variation, double pourcentDet, int nombre) throws ErreurDonneesException{
         ds = (V) creerScenarios(variation, pourcentDet, nombre);
     }
@@ -64,5 +64,7 @@ public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees
     	else
     		return solutionInitialBase();
     }
+
+	
     
 }

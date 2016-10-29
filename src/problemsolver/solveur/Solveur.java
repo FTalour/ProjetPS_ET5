@@ -12,9 +12,9 @@ import problemsolver.probleme.Probleme;
 /**
  *
  * @author Clément
- * @param <T> Les types de problème résolvables (Probleme pour tous, Probleme_Stochastique pour les problèmes stochastiques etc)
+ * @param <T> Les types de problèmes résolvables (Probleme pour tous, Probleme_Stochastique pour les problèmes stochastiques etc)
  */
-public abstract class Solveur<T extends Probleme> {
+public abstract class Solveur<T extends Probleme<?, ?>> {
     private T probleme;
     private boolean affiche;
     
@@ -30,6 +30,10 @@ public abstract class Solveur<T extends Probleme> {
 		return resoudre(this.getProbleme().solutionInitial(), minimiser);
 	}
 
+    /**
+     * Renvoi un sous-type de problème
+     * @return
+     */
     public T getProbleme() {
         return probleme;
     }
