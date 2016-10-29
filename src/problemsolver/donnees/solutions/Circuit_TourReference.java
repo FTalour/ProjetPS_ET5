@@ -40,6 +40,9 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
         this.minY = g.getMinY();
     }
     
+    /**
+     * calcul la moyenne sur la collection des valeurs des arrêtes selectionnés
+     */
     public void calculer(Collection<Circuit> d){
     	double div = d.size();
     	for(Arete a:getKeySet()){
