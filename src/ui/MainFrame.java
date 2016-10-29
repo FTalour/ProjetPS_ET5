@@ -400,7 +400,29 @@ public class MainFrame extends javax.swing.JFrame {
             manager.setSolveur(new RecuitPha(mt));
         }
         updateLabelSolveur();
-    }                                           
+    } 
+    
+    private void menuItemSAAActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        SaaOptions optSaa = new SaaOptions(this);
+        optSaa.setLocationRelativeTo(null);
+        optSaa.setVisible(true);
+        SAA s = optSaa.getSaa();
+        if(s != null){
+            manager.setSolveur(s);
+        }
+        updateLabelSolveur();
+    }
+    
+    private void menuItemS2APHAActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        S2aphaOptions optS2apha = new S2aphaOptions(this);
+        optS2apha.setLocationRelativeTo(null);
+        optS2apha.setVisible(true);
+        S2APHA s2 = optS2apha.getS2apha();
+        if(s2 != null){
+            manager.setSolveur(s2);
+        }
+        updateLabelSolveur();
+    }
 
     private void menuItemTSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemTSPActionPerformed
         manager.setProbleme(new TSP());

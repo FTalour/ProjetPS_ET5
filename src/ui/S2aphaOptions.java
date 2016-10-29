@@ -5,6 +5,8 @@
  */
 package ui;
 
+import problemsolver.solveur.S2APHA;
+import problemsolver.solveur.SAA;
 import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
 import problemsolver.solveur.Solveur;
@@ -57,8 +59,8 @@ public class S2aphaOptions extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         comboBoxSolveurs = new javax.swing.JComboBox<>();
-        sliderScenar1 = new javax.swing.JSlider();
-        spinnerScenar1 = new javax.swing.JSpinner();
+        sliderEchantillon = new javax.swing.JSlider();
+        spinnerEchantillon = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -177,15 +179,15 @@ public class S2aphaOptions extends javax.swing.JDialog {
         comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit" }));
         comboBoxSolveurs.setSelectedItem("Recuit");
 
-        sliderScenar1.setMajorTickSpacing(100);
-        sliderScenar1.setMaximum(500);
-        sliderScenar1.setMinimum(1);
-        sliderScenar1.setMinorTickSpacing(25);
-        sliderScenar1.setPaintTicks(true);
-        sliderScenar1.setToolTipText("");
+        sliderEchantillon.setMajorTickSpacing(100);
+        sliderEchantillon.setMaximum(500);
+        sliderEchantillon.setMinimum(1);
+        sliderEchantillon.setMinorTickSpacing(25);
+        sliderEchantillon.setPaintTicks(true);
+        sliderEchantillon.setToolTipText("");
 
-        spinnerScenar1.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
-        spinnerScenar1.setRequestFocusEnabled(false);
+        spinnerEchantillon.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
+        spinnerEchantillon.setRequestFocusEnabled(false);
 
         jLabel5.setText("Quantité d'échantillons:");
 
@@ -205,8 +207,8 @@ public class S2aphaOptions extends javax.swing.JDialog {
                             .addComponent(sliderScenar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(comboBoxSolveurs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(spinnerScenar)
-                            .addComponent(sliderScenar1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(spinnerScenar1)
+                            .addComponent(sliderEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(spinnerEchantillon)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
@@ -220,9 +222,9 @@ public class S2aphaOptions extends javax.swing.JDialog {
                 .addGap(10, 10, 10)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerScenar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spinnerEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sliderScenar1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sliderEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -312,12 +314,12 @@ public class S2aphaOptions extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel panelAvance;
     private javax.swing.JSlider sliderDet;
+    private javax.swing.JSlider sliderEchantillon;
     private javax.swing.JSlider sliderScenar;
-    private javax.swing.JSlider sliderScenar1;
     private javax.swing.JSlider sliderVar;
     private javax.swing.JSpinner spinnerDet;
+    private javax.swing.JSpinner spinnerEchantillon;
     private javax.swing.JSpinner spinnerScenar;
-    private javax.swing.JSpinner spinnerScenar1;
     private javax.swing.JSpinner spinnerVar;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -329,6 +331,18 @@ public class S2aphaOptions extends javax.swing.JDialog {
                 case "recuit":
                     second = new Recuit();
                     break;
+                case "PHA":
+                    PhaOptions optPha = new PhaOptions(this);
+                    optPha.setLocationRelativeTo(null);
+                    optPha.setVisible(true);
+                    second = optPha.getPha();
+                    break;
+                case "SAA":
+                    SaaOptions optSaa = new SaaOptions(this);
+                    optSaa.setLocationRelativeTo(null);
+                    optSaa.setVisible(true);
+                    second = optSaa.getSaa();
+                    break;
                 default:
                     second = null;
                     break;
@@ -338,9 +352,9 @@ public class S2aphaOptions extends javax.swing.JDialog {
                 return null;
             }else{
                 if(panelAvance.isVisible())
-                    return new Pha(sliderScenar.getValue(), second, sliderVar.getValue(), sliderDet.getValue());
+                    return new S2APHA(sliderEchantillon.getValue(), sliderScenar.getValue(), second, sliderVar.getValue(), sliderDet.getValue());
                 else
-                    return new Pha(sliderScenar.getValue(), second);
+                    return new S2APHA(sliderEchantillon.getValue(), sliderScenar.getValue(), second);
             }
         }
         return null;

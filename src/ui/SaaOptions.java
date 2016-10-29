@@ -5,14 +5,12 @@
  */
 package ui;
 
+import problemsolver.solveur.SAA;
 import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
 import problemsolver.solveur.Solveur;
 
-/**
- *
- * @author Clément
- */
+
 public class SaaOptions extends javax.swing.JDialog {
     private boolean OKpressed;
     /**
@@ -24,7 +22,7 @@ public class SaaOptions extends javax.swing.JDialog {
         initComponents();
         OKpressed = false;
         panelAvance.setVisible(false);
-        spinnerScenar.setValue(5);
+        spinnerEchantillon.setValue(5);
         spinnerVar.setValue(20);
         spinnerDet.setValue(20);
         pack();
@@ -43,9 +41,9 @@ public class SaaOptions extends javax.swing.JDialog {
         boutonOK = new javax.swing.JButton();
         boutonAnnuler = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        spinnerScenar = new javax.swing.JSpinner();
+        spinnerEchantillon = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
-        sliderScenar = new javax.swing.JSlider();
+        sliderEchantillon = new javax.swing.JSlider();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         comboBoxSolveurs = new javax.swing.JComboBox<>();
@@ -68,22 +66,22 @@ public class SaaOptions extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        spinnerScenar.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
-        spinnerScenar.setRequestFocusEnabled(false);
+        spinnerEchantillon.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
+        spinnerEchantillon.setRequestFocusEnabled(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderScenar, org.jdesktop.beansbinding.ELProperty.create("${value}"), spinnerScenar, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderEchantillon, org.jdesktop.beansbinding.ELProperty.create("${value}"), spinnerEchantillon, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         jLabel1.setText("Quantité d'échantillons:");
 
-        sliderScenar.setMajorTickSpacing(100);
-        sliderScenar.setMaximum(500);
-        sliderScenar.setMinimum(1);
-        sliderScenar.setMinorTickSpacing(25);
-        sliderScenar.setPaintTicks(true);
-        sliderScenar.setToolTipText("");
+        sliderEchantillon.setMajorTickSpacing(100);
+        sliderEchantillon.setMaximum(500);
+        sliderEchantillon.setMinimum(1);
+        sliderEchantillon.setMinorTickSpacing(25);
+        sliderEchantillon.setPaintTicks(true);
+        sliderEchantillon.setToolTipText("");
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinnerScenar, org.jdesktop.beansbinding.ELProperty.create("${value}"), sliderScenar, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinnerEchantillon, org.jdesktop.beansbinding.ELProperty.create("${value}"), sliderEchantillon, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         jLabel2.setText("Solveur secondaire à utiliser:");
@@ -104,12 +102,12 @@ public class SaaOptions extends javax.swing.JDialog {
                         .addGap(0, 24, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sliderScenar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(sliderEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(comboBoxSolveurs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(spinnerScenar))
+                            .addComponent(spinnerEchantillon))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
@@ -118,9 +116,9 @@ public class SaaOptions extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerScenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spinnerEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sliderScenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sliderEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -169,7 +167,7 @@ public class SaaOptions extends javax.swing.JDialog {
         OKpressed = false;
         setVisible(false);
     }//GEN-LAST:event_boutonAnnulerActionPerformed
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boutonAnnuler;
     private javax.swing.JButton boutonOK;
@@ -178,12 +176,12 @@ public class SaaOptions extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSlider sliderScenar;
-    private javax.swing.JSpinner spinnerScenar;
+    private javax.swing.JSlider sliderEchantillon;
+    private javax.swing.JSpinner spinnerEchantillon;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    public Pha getPha() {
+    public Pha getSaa() {
         if(OKpressed){
             Solveur second = null;
             switch(comboBoxSolveurs.getItemAt(comboBoxSolveurs.getSelectedIndex())){
@@ -191,8 +189,10 @@ public class SaaOptions extends javax.swing.JDialog {
                     second = new Recuit();
                     break;
                 case "PHA":
-                    break;
-                case "SAA":
+                    PhaOptions optPha = new PhaOptions(this);
+                    optPha.setLocationRelativeTo(null);
+                    optPha.setVisible(true);
+                    second = optPha.getPha();
                     break;
                 default:
                     second = null;
@@ -202,10 +202,7 @@ public class SaaOptions extends javax.swing.JDialog {
                 Afficheur.erreurDialog("Solveur secondaire incompatible");
                 return null;
             }else{
-                if(panelAvance.isVisible())
-                    return new Pha(sliderScenar.getValue(), second, sliderVar.getValue(), sliderDet.getValue());
-                else
-                    return new Pha(sliderScenar.getValue(), second);
+                return new SAA(sliderEchantillon.getValue(), second);
             }
         }
         return null;
