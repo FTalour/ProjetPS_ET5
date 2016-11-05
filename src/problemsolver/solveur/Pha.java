@@ -5,13 +5,19 @@
  */
 package problemsolver.solveur;
 
+import java.util.ArrayList;
+import problemsolver.donnees.Graphe;
+import problemsolver.donnees.solutions.TourReference;
 import java.util.HashMap;
 import java.util.Set;
 
+import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
 import problemsolver.exceptions.ErreurDonneesException;
+import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
+import problemsolver.donnees.solutions.TourReference;
 import ui.Afficheur;
 
 /**
@@ -41,7 +47,7 @@ public class Pha extends Solveur<Probleme_Stochastique>{
     @Override
 
 	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser) throws ErreurDonneesException{
-			double t = 0;
+    		double t = 0;
 		    boolean b;
 		    secondSolveur.setProbleme(getProbleme());
 		    secondSolveur.setAffiche(false);
@@ -55,7 +61,7 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 		    }
 		    getProbleme().getTr().calculer(listSolution.values());
 		    getProbleme().setUseStochastique(true);
-			do {
+			do{
 				t = t + 1;
 				listSolution.clear();
 				
@@ -68,11 +74,41 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 					b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
 					getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 				}
-			} while(!b);
+			}while(!b);
 			Afficheur.infoDialog("Terminé en "+t+" tours");
 			return getProbleme().getTr();
 	}
 
+    public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
+		double t = 0;
+	    boolean b;
+	    secondSolveur.setProbleme(getProbleme());
+	    secondSolveur.setAffiche(false);
+	    secondSolveur.init();
+	    HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
+	    for(Donnees scen: echantillon){
+	    	
+	    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
+	    }
+	    getProbleme().getTr().calculer(listSolution.values());
+	    getProbleme().setUseStochastique(true);
+		do{
+			t = t + 1;
+			listSolution.clear();
+			
+			for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
+		    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
+		    }
+			getProbleme().getTr().calculer(listSolution.values());
+			b = true;
+			for(Donnees d:listSolution.keySet()){
+				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
+				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
+			}
+		}while(!b);
+		Afficheur.infoDialog("Terminé en "+t+" tours");
+		return getProbleme().getTr();
+}
     
     @Override
     public String toString(){

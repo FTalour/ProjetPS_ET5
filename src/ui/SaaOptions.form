@@ -90,13 +90,13 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="sliderScenar" pref="0" max="32767" attributes="0"/>
+                              <Component id="sliderEchantillon" pref="0" max="32767" attributes="0"/>
                               <Component id="comboBoxSolveurs" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="spinnerScenar" max="32767" attributes="0"/>
+                              <Component id="spinnerEchantillon" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -110,9 +110,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="spinnerScenar" min="-2" max="-2" attributes="0"/>
+                  <Component id="spinnerEchantillon" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sliderScenar" min="-2" max="-2" attributes="0"/>
+                  <Component id="sliderEchantillon" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -125,7 +125,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JSpinner" name="spinnerScenar">
+        <Component class="javax.swing.JSpinner" name="spinnerEchantillon">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="5" maximum="500" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
@@ -133,7 +133,7 @@
             <Property name="requestFocusEnabled" type="boolean" value="false"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="sliderScenar" sourcePath="${value}" target="spinnerScenar" targetPath="value" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="value" source="sliderEchantillon" sourcePath="${value}" target="spinnerEchantillon" targetPath="value" updateStrategy="0" immediately="false"/>
           </BindingProperties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -141,7 +141,7 @@
             <Property name="text" type="java.lang.String" value="Quantit&#xe9; d&apos;&#xe9;chantillons:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSlider" name="sliderScenar">
+        <Component class="javax.swing.JSlider" name="sliderEchantillon">
           <Properties>
             <Property name="majorTickSpacing" type="int" value="100"/>
             <Property name="maximum" type="int" value="500"/>
@@ -151,7 +151,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="spinnerScenar" sourcePath="${value}" target="sliderScenar" targetPath="value" updateStrategy="0" immediately="false">
+            <BindingProperty name="value" source="spinnerEchantillon" sourcePath="${value}" target="sliderEchantillon" targetPath="value" updateStrategy="0" immediately="false">
               <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
             </BindingProperty>
           </BindingProperties>

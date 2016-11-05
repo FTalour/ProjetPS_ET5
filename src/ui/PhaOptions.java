@@ -9,10 +9,6 @@ import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
 import problemsolver.solveur.Solveur;
 
-/**
- *
- * @author Clément
- */
 public class PhaOptions extends javax.swing.JDialog {
     private boolean OKpressed;
     /**
