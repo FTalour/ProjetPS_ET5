@@ -7,6 +7,7 @@ package problemsolver.solveur;
 
 import problemsolver.donnees.Donnees;
 import problemsolver.exceptions.ErreurDonneesException;
+import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.Probleme;
 
 /**
@@ -26,6 +27,7 @@ public abstract class Solveur<T extends Probleme<?, ?>> {
     public Donnees resoudre(Donnees d, boolean minimiser) throws ErreurDonneesException{
 		return resoudre(this.getProbleme().getJeu(), d, minimiser);
 	}
+    
     public Donnees resoudre(boolean minimiser) throws ErreurDonneesException {
 		return resoudre(this.getProbleme().solutionInitial(), minimiser);
 	}
@@ -49,4 +51,10 @@ public abstract class Solveur<T extends Probleme<?, ?>> {
     public boolean getAffiche(){return affiche;}
     
     public abstract void init() throws ErreurDonneesException;
+
+	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser, Echantillon echantillon)
+			throws ErreurDonneesException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
