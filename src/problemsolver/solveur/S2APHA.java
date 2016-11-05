@@ -121,7 +121,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			solution.add((ArrayList<Donnees>) listSolution.values());
 		}
 		
-		getProbleme().setUseStochastique(true); // le problème est stochastique louololol
+		getProbleme().setUseStochastique(true); // le problème est stochastique
 		
 		double epsilon; // seuil de convergence
 		double[] epsilonTab; // seuil de convergence à l'iteration k
@@ -133,7 +133,6 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			//TODO la boucle principale du saapha
 			
 			getProbleme().getTr().calculer(listSolution.values());
-			
 			
 		}
 		
