@@ -13,6 +13,7 @@ import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.DonneesScenario;
+import problemsolver.probleme.EchantillonS2APHA;
 import problemsolver.probleme.Penalites;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
@@ -27,17 +28,16 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 	private int nombreEchantillons;
 	private int nombreScenarios;
 	private int tailleEchantillonRef;
-	private Solveur solveurSecondaire;
 
-	private HashMap<Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> tous_scenarios;
-	private ArrayList<ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>>> listeEchantillon;
-	private ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>> EchRef;
+	private HashMap<Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenarios;
+	private ArrayList<EchantillonS2APHA> listeEchantillon;
+	private EchantillonS2APHA EchRef;
 
 	public S2APHA(int nbEchantillon, Solveur secondS, int var, int pDet) {
 		nombreEchantillons = nbEchantillon;
 		nombreScenarios = nombreEchantillons;
 		tailleEchantillonRef = 4 * nombreScenarios;
-		solveurSecondaire = secondS;
+		secondSolveur = secondS;
 		variation = var;
 		pourcentDet = pDet;
 	}
@@ -52,40 +52,43 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		secondSolveur.setProbleme(getProbleme());
 		secondSolveur.setAffiche(false);
 		secondSolveur.init();
-		HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees> listSolution = new HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees>();
+		HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees> solutionsCalculees = new HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees>();
 
 		// prépartition du problème
 		
+		//le problème contient l'ensemble des scénarios de tous les échantillons 
 		getProbleme().initialiserScenarios(variation, pourcentDet,
 				nombreEchantillons * nombreScenarios + tailleEchantillonRef);
 		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
 
-		tous_scenarios = getProbleme().getDs().getHashMapScenarios();
-		ArrayList<Donnees> keys = (ArrayList<Donnees>) tous_scenarios.keySet();
-		ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>> penalities = (ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>>) tous_scenarios
+		allScenarios = getProbleme().getDs().getHashMapScenarios();
+		ArrayList<Donnees> allScenariosKeys = (ArrayList<Donnees>) allScenarios.keySet();
+		ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenariosPenalities = (ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>>) allScenarios
 				.values();
-		HashSet<Donnees> donneesDeterministes = getProbleme().getDs().getDonneesDeterministes();
+		HashSet<Donnees> allDataDeterministes = getProbleme().getDs().getDonneesDeterministes();
 		int i = 0, j = 0;
 		HashMap maHashMap;
-		ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>> mon_echantillon = null;
+		EchantillonS2APHA mon_echantillon;
 
 		// mise sous forme d'echantillons
 		
+		//création des échantillons
 		for (i = 0; i < nombreEchantillons; i++) {
 			mon_echantillon = null;
 			for (j = 0; j < nombreScenarios; j++) {
 				maHashMap = new HashMap();
-				maHashMap.put(keys.get(j + i * nombreEchantillons), penalities.get(j + i * nombreEchantillons));
-				mon_echantillon.add(new DonneesScenario(maHashMap, donneesDeterministes));
+				maHashMap.put(allScenariosKeys.get(j + i * nombreEchantillons), allScenariosPenalities.get(j + i * nombreEchantillons));
+				mon_echantillon.add(new DonneesScenario(maHashMap, allDataDeterministes));
 			}
 			listeEchantillon.add(mon_echantillon);
 		}
 
+		//création de l'échantillon de référence
 		for (i++; i < nombreEchantillons * nombreScenarios + tailleEchantillonRef; i++) {
 			for (j++; j < tailleEchantillonRef; j++) {
 				maHashMap = new HashMap();
-				maHashMap.put(keys.get(j + i * nombreEchantillons), penalities.get(j + i * nombreEchantillons));
-				mon_echantillon.add(new DonneesScenario(maHashMap, donneesDeterministes));
+				maHashMap.put(allScenariosKeys.get(j + i * nombreEchantillons), allScenariosPenalities.get(j + i * nombreEchantillons));
+				mon_echantillon.add(new DonneesScenario(maHashMap, allDataDeterministes));
 			}
 			EchRef = mon_echantillon;
 		}
@@ -94,10 +97,10 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		// EchRef contient l'echantillon référence
 		
 		//pour chaque echantillon on calcule une solution initiale avec le SAA
-		for (ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>> echantillon : listeEchantillon) { 
+		for (EchantillonS2APHA echantillon : listeEchantillon) { 
 			for (DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> donneesScenario : echantillon) {
 				for(Donnees scen : donneesScenario.getScenarios()) { // resolution par echantillon
-					listSolution.put(donneesScenario.getScenarios(), secondSolveur.resoudre(donneesScenario.getScenarios(), solInit, minimiser)); // SAA
+					solutionsCalculees.put(donneesScenario.getScenarios(), secondSolveur.resoudre(scen, solInit, minimiser, echantillon)); // SAA
 				}
 			}
 		}
@@ -105,7 +108,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		// stockage des valeurs intiatiales
 		Donnees xBest; // meilleur solution
 		double vBest=0; // valeur de la meilleur solution ^v^best
-		for (Donnees maSolutionInitiale : listSolution.values()) {
+		for (Donnees maSolutionInitiale : solutionsCalculees.values()) {
 			double v = ((Circuit) maSolutionInitiale).distanceTotale(); // renvoi la ditance du circuit
 			if (v > vBest) {
 				vBest = v;
@@ -113,13 +116,12 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			}
 		}
 		
-		
-		ArrayList<ArrayList<Donnees>> solution = null; // contient x^mk, les solution des échantillons à l'iteration k
+		ArrayList<ArrayList<Donnees>> solutionsEchantillons = null; // contient x^mk, les solution des échantillons à l'iteration k
 		double[][] v = null; // valeurs des solutions ^v^m,k
 		double[] vkbest = null; // valeurs des ^v^k best 
 		
-		for (Donnees maSolutionInitiale : listSolution.values()) {
-			solution.add((ArrayList<Donnees>) listSolution.values());
+		for (Donnees maSolutionInitiale : solutionsCalculees.values()) {
+			solutionsEchantillons.add((ArrayList<Donnees>) solutionsCalculees.values());
 		}
 		
 		getProbleme().setUseStochastique(true); // le problème est stochastique
@@ -130,33 +132,35 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		int k=0, kmax = 1000; // indices d'iterations
 		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax) {
 			k++;
-			listSolution.clear();
+			solutionsCalculees.clear();
 			
 			// TODO mettre les pénalités à jour avec les classes qui vont bien
 			
 			
 			for (i=0; i<listeEchantillon.size(); i++) {
 				
-				//TODO resoudre le problème à deux niveaux 
-				//faire un truc comme ça ==> getProbleme().getTr().calculer(listSolution.values());
+				//TODO resoudre le problème à deux niveaux (s'inspirer de la classe Pha)
+				solutionsCalculees.put(listeEchantillon.get(i), secondSolveur.resoudre(donnees, solInit, minimiser, listeEchantillon.get(i)));
+				listeEchantillon.get(i).getTr().calculer(solutionsCalculees.values());
 				
 				//TODO stocker le résultat v (^v^mk) et solution (x^mk)
 				
 				double somme = 0;
 				for (j=0; j<listeEchantillon.size(); j++) {
 					//TODO avoir la valeur des solutions et pas juste la solution
-					somme = Math.sqrt(Math.abs(solution.get(j).get(k) - solEquilibreeTab[k]));
+					somme = Math.sqrt(Math.abs(((Circuit) solutionsEchantillons.get(j).get(k)).distanceTotale() - ((Circuit) solEquilibreeTab[k]).distanceTotale()));
 				}
 				epsilonTab[k] = somme; 
 			}
 			
 			//on calcule la "vrai" meilleure solution sur N' 
-			//en partant des solutions trouvées sur chaque echantillon
+			//en partant de la partie deterministe des solutions trouvées sur chaque echantillon
 			for (i=0; i<listeEchantillon.size(); i++) {
 				//on calcule la meilleure valeur objectif sur tout N'
 				//en cherchant sur tous les scénarios de celui-ci avec la solution trouvée avant 
 				for (j=0; j<EchRef.size(); j++) {
-					
+					//TODO appeler calculer sur les valeurs deterministes
+					EchRef.get(j).
 				}
 			}
 			
@@ -181,8 +185,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		Afficheur.infoDialog("Terminé en " + k + " tours");
 		
 		//x^S2APHA
-		return getProbleme().initialiserTourRef(donS, typD);
-		
+		return null;
 	}
 
 	@Override
