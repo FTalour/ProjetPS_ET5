@@ -176,7 +176,7 @@ public class S2aphaOptions extends javax.swing.JDialog {
 
         jLabel2.setText("Solveur secondaire à utiliser:");
 
-        comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit" }));
+        comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit", "PHA", "SAA" }));
         comboBoxSolveurs.setSelectedItem("Recuit");
 
         sliderEchantillon.setMajorTickSpacing(100);

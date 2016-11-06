@@ -479,11 +479,25 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemTourPhaActionPerformed
 
     private void menuItemPHA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemPHA1ActionPerformed
-        // TODO add your handling code here:
+        SaaOptions optSaa = new SaaOptions(this);
+        optSaa.setLocationRelativeTo(null);
+        optSaa.setVisible(true);
+        SAA s = optSaa.getSaa();
+        if(s != null){
+            manager.setSolveur(s);
+        }
+        updateLabelSolveur();
     }//GEN-LAST:event_menuItemPHA1ActionPerformed
 
     private void menuItemPHA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemPHA2ActionPerformed
-        // TODO add your handling code here:
+        S2aphaOptions optS2apha = new S2aphaOptions(this);
+        optS2apha.setLocationRelativeTo(null);
+        optS2apha.setVisible(true);
+        S2APHA s2 = optS2apha.getS2apha();
+        if(s2 != null){
+            manager.setSolveur(s2);
+        }
+        updateLabelSolveur();
     }//GEN-LAST:event_menuItemPHA2ActionPerformed
 
     private void updateLabelSolveur(){
