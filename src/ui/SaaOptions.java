@@ -21,10 +21,7 @@ public class SaaOptions extends javax.swing.JDialog {
         super(parent, true);
         initComponents();
         OKpressed = false;
-        panelAvance.setVisible(false);
         spinnerEchantillon.setValue(5);
-        spinnerVar.setValue(20);
-        spinnerDet.setValue(20);
         pack();
     }
 
@@ -86,8 +83,13 @@ public class SaaOptions extends javax.swing.JDialog {
 
         jLabel2.setText("Solveur secondaire à utiliser:");
 
-        comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit" }));
+        comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit", "PHA" }));
         comboBoxSolveurs.setSelectedItem("Recuit");
+        comboBoxSolveurs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxSolveursActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -103,12 +105,12 @@ public class SaaOptions extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(sliderEchantillon, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(comboBoxSolveurs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(spinnerEchantillon))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addComponent(comboBoxSolveurs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,6 +169,10 @@ public class SaaOptions extends javax.swing.JDialog {
         OKpressed = false;
         setVisible(false);
     }//GEN-LAST:event_boutonAnnulerActionPerformed
+
+    private void comboBoxSolveursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSolveursActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxSolveursActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boutonAnnuler;
@@ -181,7 +187,7 @@ public class SaaOptions extends javax.swing.JDialog {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    public Pha getSaa() {
+    public SAA getSaa() {
         if(OKpressed){
             Solveur second = null;
             switch(comboBoxSolveurs.getItemAt(comboBoxSolveurs.getSelectedIndex())){
@@ -189,6 +195,7 @@ public class SaaOptions extends javax.swing.JDialog {
                     second = new Recuit();
                     break;
                 case "PHA":
+                    java.awt.event.ActionEvent evt;
                     PhaOptions optPha = new PhaOptions(this);
                     optPha.setLocationRelativeTo(null);
                     optPha.setVisible(true);

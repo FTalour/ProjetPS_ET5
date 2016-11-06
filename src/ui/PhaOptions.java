@@ -25,6 +25,17 @@ public class PhaOptions extends javax.swing.JDialog {
         spinnerDet.setValue(20);
         pack();
     }
+    
+     public PhaOptions(javax.swing.JDialog parent) {
+        super(parent, true);
+        initComponents();
+        OKpressed = false;
+        panelAvance.setVisible(false);
+        spinnerScenar.setValue(5);
+        spinnerVar.setValue(20);
+        spinnerDet.setValue(20);
+        pack();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -169,6 +180,11 @@ public class PhaOptions extends javax.swing.JDialog {
 
         comboBoxSolveurs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "recuit" }));
         comboBoxSolveurs.setSelectedItem("Recuit");
+        comboBoxSolveurs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxSolveursActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -268,6 +284,10 @@ public class PhaOptions extends javax.swing.JDialog {
             pack();
         }
     }//GEN-LAST:event_boutonAvanceActionPerformed
+
+    private void comboBoxSolveursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSolveursActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxSolveursActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boutonAnnuler;
