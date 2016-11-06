@@ -104,7 +104,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		
 		// stockage des valeurs intiatiales
 		Donnees xBest; // meilleur solution
-		double vBest=0; // valeur de la meilleur solution
+		double vBest=0; // valeur de la meilleur solution ^v^best
 		for (Donnees maSolutionInitiale : listSolution.values()) {
 			double v = ((Circuit) maSolutionInitiale).distanceTotale(); // renvoi la ditance du circuit
 			if (v > vBest) {
@@ -115,7 +115,8 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		
 		
 		ArrayList<ArrayList<Donnees>> solution = null; // contient x^mk, les solution des échantillons à l'iteration k
-		double[][] v = null; // valeurs des solutions
+		double[][] v = null; // valeurs des solutions ^v^m,k
+		double[] vkbest = null; // valeurs des ^v^k best 
 		
 		for (Donnees maSolutionInitiale : listSolution.values()) {
 			solution.add((ArrayList<Donnees>) listSolution.values());
@@ -130,14 +131,58 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax) {
 			k++;
 			listSolution.clear();
-			//TODO la boucle principale du saapha
 			
-			getProbleme().getTr().calculer(listSolution.values());
+			// TODO mettre les pénalités à jour avec les classes qui vont bien
 			
+			
+			for (i=0; i<listeEchantillon.size(); i++) {
+				
+				//TODO resoudre le problème à deux niveaux 
+				//faire un truc comme ça ==> getProbleme().getTr().calculer(listSolution.values());
+				
+				//TODO stocker le résultat v (^v^mk) et solution (x^mk)
+				
+				double somme = 0;
+				for (j=0; j<listeEchantillon.size(); j++) {
+					//TODO avoir la valeur des solutions et pas juste la solution
+					somme = Math.sqrt(Math.abs(solution.get(j).get(k) - solEquilibreeTab[k]));
+				}
+				epsilonTab[k] = somme; 
+			}
+			
+			//on calcule la "vrai" meilleure solution sur N' 
+			//en partant des solutions trouvées sur chaque echantillon
+			for (i=0; i<listeEchantillon.size(); i++) {
+				//on calcule la meilleure valeur objectif sur tout N'
+				//en cherchant sur tous les scénarios de celui-ci avec la solution trouvée avant 
+				for (j=0; j<EchRef.size(); j++) {
+					
+				}
+			}
+			
+			// recherche de la meilleur solution du tour
+			vkbest[k]=v[0][k];
+			for (i=1; i<listeEchantillon.size(); i++) {
+				if (v[i][k] < vkbest[k]) {
+					vkbest[k]=v[i][k];
+				}
+				
+			}
+			
+			// recherche de la meilleur solution sur tous les tours 
+			if (vkbest[k] < vBest) {
+				vBest = vkbest[k];
+				for (i=0; i<listeEchantillon.size(); i++) {
+					//xBest = /* x corespondant au vBest */;
+				}
+			}
 		}
 		
 		Afficheur.infoDialog("Terminé en " + k + " tours");
-		return getProbleme().getTr();
+		
+		//x^S2APHA
+		return getProbleme().initialiserTourRef(donS, typD);
+		
 	}
 
 	@Override

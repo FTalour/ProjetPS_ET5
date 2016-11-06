@@ -28,52 +28,52 @@ public class SAA extends Solveur<Probleme_Stochastique> {
 	@Override
 	public Donnees resoudre(Donnees donnees, Donnees solution, boolean minimiser) throws ErreurDonneesException {
 		solveurSecondaire.setProbleme(getProbleme());
-	    solveurSecondaire.setAffiche(false);
-	    solveurSecondaire.init();
-	    //Il faut changer pour ce qu'on a entree
-	    getProbleme().initialiserScenarios(20, 20, 5);
-	    getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
-	    int nombreDeScenario = getProbleme().getDs().getScenarios().size();
-	    //Il faut changer 5 pour ce qu'on a entrer
-	    int nombreDeEchantillon = 5;
-		
-	    int increment = nombreDeScenario/nombreDeEchantillon;
-	    Echantillon echantillon = new Echantillon();
-	    for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
-	    	
-	    	if (nombreDeScenario/nombreDeEchantillon==increment) {
+		solveurSecondaire.setAffiche(false);
+		solveurSecondaire.init();
+		//Il faut changer pour ce qu'on a entree
+		getProbleme().initialiserScenarios(20, 20, 5);
+		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
+		int nombreDeScenario = getProbleme().getDs().getScenarios().size();
+		//Il faut changer 5 pour ce qu'on a entrer
+		int nombreDeEchantillon = 5;
+
+		int increment = nombreDeScenario/nombreDeEchantillon;
+		Echantillon echantillon = new Echantillon();
+		for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
+
+			if (nombreDeScenario/nombreDeEchantillon==increment) {
 				echantillon = new Echantillon();
 				listeEchantillon.add(echantillon);
 				increment = 0;
 			}
-	    	echantillon.add(scen);
-			
+			echantillon.add(scen);
+
 			increment++;
 
 		}
-	  for (int i = 0; i < 1; i++) {
-	   	listeEchantillon.get(i).setResultat((TourReference)solveurSecondaire.resoudre(donnees, solution, minimiser,listeEchantillon.get(i)));
-	  }
-	  
-	  TourReference min_CR = listeEchantillon.get(0).getResultat();
-	  
-	  for (int i = 1; i < listeEchantillon.size(); i++) {
-		  if (getDistance(listeEchantillon.get(i).getResultat().getKeySet()) <getDistance(min_CR.getKeySet())) {
-			min_CR = listeEchantillon.get(i).getResultat();
+		for (int i = 0; i < 1; i++) {
+			listeEchantillon.get(i).setResultat((TourReference)solveurSecondaire.resoudre(donnees, solution, minimiser,listeEchantillon.get(i)));
 		}
-	  }
-	  
-	  
-	  System.out.println(getDistance(min_CR.getKeySet()));
-	   return min_CR;
+
+		TourReference min_CR = listeEchantillon.get(0).getResultat();
+
+		for (int i = 1; i < listeEchantillon.size(); i++) {
+			if (getDistance(listeEchantillon.get(i).getResultat().getKeySet()) <getDistance(min_CR.getKeySet())) {
+				min_CR = listeEchantillon.get(i).getResultat();
+			}
+		}
+
+		System.out.println(getDistance(min_CR.getKeySet()));
+		
+		return min_CR;
 	}
 
 	private double getDistance(Set<Arete> p) {
-    	double distance = 0;
-    	for(Arete a:p){
-    		distance = distance + a.getPoids();   		
-    	}
-    	return distance;
+		double distance = 0;
+		for(Arete a:p){
+			distance = distance + a.getPoids();   		
+		}
+		return distance;
 	}
 	
 	@Override
