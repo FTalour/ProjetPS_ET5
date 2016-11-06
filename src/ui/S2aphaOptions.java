@@ -324,7 +324,7 @@ public class S2aphaOptions extends javax.swing.JDialog {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    public Pha getPha() {
+    public S2APHA getS2apha() {
         if(OKpressed){
             Solveur second = null;
             switch(comboBoxSolveurs.getItemAt(comboBoxSolveurs.getSelectedIndex())){

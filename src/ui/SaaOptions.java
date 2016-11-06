@@ -21,10 +21,7 @@ public class SaaOptions extends javax.swing.JDialog {
         super(parent, true);
         initComponents();
         OKpressed = false;
-        panelAvance.setVisible(false);
         spinnerEchantillon.setValue(5);
-        spinnerVar.setValue(20);
-        spinnerDet.setValue(20);
         pack();
     }
 
@@ -181,7 +178,7 @@ public class SaaOptions extends javax.swing.JDialog {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    public Pha getSaa() {
+    public SAA getSaa() {
         if(OKpressed){
             Solveur second = null;
             switch(comboBoxSolveurs.getItemAt(comboBoxSolveurs.getSelectedIndex())){
