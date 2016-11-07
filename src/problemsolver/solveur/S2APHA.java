@@ -18,6 +18,7 @@ import problemsolver.probleme.EchantillonS2APHA;
 import problemsolver.probleme.Penalites;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
+import problemsolver.probleme.ScenarioTSP;
 import ui.Afficheur;
 
 public class S2APHA extends Solveur<Probleme_Stochastique> {
@@ -30,10 +31,12 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 	private int nombreScenarios;
 	private int tailleEchantillonRef;
 
+	HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
 	private HashMap<Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenarios;
 	private ArrayList<EchantillonS2APHA> listeEchantillon;
 	private EchantillonS2APHA EchRef;
 
+	
 	public S2APHA(int nbEchantillon, Solveur secondS, int var, int pDet) {
 		nombreEchantillons = nbEchantillon;
 		nombreScenarios = nombreEchantillons;
@@ -61,6 +64,11 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		getProbleme().initialiserScenarios(variation, pourcentDet,
 				nombreEchantillons * nombreScenarios + tailleEchantillonRef);
 		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
+		for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()) {
+	    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
+	    }
+		getProbleme().getTr().calculer(listSolution.values());
+	    getProbleme().setUseStochastique(true);
 
 		allScenarios = getProbleme().getDs().getHashMapScenarios();
 		ArrayList<Donnees> allScenariosKeys = (ArrayList<Donnees>) allScenarios.keySet();
@@ -69,7 +77,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		HashSet<Donnees> allDataDeterministes = getProbleme().getDs().getDonneesDeterministes();
 		int i = 0, j = 0;
 		HashMap maHashMap;
-		EchantillonS2APHA mon_echantillon;
+		EchantillonS2APHA mon_echantillon = null;
 
 		// mise sous forme d'echantillons
 		
@@ -107,7 +115,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		}
 		
 		// stockage des valeurs intiatiales
-		Donnees xBest; // meilleur solution
+		Donnees xBest = null; // meilleur solution
 		double vBest=0; // valeur de la meilleur solution ^v^best
 		for (Donnees maSolutionInitiale : solutionsCalculees.values()) {
 			double v = ((Circuit) maSolutionInitiale).distanceTotale(); // renvoi la ditance du circuit
@@ -125,24 +133,21 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			solutionsEchantillons.add((ArrayList<Donnees>) solutionsCalculees.values());
 		}
 		
-		getProbleme().setUseStochastique(true); // le problème est stochastique
-		
 		double epsilon = 0; // seuil de convergence
 		double[] epsilonTab = {0}; // seuil de convergence à l'iteration k
 		Donnees[] solPondereeTab; // solutions pondérées par les probobabilités à l'iteration k
-		Donnees[] solEquilibreeTab; // solutions equilibrées à l'iteration k
+		Donnees[] solEquilibreeTab=null; // solutions equilibrées à l'iteration k
 		double[][] w = new double[nombreEchantillons][1000]; // w^mk
 		double[] alpha = new double[1000]; alpha[0]=1; // alpha
 		int k=0, kmax = 1000; // indices d'iterations
 		double delta = 0.05;
 		double beta = 2.0;
 		double[] ro = new double[1000]; ro[0]=1;
-		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax) {
+		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax && beta == delta) {
 			k++;
 
 			for (i=0; i<listeEchantillon.size(); i++) {
-				//TODO définir l'opérateur ou crée une fonction pour pondéré une solution (Circuit)
-				solPondereeTab[k] = (1/listeEchantillon.size()) * solutionsEchantillons.get(i).get(k);
+				//solPondereeTab[k] = (1/listeEchantillon.size()) * solutionsEchantillons.get(i).get(k);
 			}
 			
 			solutionsCalculees.clear();
@@ -156,7 +161,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			}
 			
 			for (i=0; i<listeEchantillon.size(); i++) {
-				solEquilibreeTab[k] = alpha[k] * solPondereeTab[k] + (1 - alpha[k]) * xBest;
+				//solEquilibreeTab[k] = alpha[k] * solPondereeTab[k] + (1 - alpha[k]) * xBest;
 			}
 				
 			if (k >= 2) {
@@ -176,20 +181,15 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			}
 			
 			for (i=0; i<listeEchantillon.size(); i++) {
-				
-				//TODO resoudre le problème à deux niveaux (s'inspirer de la classe Pha)
 				for (DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> donneesScenario : listeEchantillon.get(i)) {
 					for(Donnees scen : donneesScenario.getScenarios()) { // resolution par echantillon
 						solutionsCalculees.put(donneesScenario, secondSolveur.resoudre(scen, solInit, minimiser, (Echantillon) new ArrayList<Donnees>(donneesScenario.getScenarios())));
 					}
 				}
 				listeEchantillon.get(i).getTr().calculer(solutionsCalculees.values());
-				
-				//TODO stocker le résultat v (^v^mk) et solution (x^mk)
-				
+								
 				double somme = 0;
 				for (ArrayList<Donnees> unesolution :  solutionsEchantillons) {
-					//TODO avoir la valeur des solutions et pas juste la solution
 					somme = Math.sqrt(Math.abs(((Circuit) unesolution.get(k)).distanceTotale() - ((Circuit) solEquilibreeTab[k]).distanceTotale()));
 				}
 				epsilonTab[k] = somme; 
@@ -223,10 +223,26 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			}
 		}
 		
+		int t=0;
+		do{
+			t = t + 1;
+			listSolution.clear();
+			
+			for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
+		    	listSolution .put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
+		    }
+			getProbleme().getTr().calculer(listSolution.values());
+			b = true;
+			for(Donnees d:listSolution.keySet()){
+				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b); k=t;
+				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
+			}
+		}while(!b);
+		
 		Afficheur.infoDialog("Terminé en " + k + " tours");
 		
 		//x^S2APHA
-		return null;
+		return getProbleme().getTr();
 	}
 
 	@Override
@@ -248,7 +264,6 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 
 	@Override
 	public void init() throws ErreurDonneesException {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -12,4 +12,15 @@ public class ScenarioTSP extends DonneesScenario<Graphe, Arete, PhiLambda> {
 		super(pScenario, lArete);
 		// TODO Auto-generated constructor stub
 	}
+	
+	 public void pondereScenario(double facteurPonderation){
+		 for(Graphe g : super.scenarios.keySet()) {
+			 for(Arete a : g.getMapAretes().values()) {
+				 a.pondere(facteurPonderation);
+			 }
+		 }
+		 for (Arete a1 : super.donneesDeterministes) {
+			 a1.pondere(facteurPonderation);
+		 }
+    }
 }

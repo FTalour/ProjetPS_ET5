@@ -30,6 +30,10 @@ public class Arete extends Donnees{
         this.noeudB = b;
         this.poids = poids;
     }
+    
+    public void pondere(double facteurPonderation){
+    	setPoids(poids*facteurPonderation);
+    }
 
     public Noeud getNoeudA() {
         return noeudA;
