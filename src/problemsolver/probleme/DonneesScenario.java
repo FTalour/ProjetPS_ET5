@@ -20,8 +20,8 @@ import problemsolver.donnees.solutions.TourReference;
  * @param <V> Le type de pénalités
  */
 public class DonneesScenario<T extends Donnees, U extends Donnees, V extends Penalites<? extends TourReference<?, ?>, ? extends Donnees>> {
-    private HashMap<T, V> scenarios; // un ensemble de scénarios
-    HashSet<U> donneesDeterministes; // un hashset des données déterministes
+    protected HashMap<T, V> scenarios; // un ensemble de scénarios
+    protected HashSet<U> donneesDeterministes; // un hashset des données déterministes
     
     public DonneesScenario(HashMap <T, V> pScenario, HashSet<U> lArete){
         scenarios = pScenario;

@@ -55,8 +55,7 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 		    HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
 		    getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios);
 		    getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
-		    for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
-		    	
+		    for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()) {
 		    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 		    }
 		    getProbleme().getTr().calculer(listSolution.values());
