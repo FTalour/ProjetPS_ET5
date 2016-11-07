@@ -129,7 +129,8 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		
 		double epsilon = 0; // seuil de convergence
 		double[] epsilonTab = {0}; // seuil de convergence à l'iteration k
-		Donnees[] solEquilibreeTab; // solution equilibree à l'iteration k
+		Donnees[] solPondereeTab; // solutions pondérées par les probobabilités à l'iteration k
+		Donnees[] solEquilibreeTab; // solutions equilibrées à l'iteration k
 		double[][] w = new double[nombreEchantillons][1000]; // w^mk
 		double[] alpha = new double[1000]; alpha[0]=1; // alpha
 		int k=0, kmax = 1000; // indices d'iterations
@@ -138,8 +139,11 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		double[] ro = new double[1000]; ro[0]=1;
 		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax) {
 			k++;
-			
-			//TODO solution pondérée 
+
+			for (i=0; i<listeEchantillon.size(); i++) {
+				//TODO définir l'opérateur ou crée une fonction pour pondéré une solution (Circuit)
+				solPondereeTab[k] = (1/listeEchantillon.size()) * solutionsEchantillons.get(i).get(k);
+			}
 			
 			solutionsCalculees.clear();
 			
@@ -151,9 +155,10 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 				alpha[k] = alpha[k-1]*delta;
 			}
 			
-			//TODO maj x 2 bar
-			solEquilibreeTab[k]= alpha[k] * aerze + (1 - alpha[k]) * 
-			
+			for (i=0; i<listeEchantillon.size(); i++) {
+				solEquilibreeTab[k] = alpha[k] * solPondereeTab[k] + (1 - alpha[k]) * xBest;
+			}
+				
 			if (k >= 2) {
 				if (epsilonTab[k] >= epsilonTab[k]/2.0) {
 					ro[k] = beta * ro [k-1];
@@ -196,8 +201,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 				//on calcule la meilleure valeur objectif sur tout N'
 				//en cherchant sur tous les scénarios de celui-ci avec la solution trouvée avant 
 				for (j=0; j<EchRef.size(); j++) {
-					//TODO appeler calculer sur les valeurs deterministes
-					EchRef.get(j)
+					EchRef.getTr().calculer(solutionsCalculees.values());
 				}
 			}
 			
