@@ -25,6 +25,7 @@ public class Solving extends Thread {
 			Donnees d =solveur.resoudre(min);
 			SwingUtilities.invokeLater(() -> {
                             ProblemSolver.getMainFrame().getGFrame().showDonnees(GraphFrame.TAB_SOLUTION, d, Color.BLACK);
+                            //ProblemSolver.getMainFrame().getGFrame().setText(GraphFrame.TAB_SOLUTION, "TonTexte");
                             Afficheur.infoDialog("Terminé en "+ProblemSolver.getMainFrame().getClock());
                             ProblemSolver.getMainFrame().stopClock();
                         });
