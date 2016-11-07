@@ -24,6 +24,14 @@ public class SaaOptions extends javax.swing.JDialog {
         spinnerEchantillon.setValue(5);
         pack();
     }
+    
+    public SaaOptions(javax.swing.JDialog parent) {
+        super(parent, true);
+        initComponents();
+        OKpressed = false;
+        spinnerEchantillon.setValue(5);
+        pack();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

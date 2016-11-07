@@ -352,9 +352,9 @@ public class S2aphaOptions extends javax.swing.JDialog {
                 return null;
             }else{
                 if(panelAvance.isVisible())
-                    return new S2APHA(sliderEchantillon.getValue(), sliderScenar.getValue(), second, sliderVar.getValue(), sliderDet.getValue());
+                    return new S2APHA(sliderEchantillon.getValue(), second, sliderVar.getValue(), sliderDet.getValue());
                 else
-                    return new S2APHA(sliderEchantillon.getValue(), sliderScenar.getValue(), second);
+                    return new S2APHA(sliderEchantillon.getValue(), second);
             }
         }
         return null;
