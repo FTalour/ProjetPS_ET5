@@ -2,6 +2,7 @@ package problemsolver.solveur;
 
 import problemsolver.donnees.Donnees;
 import problemsolver.exceptions.ErreurDonneesException;
+import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.Probleme_Stochastique;
 
 public class RecuitPha extends Solveur<Probleme_Stochastique>{
@@ -34,5 +35,16 @@ public class RecuitPha extends Solveur<Probleme_Stochastique>{
     public String toString(){
         return "Pha "+p.donneesString();
     }
+
+	@Override
+	public Donnees resoudre(Donnees donnees, Donnees solution, boolean minimiser, Echantillon echantillon)
+			throws ErreurDonneesException {
+		p.setProbleme(this.getProbleme());
+		r.setProbleme(this.getProbleme());
+		p.resoudre(donnees, solution, minimiser,echantillon);
+		p.getProbleme().setUseHeuristique(true);
+		p.getProbleme().setUseStochastique(false);
+		return r.resoudre(minimiser);
+	}
 
 }
