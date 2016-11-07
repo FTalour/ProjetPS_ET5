@@ -69,7 +69,8 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 	    }
 		getProbleme().getTr().calculer(listSolution.values());
 	    getProbleme().setUseStochastique(true);
-
+	    
+	    /*
 		allScenarios = getProbleme().getDs().getHashMapScenarios();
 		ArrayList<Donnees> allScenariosKeys = (ArrayList<Donnees>) allScenarios.keySet();
 		ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenariosPenalities = (ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>>) allScenarios
@@ -218,10 +219,10 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			if (vkbest[k] < vBest) {
 				vBest = vkbest[k];
 				for (i=0; i<listeEchantillon.size(); i++) {
-					//xBest = /* x corespondant au vBest */;
+					//xBest =  ; //x corespondant au vBest
 				}
 			}
-		}
+		}*/
 		
 		int t=0;
 		do{
@@ -234,12 +235,12 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			getProbleme().getTr().calculer(listSolution.values());
 			b = true;
 			for(Donnees d:listSolution.keySet()){
-				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b); k=t;
+				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
 				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 			}
 		}while(!b);
 		
-		Afficheur.infoDialog("Terminé en " + k + " tours");
+		Afficheur.infoDialog("Terminé en " + t + " tours");
 		
 		//x^S2APHA
 		return getProbleme().getTr();
