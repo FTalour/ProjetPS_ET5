@@ -35,7 +35,7 @@ public class SAA extends Solveur<Probleme_Stochastique> {
 		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
 		int nombreDeScenario = getProbleme().getDs().getScenarios().size();
 		//Il faut changer 5 pour ce qu'on a entrer
-		int nombreDeEchantillon = 5;
+		int nombreDeEchantillon = nombreEchantillons;
 
 		int increment = nombreDeScenario/nombreDeEchantillon;
 		Echantillon echantillon = new Echantillon();

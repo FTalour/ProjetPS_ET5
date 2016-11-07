@@ -13,6 +13,7 @@ import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.DonneesScenario;
+import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.EchantillonS2APHA;
 import problemsolver.probleme.Penalites;
 import problemsolver.probleme.Probleme;
@@ -100,7 +101,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		for (EchantillonS2APHA echantillon : listeEchantillon) { 
 			for (DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> donneesScenario : echantillon) {
 				for(Donnees scen : donneesScenario.getScenarios()) { // resolution par echantillon
-					solutionsCalculees.put(donneesScenario.getScenarios(), secondSolveur.resoudre(scen, solInit, minimiser, echantillon)); // SAA
+					solutionsCalculees.put(donneesScenario, secondSolveur.resoudre(scen, solInit, minimiser, (Echantillon) new ArrayList<Donnees>(donneesScenario.getScenarios()))); // SAA
 				}
 			}
 		}
@@ -126,29 +127,65 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		
 		getProbleme().setUseStochastique(true); // le problème est stochastique
 		
-		double epsilon; // seuil de convergence
-		double[] epsilonTab; // seuil de convergence à l'iteration k
+		double epsilon = 0; // seuil de convergence
+		double[] epsilonTab = {0}; // seuil de convergence à l'iteration k
 		Donnees[] solEquilibreeTab; // solution equilibree à l'iteration k
+		double[][] w = new double[nombreEchantillons][1000]; // w^mk
+		double[] alpha = new double[1000]; alpha[0]=1; // alpha
 		int k=0, kmax = 1000; // indices d'iterations
+		double delta = 0.05;
+		double beta = 2.0;
+		double[] ro = new double[1000]; ro[0]=1;
 		while ((epsilonTab[k] >= epsilon || solEquilibreeTab[k] != xBest)  && k < kmax) {
 			k++;
+			
+			//TODO solution pondérée 
+			
 			solutionsCalculees.clear();
 			
-			// TODO mettre les pénalités à jour avec les classes qui vont bien
+			if (alpha[k-1] == 0) {
+				alpha[k] = alpha[k-1];
+			}
+			else
+			{
+				alpha[k] = alpha[k-1]*delta;
+			}
 			
+			//TODO maj x 2 bar
+			solEquilibreeTab[k]= alpha[k] * aerze + (1 - alpha[k]) * 
+			
+			if (k >= 2) {
+				if (epsilonTab[k] >= epsilonTab[k]/2.0) {
+					ro[k] = beta * ro [k-1];
+				}
+				else
+				{
+					ro[k] = ro[k-1];
+				}
+			}
+			
+			for (i=0; i<listeEchantillon.size(); i++) {
+				//x^m k-1 - xEqu^k
+				double diff = ((Circuit) solutionsEchantillons.get(i).get(k-1)).distanceTotale() - ((Circuit) solEquilibreeTab[k]).distanceTotale();
+				w[i][k] = w[i][k-1] + ro[k] * diff;
+			}
 			
 			for (i=0; i<listeEchantillon.size(); i++) {
 				
 				//TODO resoudre le problème à deux niveaux (s'inspirer de la classe Pha)
-				solutionsCalculees.put(listeEchantillon.get(i), secondSolveur.resoudre(donnees, solInit, minimiser, listeEchantillon.get(i)));
+				for (DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> donneesScenario : listeEchantillon.get(i)) {
+					for(Donnees scen : donneesScenario.getScenarios()) { // resolution par echantillon
+						solutionsCalculees.put(donneesScenario, secondSolveur.resoudre(scen, solInit, minimiser, (Echantillon) new ArrayList<Donnees>(donneesScenario.getScenarios())));
+					}
+				}
 				listeEchantillon.get(i).getTr().calculer(solutionsCalculees.values());
 				
 				//TODO stocker le résultat v (^v^mk) et solution (x^mk)
 				
 				double somme = 0;
-				for (j=0; j<listeEchantillon.size(); j++) {
+				for (ArrayList<Donnees> unesolution :  solutionsEchantillons) {
 					//TODO avoir la valeur des solutions et pas juste la solution
-					somme = Math.sqrt(Math.abs(((Circuit) solutionsEchantillons.get(j).get(k)).distanceTotale() - ((Circuit) solEquilibreeTab[k]).distanceTotale()));
+					somme = Math.sqrt(Math.abs(((Circuit) unesolution.get(k)).distanceTotale() - ((Circuit) solEquilibreeTab[k]).distanceTotale()));
 				}
 				epsilonTab[k] = somme; 
 			}
@@ -160,7 +197,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 				//en cherchant sur tous les scénarios de celui-ci avec la solution trouvée avant 
 				for (j=0; j<EchRef.size(); j++) {
 					//TODO appeler calculer sur les valeurs deterministes
-					EchRef.get(j).
+					EchRef.get(j)
 				}
 			}
 			
