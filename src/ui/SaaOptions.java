@@ -8,6 +8,7 @@ package ui;
 import problemsolver.solveur.SAA;
 import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
+import problemsolver.solveur.RecuitPha;
 import problemsolver.solveur.Solveur;
 
 
@@ -207,7 +208,7 @@ public class SaaOptions extends javax.swing.JDialog {
                     PhaOptions optPha = new PhaOptions(this);
                     optPha.setLocationRelativeTo(null);
                     optPha.setVisible(true);
-                    second = optPha.getPha();
+                    second = new RecuitPha(optPha.getPha());
                     break;
                 default:
                     second = null;

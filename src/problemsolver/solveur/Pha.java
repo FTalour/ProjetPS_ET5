@@ -105,7 +105,7 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 			}
 		}while(!b);
-		Afficheur.infoDialog("Terminé en "+t+" tours");
+		//Afficheur.infoDialog("Terminé en "+t+" tours");
 		return getProbleme().getTr();
 }
     

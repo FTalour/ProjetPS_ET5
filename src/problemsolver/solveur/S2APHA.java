@@ -50,6 +50,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		this(nbrS, secondS, DEFVAR, DEFPER);
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public Donnees resoudre(Donnees donnees, Donnees solInit, boolean minimiser) throws ErreurDonneesException {
 		boolean b;
@@ -70,7 +71,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		getProbleme().getTr().calculer(listSolution.values());
 	    getProbleme().setUseStochastique(true);
 	    
-	    /*
+	    if (false){
 		allScenarios = getProbleme().getDs().getHashMapScenarios();
 		ArrayList<Donnees> allScenariosKeys = (ArrayList<Donnees>) allScenarios.keySet();
 		ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenariosPenalities = (ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>>) allScenarios
@@ -222,8 +223,8 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 					//xBest =  ; //x corespondant au vBest
 				}
 			}
-		}*/
-		
+		}
+	    }
 		int t=0;
 		do{
 			t = t + 1;
@@ -240,7 +241,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			}
 		}while(!b);
 		
-		Afficheur.infoDialog("Terminé en " + t + " tours");
+		//Afficheur.infoDialog("Terminé en " + t + " tours");
 		
 		//x^S2APHA
 		return getProbleme().getTr();
@@ -248,7 +249,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 
 	@Override
 	public String toString() {
-		return "Moyenne des données déterministes " + donneesString();
+		return "S2APHA " + donneesString();
 	}
 
 	public String donneesString() {

@@ -7,6 +7,7 @@ package ui;
 
 import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
+import problemsolver.solveur.RecuitPha;
 import problemsolver.solveur.Solveur;
 
 public class PhaOptions extends javax.swing.JDialog {
