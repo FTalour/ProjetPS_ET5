@@ -43,8 +43,9 @@ public abstract class Solveur<T extends Probleme<Graphe_Complet, Circuit_Hamilto
         return probleme;
     }
 
-    public void setProbleme(Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme2) {
-        this.probleme = (T) probleme2;
+    @SuppressWarnings("unchecked")
+	public void setProbleme(Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme2) {
+    	this.probleme = (T) probleme2;
     }
     
     public void setAffiche(boolean b){

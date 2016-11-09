@@ -94,7 +94,8 @@ public class Circuit extends AbstractCircuit{
         double MY = Math.abs(minY);
     	double EL = (j.getWidth()/(maxX+MX))*echelleLargeur;
         double EH = (j.getHeight()/(maxY+MY))*echelleHauteur;
-    	GraphicComponent pan = new GraphicComponent(){
+    	@SuppressWarnings("serial")
+		GraphicComponent pan = new GraphicComponent(){
             
     		@Override
     		protected void affiche(Graphics g) {

@@ -5,17 +5,20 @@ import java.awt.Color;
 import javax.swing.SwingUtilities;
 
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe_Complet;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.exceptions.ErreurDonneesException;
+import problemsolver.probleme.Probleme;
 import problemsolver.solveur.Solveur;
 import ui.Afficheur;
 import ui.GraphFrame;
 
 public class Solving extends Thread {
-	private final Solveur solveur;
+	private final Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur;
 	private final boolean min;
 	
-	public Solving(Solveur s, boolean m) {
-		solveur = s;
+	public Solving(Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur2, boolean m) {
+		solveur = solveur2;
 		min = m;
 	}
 	

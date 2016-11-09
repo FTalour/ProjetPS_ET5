@@ -21,6 +21,7 @@ public class RecuitPha extends Solveur<Probleme<Graphe_Complet, Circuit_Hamilton
 		p = mt;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser) throws ErreurDonneesException {
 		p.setProbleme((Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>) this.getProbleme());

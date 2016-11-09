@@ -130,6 +130,7 @@ public class MyXMLHandler extends DefaultHandler {
 		// don't do anything
 	}
 	
+	@SuppressWarnings("unused")
 	private void RepartitionNoeudsMDSJ(Graphe_Complet g){
     	double[][] x;
     	x = MDSJ.classicalScaling(g.getDoubleArray(), 2);

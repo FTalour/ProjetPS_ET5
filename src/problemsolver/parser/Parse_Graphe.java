@@ -8,7 +8,6 @@ package problemsolver.parser;
 import java.io.BufferedReader;
 import java.io.File;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -20,7 +19,6 @@ import problemsolver.donnees.Arete;
 import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.Noeud;
 import problemsolver.exceptions.ErreurDonneesException;
-import ui.Afficheur;
 
 /**
  *

@@ -9,6 +9,7 @@ package problemsolver.exceptions;
  *
  * @author Clément
  */
+@SuppressWarnings("serial")
 public class IGotItException extends Exception {
     
 }

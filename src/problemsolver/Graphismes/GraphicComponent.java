@@ -13,6 +13,7 @@ import javax.swing.JPanel;
  *
  * @author Clément
  */
+@SuppressWarnings("serial")
 public abstract class GraphicComponent extends JPanel{
     int initSX;
     int initSY;

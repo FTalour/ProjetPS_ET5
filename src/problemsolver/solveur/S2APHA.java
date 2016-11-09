@@ -1,6 +1,7 @@
 package problemsolver.solveur;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
 import ui.Afficheur;
 
+@SuppressWarnings("unused")
 public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> {
 	private Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondSolveur;
 	private int variation;
