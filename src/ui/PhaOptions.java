@@ -9,6 +9,7 @@ import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
 import problemsolver.solveur.Solveur;
 
+@SuppressWarnings("serial")
 public class PhaOptions extends javax.swing.JDialog {
     private boolean OKpressed;
     /**

@@ -2,27 +2,27 @@ package problemsolver.solveur;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe;
+import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.Circuit_Hamiltonien;
+import problemsolver.donnees.solutions.Circuit_TourReference;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.DonneesScenario;
-import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.EchantillonS2APHA;
 import problemsolver.probleme.Penalites;
+import problemsolver.probleme.PhiLambda;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
-import problemsolver.probleme.ScenarioTSP;
 import ui.Afficheur;
 
-public class S2APHA extends Solveur<Probleme_Stochastique> {
-	private Solveur<Probleme> secondSolveur;
+public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> {
+	private Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondSolveur;
 	private int variation;
 	private int pourcentDet;
 	private static final int DEFVAR = 20, DEFPER = 20;
@@ -31,13 +31,13 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 	private int nombreScenarios;
 	private int tailleEchantillonRef;
 
-	HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
+	HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
 	private HashMap<Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenarios;
 	private ArrayList<EchantillonS2APHA> listeEchantillon;
 	private EchantillonS2APHA EchRef;
 
 	
-	public S2APHA(int nbEchantillon, Solveur secondS, int var, int pDet) {
+	public S2APHA(int nbEchantillon, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondS, int var, int pDet) {
 		nombreEchantillons = nbEchantillon;
 		nombreScenarios = nombreEchantillons;
 		tailleEchantillonRef = 4 * nombreScenarios;
@@ -46,17 +46,17 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		pourcentDet = pDet;
 	}
 
-	public S2APHA(int nbrS, Solveur secondS) {
+	public S2APHA(int nbrS, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondS) {
 		this(nbrS, secondS, DEFVAR, DEFPER);
 	}
 
 	@Override
-	public Donnees resoudre(Donnees donnees, Donnees solInit, boolean minimiser) throws ErreurDonneesException {
+	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
 		boolean b;
 		secondSolveur.setProbleme(getProbleme());
 		secondSolveur.setAffiche(false);
 		secondSolveur.init();
-		HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees> solutionsCalculees = new HashMap<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?, ?>, ? extends Donnees>>, Donnees>();
+		HashMap<DonneesScenario<Graphe, Arete, PhiLambda>, Donnees> solutionsCalculees = new HashMap<DonneesScenario<Graphe, Arete, PhiLambda>, Donnees>();
 
 		// prépartition du problème
 		
@@ -64,7 +64,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 		getProbleme().initialiserScenarios(variation, pourcentDet,
 				nombreEchantillons * nombreScenarios + tailleEchantillonRef);
 		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
-		for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()) {
+		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
 	    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 	    }
 		getProbleme().getTr().calculer(listSolution.values());
@@ -229,12 +229,12 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 			t = t + 1;
 			listSolution.clear();
 			
-			for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
+			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
 		    	listSolution .put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
 		    }
 			getProbleme().getTr().calculer(listSolution.values());
 			b = true;
-			for(Donnees d:listSolution.keySet()){
+			for(Graphe_Complet d:listSolution.keySet()){
 				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
 				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 			}
@@ -259,7 +259,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique> {
 					+ "% déterminisne, avec " + secondSolveur + ")";
 	}
 
-	public Solveur<Probleme> getSolveur() {
+	public Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
 		return secondSolveur;
 	}
 

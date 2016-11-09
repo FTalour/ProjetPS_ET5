@@ -8,7 +8,6 @@ package problemsolver.donnees.solutions;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -17,44 +16,35 @@ import javax.swing.SwingUtilities;
 
 import problemsolver.Graphismes.GraphicComponent;
 import problemsolver.donnees.Arete;
-import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe;
-import problemsolver.donnees.Noeud;
 
 /**
  *
  * @author Clément
  */
 public class Circuit_TourReference extends TourReference<Arete, Circuit>{
-    private final double maxX;
-    private final double maxY;
-    private final double minX;
-    private final double minY;
-    private final static int GRAPHICSIZE = 8;
     
     public Circuit_TourReference(HashSet<Arete> l, Graphe g) {
-        super(l);
-        this.maxX = g.getMaxX();
-        this.maxY = g.getMaxY();
-        this.minX = g.getMinX();
-        this.minY = g.getMinY();
+        super(l, g);
     }
     
     /**
      * calcul la moyenne sur la collection des valeurs des arrêtes selectionnés
      */
-    public void calculer(Collection<Circuit> d){
-    	double div = d.size();
+    
+    @Override
+	public void calculer(Collection<? extends Circuit> collection) {
+    	double div = collection.size();
     	for(Arete a:getKeySet()){
     		double val = 0;
-    		for(Circuit c:d){
+    		for(Circuit c:collection){
     			if(c.getParcourt().contains(a)){
     				val += 1;
     			}
     		}
     		setValeur(a, val/div);
     	}
-    }
+	}
     
     @SuppressWarnings("serial")
 	@Override
@@ -108,6 +98,8 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
         }
         return ret;
     }
+
+	
     
     
 }

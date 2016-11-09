@@ -46,7 +46,6 @@ public class Circuit_Hamiltonien extends Circuit{
     	try {
 			return new Circuit_Hamiltonien((ArrayList<Noeud>)getOrdre().clone(), getGraphe());
 		} catch (ErreurDonneesException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

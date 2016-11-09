@@ -5,57 +5,56 @@
  */
 package problemsolver.solveur;
 
-import java.util.ArrayList;
-import problemsolver.donnees.Graphe;
-import problemsolver.donnees.solutions.TourReference;
 import java.util.HashMap;
 import java.util.Set;
 
 import problemsolver.donnees.Arete;
-import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe_Complet;
+import problemsolver.donnees.solutions.Circuit;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
+import problemsolver.donnees.solutions.Circuit_TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
+import problemsolver.probleme.DonneesScenario;
 import problemsolver.probleme.Echantillon;
+import problemsolver.probleme.PhiLambda;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
-import problemsolver.donnees.solutions.TourReference;
 import ui.Afficheur;
 
 /**
  *
  * @author Clément
  */
-public class Pha extends Solveur<Probleme_Stochastique>{
+public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>>{
     private int nombreScenarios;
-    private Solveur<Probleme> secondSolveur;
+    private Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondSolveur;
     private int variation;
     private int pourcentDet;
     private static final int DEFVAR = 20, DEFPER = 20;
     // UTILISER PLUSIEURS THREAD POUR FAIRE LES RECUITS EN MÊME TEMPS
     
-    public Pha(int nbrS, Solveur secondS, int var, int pDet){
+    public Pha(int nbrS, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondS, int var, int pDet){
         nombreScenarios = nbrS;
         secondSolveur = secondS;
         variation = var;
         pourcentDet = pDet;
     }
     
-    public Pha(int nbrS, Solveur secondS) {
+    public Pha(int nbrS, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondS) {
         this(nbrS, secondS, DEFVAR, DEFPER);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-
-	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser) throws ErreurDonneesException{
+	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException{
     		double t = 0;
 		    boolean b;
 		    secondSolveur.setProbleme(getProbleme());
 		    secondSolveur.setAffiche(false);
 		    secondSolveur.init();
-		    HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
+		    HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
 		    getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios);
 		    getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
-		    for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()) {
+		    for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
 		    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 		    }
 		    getProbleme().getTr().calculer(listSolution.values());
@@ -64,12 +63,12 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 				t = t + 1;
 				listSolution.clear();
 				
-				for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
-			    	listSolution .put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
+				for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
+			    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
 			    }
 				getProbleme().getTr().calculer(listSolution.values());
 				b = true;
-				for(Donnees d:listSolution.keySet()){
+				for(Graphe_Complet d:listSolution.keySet()){
 					b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
 					getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 				}
@@ -78,14 +77,14 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 			return getProbleme().getTr();
 	}
 
-    public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
+    public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
 		double t = 0;
 	    boolean b;
 	    secondSolveur.setProbleme(getProbleme());
 	    secondSolveur.setAffiche(false);
 	    secondSolveur.init();
-	    HashMap<Donnees, Donnees> listSolution = new HashMap<Donnees, Donnees>();
-	    for(Donnees scen: echantillon){
+	    HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
+	    for(Graphe_Complet scen: echantillon){
 	    	
 	    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 	    }
@@ -95,12 +94,12 @@ public class Pha extends Solveur<Probleme_Stochastique>{
 			t = t + 1;
 			listSolution.clear();
 			
-			for(Donnees scen: (Set<Donnees>) getProbleme().getDs().getScenarios()){
+			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
 		    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
 		    }
 			getProbleme().getTr().calculer(listSolution.values());
 			b = true;
-			for(Donnees d:listSolution.keySet()){
+			for(Graphe_Complet d:listSolution.keySet()){
 				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
 				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
 			}
@@ -121,7 +120,7 @@ public class Pha extends Solveur<Probleme_Stochastique>{
             return "("+nombreScenarios+" scenarios, variation "+variation+"% et "+pourcentDet+"% déterminisne, avec "+secondSolveur+")";
     }
 
-    public Solveur<Probleme> getSolveur() {
+    public Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
         return secondSolveur;
     }
 

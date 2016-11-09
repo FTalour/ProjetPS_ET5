@@ -5,9 +5,10 @@
  */
 package problemsolver.probleme;
 
-import java.util.ArrayList;
-
-import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Arete;
+import problemsolver.donnees.Graphe_Complet;
+import problemsolver.donnees.solutions.Circuit;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.parser.Parser;
@@ -20,7 +21,7 @@ import problemsolver.parser.Parser;
  * @param <V> Le type de DonneesScenario
  * @param <W> Le tour de référence
  */
-public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees, V extends DonneesScenario, W extends TourReference> extends Probleme<T, U>{
+public abstract class Probleme_Stochastique<T extends Graphe_Complet, U extends Circuit_Hamiltonien, V extends DonneesScenario<? extends Graphe_Complet, ? extends Arete, ? extends PhiLambda>, W extends TourReference<? extends Arete, ? extends Circuit>> extends Probleme<T,U>{
     private V ds;
     private W tr;
 
@@ -44,15 +45,15 @@ public abstract class Probleme_Stochastique<T extends Donnees, U extends Donnees
     
     protected abstract V creerScenarios(double variation, double pourcentDet, int nombre) throws ErreurDonneesException;
 
-    public void initialiserTourRef(V donS, T typD) throws ErreurDonneesException{
-        tr = (W) creerTourRef(donS, typD);
+    public void initialiserTourRef(DonneesScenario<Graphe_Complet, Arete, PhiLambda> donneesScenario, Graphe_Complet graphe_Complet) throws ErreurDonneesException{
+        tr = (W) creerTourRef(donneesScenario, graphe_Complet);
     }
     
     public void initialiserTourRefSaa(W trNew) throws ErreurDonneesException{
         tr = trNew;
     }
     
-    protected abstract W creerTourRef(V donS, T typD) throws ErreurDonneesException;
+    protected abstract W creerTourRef(DonneesScenario<Graphe_Complet, Arete, PhiLambda> donneesScenario, Graphe_Complet graphe_Complet) throws ErreurDonneesException;
 
     public V getDs() {
         return ds;

@@ -1,43 +1,39 @@
 package problemsolver.solveur;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import problemsolver.donnees.Arete;
-import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.Circuit_TourReference;
-import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.DonneesScenario;
 import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.PhiLambda;
 import problemsolver.probleme.Probleme_Stochastique;
 
-public class SAA extends Solveur<Probleme_Stochastique> {
+public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> {
 	int nombreEchantillons;
 	ArrayList<Echantillon> listeEchantillon;
 	Echantillon referanceEchantillon = new Echantillon();
 	Echantillon EchRef;
-	Solveur solveurSecondaire;
+	Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> solveurSecondaire;
 
-	public SAA(int nbrS, Solveur secondS) {
+	public SAA(int nbrS, Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> secondS) {
 		nombreEchantillons = nbrS;
 		solveurSecondaire = secondS;
 	}
 
 	@Override
-	public Donnees resoudre(Donnees donnees, Donnees solution, boolean minimiser)
+	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser)
 			throws ErreurDonneesException {
 
 		solveurSecondaire.setProbleme(getProbleme());
 		solveurSecondaire.setAffiche(false);
 		solveurSecondaire.init();
-
 
 		getProbleme().initialiserScenarios(20, 20, 10);
 		getProbleme().initialiserTourRef(getProbleme().getDs(),	getProbleme().getJeu());
@@ -49,7 +45,7 @@ public class SAA extends Solveur<Probleme_Stochastique> {
 
 		int increment = nombreDeScenario / nombreDeEchantillon;
 		Echantillon echantillon = new Echantillon();
-		for (Donnees scen : (Set<Donnees>) getProbleme().getDs().getScenarios()) {
+		for (Graphe_Complet scen : (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
 			referanceEchantillon.add(scen);
 			if (nombreDeScenario / nombreDeEchantillon == increment) {
 				echantillon = new Echantillon();
@@ -92,14 +88,6 @@ public class SAA extends Solveur<Probleme_Stochastique> {
 	public void init() throws ErreurDonneesException {
 		// TODO Auto-generated method stub
 		listeEchantillon = new ArrayList<Echantillon>();
-	}
-
-	@Override
-	public Donnees resoudre(Donnees dinitiales, Donnees solInit,
-			boolean minimiser, Echantillon echantillon)
-			throws ErreurDonneesException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

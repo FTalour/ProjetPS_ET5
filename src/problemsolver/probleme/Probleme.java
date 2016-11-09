@@ -11,7 +11,9 @@ import java.io.IOException;
 
 import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.solutions.Circuit;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.parser.Parser;
@@ -19,9 +21,10 @@ import problemsolver.parser.Parser;
 /**
  *
  * @author Clément
- * @param <T>
+ * @param <T extends Donnees>
+ * @param <U extends Donnees>
  */
-public abstract class Probleme<T extends Donnees, U extends Donnees>{
+public abstract class Probleme<T extends Graphe_Complet, U extends Circuit_Hamiltonien>{
     T jeu;
     Parser<T> parser;
     private boolean useStochastique;
@@ -56,8 +59,9 @@ public abstract class Probleme<T extends Donnees, U extends Donnees>{
         return jeu;
     }
 
-    public void setJeu(T jeu) {
-        this.jeu = jeu;
+    @SuppressWarnings("unchecked")
+	public void setJeu(T donnees) {
+        this.jeu = donnees;
     }
     
     public T parseDonnees(File f) throws ErreurDonneesException, FileNotFoundException, IOException{
