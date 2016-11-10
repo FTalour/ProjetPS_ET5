@@ -62,7 +62,7 @@ public abstract class Probleme<T extends Graphe_Complet, U extends Circuit_Hamil
         this.jeu = donnees;
     }
     
-    public T parseDonnees(File f) throws ErreurDonneesException, FileNotFoundException, IOException{
+    public T parseDonnees(File f) throws ErreurDonneesException, FileNotFoundException, IOException {
         return parser.Parse(f);
     }
     

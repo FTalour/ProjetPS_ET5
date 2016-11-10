@@ -95,7 +95,7 @@ public class Manager{
         this.minimiser = minimiser;
     }
     
-    public Donnees getDonnees() throws FileNotFoundException, ErreurDonneesException, IOException{
+    public Donnees getDonnees() throws FileNotFoundException, ErreurDonneesException, IOException {
     	if(donnees == null)
         	donnees = probleme.parseDonnees(fichier);
     	return donnees;

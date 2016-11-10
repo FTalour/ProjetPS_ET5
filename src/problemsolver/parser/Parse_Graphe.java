@@ -26,7 +26,6 @@ import problemsolver.exceptions.ErreurDonneesException;
  */
 public class Parse_Graphe extends Parser<Graphe_Complet>{
 
-
     @Override
     public Graphe_Complet Parse(File f) throws ErreurDonneesException, IOException, NullPointerException{
     	BufferedReader in = new BufferedReader(new FileReader(f));

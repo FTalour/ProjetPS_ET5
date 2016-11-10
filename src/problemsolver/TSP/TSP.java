@@ -17,7 +17,7 @@ import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.donnees.solutions.Circuit_TourReference;
 import problemsolver.donnees.solutions.TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
-import problemsolver.parser.Parse_Graphe;
+import problemsolver.parser.Parse_Graphe_SAX;
 import problemsolver.probleme.DonneesScenario;
 import problemsolver.probleme.PhiLambda;
 import problemsolver.probleme.Probleme_Stochastique;
@@ -31,7 +31,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	private HashSet<Noeud> intouchable;
 
 	public TSP() {
-		super(new Parse_Graphe());
+		super(new Parse_Graphe_SAX()); //TODO change to Parse_Graphe to come back to previous version
 		intouchable = new HashSet<Noeud>();
 	}
 
