@@ -1,6 +1,7 @@
 package problemsolver.solveur;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
 import ui.Afficheur;
 
+@SuppressWarnings("unused")
 public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> {
 	private Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondSolveur;
 	private int variation;
@@ -56,7 +58,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		boolean b;
 		secondSolveur.setProbleme(getProbleme());
 		secondSolveur.setAffiche(false);
-		secondSolveur.init();
+		
 		HashMap<DonneesScenario<Graphe, Arete, PhiLambda>, Donnees> solutionsCalculees = new HashMap<DonneesScenario<Graphe, Arete, PhiLambda>, Donnees>();
 
 		// prépartition du problème
@@ -64,11 +66,11 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		//le problème contient l'ensemble des scénarios de tous les échantillons 
 		getProbleme().initialiserScenarios(variation, pourcentDet,
 				nombreEchantillons * nombreScenarios + tailleEchantillonRef);
-		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
-		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
+		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 	    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 	    }
-		getProbleme().getTr().calculer(listSolution.values());
+		getProbleme().getTourRef().calculer(listSolution.values());
 	    getProbleme().setUseStochastique(true);
 	    
 	    /*{
@@ -230,21 +232,21 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 			t = t + 1;
 			listSolution.clear();
 			
-			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
+			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
 		    	listSolution .put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
 		    }
-			getProbleme().getTr().calculer(listSolution.values());
+			getProbleme().getTourRef().calculer(listSolution.values());
 			b = true;
 			for(Graphe_Complet d:listSolution.keySet()){
-				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
-				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
+				b = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && b);
+				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
 		}while(!b);
 		
 		//Afficheur.infoDialog("Terminé en " + t + " tours");
 		
 		//x^S2APHA
-		return getProbleme().getTr();
+		return getProbleme().getTourRef();
 	}
 
 	@Override
@@ -262,11 +264,6 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 
 	public Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
 		return secondSolveur;
-	}
-
-	@Override
-	public void init() throws ErreurDonneesException {
-
 	}
 
 }

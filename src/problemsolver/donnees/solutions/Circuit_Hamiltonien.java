@@ -8,7 +8,6 @@ package problemsolver.donnees.solutions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import problemsolver.donnees.Arete;
 import problemsolver.donnees.Graphe;
 import problemsolver.donnees.Noeud;
 import problemsolver.exceptions.ErreurDonneesException;
@@ -41,10 +40,11 @@ public class Circuit_Hamiltonien extends Circuit{
 
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Object clone(){
     	try {
-			return new Circuit_Hamiltonien((ArrayList<Noeud>)getOrdre().clone(), getGraphe());
+			return new Circuit_Hamiltonien((ArrayList<Noeud>) getOrdre().clone(), getGraphe());
 		} catch (ErreurDonneesException e) {
 			e.printStackTrace();
 		}

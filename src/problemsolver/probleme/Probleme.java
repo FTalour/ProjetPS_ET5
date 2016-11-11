@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import problemsolver.donnees.Arete;
-import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.Circuit_Hamiltonien;
@@ -59,12 +58,11 @@ public abstract class Probleme<T extends Graphe_Complet, U extends Circuit_Hamil
         return jeu;
     }
 
-    @SuppressWarnings("unchecked")
-	public void setJeu(T donnees) {
+    public void setJeu(T donnees) {
         this.jeu = donnees;
     }
     
-    public T parseDonnees(File f) throws ErreurDonneesException, FileNotFoundException, IOException{
+    public T parseDonnees(File f) throws ErreurDonneesException, FileNotFoundException, IOException {
         return parser.Parse(f);
     }
     

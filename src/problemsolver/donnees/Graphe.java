@@ -25,12 +25,13 @@ import ui.Afficheur;
 public class Graphe extends Donnees{
     private final ArrayList<Noeud> listNoeuds;
     private final HashMap<Integer, Arete> mapAretes;
+    private double[][] poidsArretes;
+    private boolean DAinit;
+    
     private double maxX;
     private double maxY;
     private double minX;
     private double minY;
-    private double[][] doubleArray;
-    private boolean DAinit;
     private static final int GRAPHICSIZE = 8;
     
     @SuppressWarnings("unchecked")
@@ -52,25 +53,25 @@ public class Graphe extends Donnees{
             if(n.getY() < minY)
                 minY = n.getY();
         }
-        doubleArray = new double[listNoeuds.size()][listNoeuds.size()];
+        poidsArretes = new double[listNoeuds.size()][listNoeuds.size()];
         DAinit = false;
     }
 
-    @SuppressWarnings("unchecked")
-	public Graphe(Graphe g, double variation, HashSet<Arete> valDet) {
+	@SuppressWarnings("unchecked")
+	public Graphe(Graphe g, double variation, HashSet<Arete> aretesSelectedAsDeteterministes) {
         super();
-        listNoeuds = (ArrayList<Noeud>) g.listNoeuds.clone();
-        mapAretes = (HashMap<Integer, Arete>) g.mapAretes.clone();
+        listNoeuds =  (ArrayList<Noeud>) g.listNoeuds.clone(); // Ca marche ???
+        mapAretes = (HashMap<Integer, Arete>) g.mapAretes.clone(); // Ca marche ???
         for(Arete a:g.mapAretes.values()){
-        	if(!valDet.contains(a))
-        		a.setPoids(a.getPoids() + a.getPoids() * ((Math.random()*variation*2-variation)/100));
+        	if(!aretesSelectedAsDeteterministes.contains(a)) // on ne change que les aretes non deterministes
+        		a.setPoids(a.getPoids() + a.getPoids() * ((Math.random()*variation*2-variation)/(100.0)));
         }
         maxX = g.maxX;
         maxY = g.maxY;
         minX = g.minX;
         minY = g.minY;
-        doubleArray = new double[listNoeuds.size()][listNoeuds.size()];
-        DAinit = false;
+        poidsArretes = new double[listNoeuds.size()][listNoeuds.size()];
+        DAinit = false; // les donnees ne sont plus initiales
     }
     
     /*public Graphe(double[][] DA) {
@@ -97,8 +98,8 @@ public class Graphe extends Donnees{
     }*/
     
     public double[][] getDoubleArray(){
-        if(DAinit){
-            return doubleArray;
+        if(DAinit){ // deja initialise
+            return poidsArretes;
         }
         DAinit = true;
         int i = 0;
@@ -106,19 +107,19 @@ public class Graphe extends Donnees{
             int j = 0;
             for(Noeud m:listNoeuds){
                 if(n == m){
-                    doubleArray[i][j] = 0.;
+                    poidsArretes[i][j] = 0.; // Une ville vers elle même
                 }else{
                     Arete a = getArete(n, m);
                     if(a == null)
-                        doubleArray[i][j] = Double.MAX_VALUE;
+                        poidsArretes[i][j] = Double.MAX_VALUE; // si le graphe n'est pas complet on met la valeur max pour les aretes non présentent
                     else
-                    	doubleArray[i][j] = a.getPoids();
+                    	poidsArretes[i][j] = a.getPoids(); // les aretes normales prennent leur valeur
                 }
                 j++;
             }
             i++;
         }
-        return doubleArray;
+        return poidsArretes;
     }
     
     public void setCoordonnees(double coord[][]){

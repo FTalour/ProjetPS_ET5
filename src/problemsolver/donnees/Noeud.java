@@ -8,8 +8,6 @@ package problemsolver.donnees;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.text.DecimalFormat;
-
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -59,7 +57,8 @@ public class Noeud extends Donnees {
     
     @Override
     public void affiche(JPanel j, double echelleLargeur, double echelleHauteur, double translationX, double translationY, Color c) {
-        GraphicComponent point = new GraphicComponent(){
+        @SuppressWarnings("serial")
+		GraphicComponent point = new GraphicComponent(){
             
             @Override
             protected void affiche(Graphics g) {

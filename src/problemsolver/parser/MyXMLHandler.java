@@ -17,36 +17,30 @@ public class MyXMLHandler extends DefaultHandler {
 	private int numPoint = 0;
 	private String nom = "";
 	
-	private HashMap<String, Noeud> ln = new HashMap<String, Noeud>();
-	private HashMap<Integer, Arete> aa = new HashMap<Integer, Arete>();
+	private HashMap<String, Noeud> hashMapStringNoeud = new HashMap<String, Noeud>();
+	private HashMap<Integer, Arete> hashMapVilleArete = new HashMap<Integer, Arete>();
+	private ArrayList<Noeud> arrayListNoeud = new ArrayList<Noeud>();
 	private Noeud nAct = null;
 	
-	private Graphe_Complet g;
+	private Graphe_Complet graphe;
 
 	private String strCout;
 	private double cout = 0.0;
 
 	// debut du parsing
+	@Override
 	public void startDocument() throws SAXException {
 		//System.out.println("Debut du parsing");
 	}
 
 	// fin du parsing
+	@Override
 	public void endDocument() throws SAXException {
 		//System.out.println("Fin du parsing");
 		
-		ArrayList<Noeud> an = new ArrayList<Noeud>();
-    	for(Noeud n:ln.values()){
-    		an.add(n);
-    	}
-		
-		try {
-			g = new Graphe_Complet(an, aa);
-		} catch (ErreurDonneesException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		RepartitionNoeuds(g);
+    	for(Noeud n:hashMapStringNoeud.values()){
+    		arrayListNoeud.add(n);
+    	}		
 	}
 
 	/**
@@ -54,14 +48,15 @@ public class MyXMLHandler extends DefaultHandler {
 	 * Redefinition de la methode pour intercepter les evenements
 	 * 
 	 */
+	@Override
 	public void startElement(String namespaceURI, String lname, String qname, Attributes attrs) throws SAXException {
 		node = qname;
 
 		if (qname.equalsIgnoreCase("vertex")) {
 			//System.out.println("ajout d'un noeud a la liste");
-			if(!ln.containsKey(Integer.toString(numPoint)))
-				ln.put(Integer.toString(numPoint), new Noeud(0.,0.,Integer.toString(numPoint)));
-			nAct = ln.get(Integer.toString(numPoint));
+			if(!hashMapStringNoeud.containsKey(Integer.toString(numPoint)))
+				hashMapStringNoeud.put(Integer.toString(numPoint), new Noeud(0.,0.,Integer.toString(numPoint)));
+			nAct = hashMapStringNoeud.get(Integer.toString(numPoint));
 		}
 		if (qname.equalsIgnoreCase("edge")) {
 			if (attrs != null) {
@@ -84,6 +79,7 @@ public class MyXMLHandler extends DefaultHandler {
 		}
 	}
 
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		//System.out.println("Fin de l'element " + qName);
 		node = qName;
@@ -96,12 +92,12 @@ public class MyXMLHandler extends DefaultHandler {
 			//System.out.println("stockage du cout dans : " + villeActuel + " " + villeArrivee);
 			
 			if(!nom.equals(Integer.toString(numPoint))){
-    			if(!ln.containsKey(nom))
-    				ln.put(nom, new Noeud(0.,0.,nom));
-    			Noeud nTmp = ln.get(nom);
-    			if(!aa.containsKey(Arete.getHashCode(nAct, nTmp))){
+    			if(!hashMapStringNoeud.containsKey(nom))
+    				hashMapStringNoeud.put(nom, new Noeud(0.,0.,nom));
+    			Noeud nTmp = hashMapStringNoeud.get(nom);
+    			if(!hashMapVilleArete.containsKey(Arete.getHashCode(nAct, nTmp))){
     				double poids = cout;
-    				aa.put(Arete.getHashCode(nAct, nTmp), new Arete(nAct, nTmp, poids));
+    				hashMapVilleArete.put(Arete.getHashCode(nAct, nTmp), new Arete(nAct, nTmp, poids));
     			}
 			}
 		}
@@ -112,6 +108,7 @@ public class MyXMLHandler extends DefaultHandler {
 	 * permet de recuperer la valeur d'un noeud
 	 * 
 	 */
+	@Override
 	public void characters(char[] data, int start, int end) {
 
 		// La variable data contient tout notre fichier.
@@ -130,6 +127,7 @@ public class MyXMLHandler extends DefaultHandler {
 		// don't do anything
 	}
 	
+	@SuppressWarnings("unused")
 	private void RepartitionNoeudsMDSJ(Graphe_Complet g){
     	double[][] x;
     	x = MDSJ.classicalScaling(g.getDoubleArray(), 2);
@@ -154,7 +152,9 @@ public class MyXMLHandler extends DefaultHandler {
     	g.setCoordonnees(x);
     }
     
-    public Graphe_Complet getGraphComplet(){
-    	return g;
+    public Graphe_Complet getGraphComplet() throws ErreurDonneesException{
+    	graphe = new Graphe_Complet(arrayListNoeud, hashMapVilleArete);
+		RepartitionNoeuds(graphe);
+    	return graphe;
  	}
 }

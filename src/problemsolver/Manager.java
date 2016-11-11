@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.exceptions.ErreurDonneesException;
@@ -27,7 +26,7 @@ public class Manager{
     private Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme;
     private Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur;
     private boolean minimiser;
-    Graphe_Complet donnees;
+    Graphe_Complet donnees; // contient les données parsees initialement
     
     public Manager(File fichier, Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur, boolean minimiser) {
         this.fichier = fichier;
@@ -47,7 +46,7 @@ public class Manager{
             		return;
             	}
             	else
-            		donnees = probleme.parseDonnees(fichier);
+            		donnees = probleme.parseDonnees(fichier); // initialise les donnees
             }
         	probleme.setJeu(donnees);
         }catch(Exception e){
@@ -56,9 +55,8 @@ public class Manager{
 		probleme.setUseHeuristique(false);
 		probleme.setUseStochastique(false);
         solveur.setProbleme(probleme);
-        solveur.init();
         
-        new Solving(solveur, minimiser).run();
+        new Solving(solveur, minimiser).run(); // lance la résolution dans un thread séparer
         
     }
     
@@ -95,7 +93,7 @@ public class Manager{
         this.minimiser = minimiser;
     }
     
-    public Donnees getDonnees() throws FileNotFoundException, ErreurDonneesException, IOException{
+    public Graphe_Complet getDonnees() throws FileNotFoundException, ErreurDonneesException, IOException {
     	if(donnees == null)
         	donnees = probleme.parseDonnees(fichier);
     	return donnees;

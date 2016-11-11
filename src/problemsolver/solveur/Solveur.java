@@ -43,8 +43,9 @@ public abstract class Solveur<T extends Probleme<Graphe_Complet, Circuit_Hamilto
         return probleme;
     }
 
-    public void setProbleme(Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme2) {
-        this.probleme = (T) probleme2;
+    @SuppressWarnings("unchecked")
+	public void setProbleme(Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme2) {
+    	this.probleme = (T) probleme2;
     }
     
     public void setAffiche(boolean b){
@@ -52,8 +53,6 @@ public abstract class Solveur<T extends Probleme<Graphe_Complet, Circuit_Hamilto
     }
     
     public boolean getAffiche(){return affiche;}
-    
-    public abstract void init() throws ErreurDonneesException;
 
 	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser, Echantillon echantillon)
 			throws ErreurDonneesException {

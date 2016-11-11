@@ -18,17 +18,9 @@ import javax.swing.Timer;
 
 import problemsolver.Manager;
 import problemsolver.TSP.TSP;
-import problemsolver.donnees.Arete;
-import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe_Complet;
-import problemsolver.donnees.solutions.Circuit_Hamiltonien;
-import problemsolver.donnees.solutions.Circuit_TourReference;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.exceptions.IGotItException;
-import problemsolver.probleme.DonneesScenario;
-import problemsolver.probleme.PhiLambda;
-import problemsolver.probleme.Probleme;
-import problemsolver.probleme.Probleme_Stochastique;
 import problemsolver.solveur.*;
 
 /**
@@ -447,7 +439,7 @@ public class MainFrame extends javax.swing.JFrame {
 			@Override
 			public void run() {
 				try{
-					Donnees d = manager.getDonnees();
+					Graphe_Complet d = manager.getDonnees();
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
 						public void run() {

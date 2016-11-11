@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
 
 import problemsolver.donnees.Graphe_Complet;
 import problemsolver.exceptions.ErreurDonneesException;
@@ -20,22 +23,22 @@ public class Parse_Graphe_SAX extends Parser<Graphe_Complet>{
 	@Override
 	public Graphe_Complet Parse(File f) throws ErreurDonneesException, FileNotFoundException, IOException {
     	
-    	try {
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-
-			SAXParser saxParser = factory.newSAXParser();
-			MyXMLHandler handler = new MyXMLHandler();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		MyXMLHandler handler = new MyXMLHandler();
+		
+		try {
+    		SAXParser saxParser = factory.newSAXParser();
+    		saxParser.parse(f, handler);
 			
-			saxParser.parse(f, handler);
-			
-			return handler.getGraphComplet();
-			
-    	}catch (Exception e) {
+    	}catch (ParserConfigurationException e) {
 			// TODO: handle exception
     		e.printStackTrace();
-    	}
-    	
-		return null;
+    	} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return handler.getGraphComplet();
     	
 	}
 

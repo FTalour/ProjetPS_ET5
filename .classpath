@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/media/hdd/Documents/Polytech/Java workspace/beansbinding-1.2.1.jar"/>
-	<classpathentry kind="lib" path="/media/hdd/Documents/Polytech/Java workspace/mdsj.jar"/>
+	<classpathentry kind="lib" path="beansbinding-1.2.1.jar"/>
+	<classpathentry kind="lib" path="mdsj.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

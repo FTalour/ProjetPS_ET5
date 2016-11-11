@@ -61,7 +61,8 @@ public class Arete extends Donnees{
     
     @Override
     public void affiche(JPanel j, double echelleLargeur, double echelleHauteur, double translationX, double translationY, Color c) {
-        GraphicComponent line = new GraphicComponent(){
+        @SuppressWarnings("serial")
+		GraphicComponent line = new GraphicComponent(){
             
             @Override
             protected void affiche(Graphics g) {
