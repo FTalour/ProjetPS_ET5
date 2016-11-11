@@ -20,8 +20,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 	private double T0;
 
 	@Override
-	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionInitiale, boolean minimiser) throws ErreurDonneesException {
-		Circuit_Hamiltonien solutionCourante = solutionInitiale.clone();
+	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionCourante, boolean minimiser) throws ErreurDonneesException {
 		
 		int tailleProbleme 		= getProbleme().getTaille();
 		
@@ -38,7 +37,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
 
 		//valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale && valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme
-		long startTime = System.nanoTime();
+		//long startTime = System.nanoTime();
 		do{
 			int i = 0;
 			valeurSolutionCouranteSaved = valeurSolutionCourante;
@@ -69,14 +68,14 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 			}
 
 			T = 0.75 * T;
-			System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionCouranteSaved);
-			System.out.println("valeurSolutionInitiale : " + valeurSolutionCourante);
-			boolean b = valeurSolutionCouranteSaved-0.001*tailleProbleme>=valeurSolutionCourante;
-			boolean	c = valeurSolutionCourante>=valeurSolutionCouranteSaved+0.001*tailleProbleme;
-			System.out.println("b : " + b + "    c : " + c);
+			//System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionCouranteSaved);
+			//System.out.println("valeurSolutionInitiale : " + valeurSolutionCourante);
+			//boolean b = valeurSolutionCouranteSaved-0.001*tailleProbleme>=valeurSolutionCourante;
+			//boolean	c = valeurSolutionCourante>=valeurSolutionCouranteSaved+0.001*tailleProbleme;
+			//System.out.println("b : " + b + "    c : " + c);
 		}while(T > T0/100 && (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme));
-		long endTime = System.nanoTime();
-		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
+		//long endTime = System.nanoTime();
+		//System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
 		
 		return solutionMeilleure;
 	}

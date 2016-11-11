@@ -52,7 +52,6 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		this(nbrS, secondS, DEFVAR, DEFPER);
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
 		boolean b;

@@ -24,11 +24,14 @@ public class RecuitPha extends Solveur<Probleme<Graphe_Complet, Circuit_Hamilton
 	@SuppressWarnings("unchecked")
 	@Override
 	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser) throws ErreurDonneesException {
+		System.out.println("Appel recuitPha.resoudre");
 		p.setProbleme((Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>) this.getProbleme());
 		r.setProbleme(this.getProbleme());
+		System.out.println("Appel p.resoudre");
 		p.resoudre(donnees, solution, minimiser);
 		p.getProbleme().setUseHeuristique(true);
 		p.getProbleme().setUseStochastique(false);
+		System.out.println("Appel r.resoudre");
 		return r.resoudre(minimiser);
 	}
 	

@@ -69,15 +69,17 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
 
 		startTime = System.nanoTime();
+		
+		Circuit meilleurSolution = solInit;
 		// Création des scénarios avec les solutions du recuit
 		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
 		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 			long startTime1 = System.nanoTime();
-			Circuit resultat = secondSolveur.resoudre(scen,solInit,minimiser);
+			meilleurSolution = secondSolveur.resoudre(scen,(Circuit_Hamiltonien) meilleurSolution,minimiser);
 			long endTime1 = System.nanoTime();
 			System.out.println("Duree resolution d'un scénario: " + (endTime1-startTime1)/1000000.0);
 			
-			listSolution.put(scen, resultat);
+			listSolution.put(scen, meilleurSolution);
 		}
 		endTime = System.nanoTime();
 		System.out.println("Duree initialistion des solutions des '" + getProbleme().getDonnees().getScenarios().size() + "' scenarios, temps: " + (endTime-startTime)/1000000.0);
@@ -95,7 +97,8 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			// Recalculer les solutions des scénarios de données avec le recuit
 			startTime = System.nanoTime();
 			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
-				listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser));		    	
+				meilleurSolution = secondSolveur.resoudre(scen,(Circuit_Hamiltonien) meilleurSolution,minimiser);
+				listSolution.put(scen, meilleurSolution);		    	
 			}
 			endTime = System.nanoTime();
 			System.out.println("Duree calcul des solutions de la boucle '" + t +"' : temps: " + (endTime-startTime)/1000000.0);
