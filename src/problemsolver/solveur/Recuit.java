@@ -37,7 +37,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		while(T > T0/100 && solutionInitiale!=solutionInitiale_saved) {
 			int i = 0;
 			solutionInitiale_saved = solutionInitiale;
-			while (i < tailleProbleme * tailleProbleme) {
+			while (i < tailleProbleme*tailleProbleme) {
 				solution_temp = getProbleme().voisinage(solutionInitiale);
 				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionInitiale);
 				if ((deltaF < 0) == minimiser){
