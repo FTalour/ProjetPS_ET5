@@ -16,14 +16,14 @@ import problemsolver.parser.Parser;
 /**
  *
  * @author Clément
- * @param <T> Les données à utiliser
+ * @param <T> Les données à utiliser, elles peuvent etre stochastique
  * @param <U> Le type de solution
  * @param <V> Le type de DonneesScenario
  * @param <W> Le tour de référence
  */
 public abstract class Probleme_Stochastique<T extends Graphe_Complet, U extends Circuit_Hamiltonien, V extends DonneesScenario<? extends Graphe_Complet, ? extends Arete, ? extends PhiLambda>, W extends TourReference<? extends Arete, ? extends Circuit>> extends Probleme<T,U>{
-    private V ds;
-    private W tr;
+    private V donnees;
+    private W tourRef;
 
     public Probleme_Stochastique(Parser<T> p) {
         super(p);
@@ -40,32 +40,32 @@ public abstract class Probleme_Stochastique<T extends Graphe_Complet, U extends 
     protected abstract double fonctionObjectifStochastique(T donnees, U solution);
     
     public void initialiserScenarios(double variation, double pourcentDet, int nombre) throws ErreurDonneesException{
-        ds = (V) creerScenarios(variation, pourcentDet, nombre);
+        donnees = (V) creerScenarios(variation, pourcentDet, nombre);
     }
     
     protected abstract V creerScenarios(double variation, double pourcentDet, int nombre) throws ErreurDonneesException;
 
     public void initialiserTourRef(DonneesScenario<Graphe_Complet, Arete, PhiLambda> donneesScenario, Graphe_Complet graphe_Complet) throws ErreurDonneesException{
-        tr = (W) creerTourRef(donneesScenario, graphe_Complet);
+        tourRef = (W) creerTourRef(donneesScenario, graphe_Complet);
     }
     
     public void initialiserTourRefSaa(W trNew) throws ErreurDonneesException{
-        tr = trNew;
+        tourRef = trNew;
     }
     
     protected abstract W creerTourRef(DonneesScenario<Graphe_Complet, Arete, PhiLambda> donneesScenario, Graphe_Complet graphe_Complet) throws ErreurDonneesException;
 
-    public V getDs() {
-        return ds;
+    public V getDonnees() {
+        return donnees;
     }
     
-    public W getTr() {
-        return tr;
+    public W getTourRef() {
+        return tourRef;
     }
     
     public U solutionInitial() throws ErreurDonneesException{
-    	if(getHeuristique() && getTr() != null)
-    		return (U) solutionInitialHeur(getTr());
+    	if(getHeuristique() && getTourRef() != null)
+    		return (U) solutionInitialHeur(getTourRef());
     	else
     		return solutionInitialBase();
     }

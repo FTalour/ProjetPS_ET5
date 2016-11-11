@@ -65,11 +65,11 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		//le problème contient l'ensemble des scénarios de tous les échantillons 
 		getProbleme().initialiserScenarios(variation, pourcentDet,
 				nombreEchantillons * nombreScenarios + tailleEchantillonRef);
-		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
-		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
+		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 	    	listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 	    }
-		getProbleme().getTr().calculer(listSolution.values());
+		getProbleme().getTourRef().calculer(listSolution.values());
 	    getProbleme().setUseStochastique(true);
 	    
 	    /*
@@ -231,21 +231,21 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 			t = t + 1;
 			listSolution.clear();
 			
-			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
+			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
 		    	listSolution .put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
 		    }
-			getProbleme().getTr().calculer(listSolution.values());
+			getProbleme().getTourRef().calculer(listSolution.values());
 			b = true;
 			for(Graphe_Complet d:listSolution.keySet()){
-				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
-				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
+				b = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && b);
+				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
 		}while(!b);
 		
 		Afficheur.infoDialog("Terminé en " + t + " tours");
 		
 		//x^S2APHA
-		return getProbleme().getTr();
+		return getProbleme().getTourRef();
 	}
 
 	@Override

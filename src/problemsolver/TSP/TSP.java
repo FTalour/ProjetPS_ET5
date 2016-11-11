@@ -39,14 +39,14 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	protected double fonctionObjectifStochastique(Graphe_Complet gC, Circuit_Hamiltonien circuit) {
 		double valeurTotale = this.fonctionObjectif(gC, circuit);
 		double valeurPhi = 0;
-		HashSet<Arete> hashSetAretes = getDs().getDonneesDeterministes();
+		HashSet<Arete> hashSetAretes = getDonnees().getDonneesDeterministes();
 		for(Arete arete : hashSetAretes){
 			if(circuit.getParcourt().contains(arete)){
-				valeurTotale += (1 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getLambda(arete);
-				valeurPhi += Math.pow((1 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getPhi(arete), 2);
+				valeurTotale += (1 - this.getTourRef().getValeur(arete)) * this.getDonnees().getPenalites(gC).getLambda(arete);
+				valeurPhi += Math.pow((1 - this.getTourRef().getValeur(arete)) * this.getDonnees().getPenalites(gC).getPhi(arete), 2);
 			}else{
-				valeurTotale += (0 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getLambda(arete);
-				valeurPhi += Math.pow((0 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getPhi(arete), 2);
+				valeurTotale += (0 - this.getTourRef().getValeur(arete)) * this.getDonnees().getPenalites(gC).getLambda(arete);
+				valeurPhi += Math.pow((0 - this.getTourRef().getValeur(arete)) * this.getDonnees().getPenalites(gC).getPhi(arete), 2);
 			}
 		}
 
@@ -65,11 +65,15 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 		for(int i = 0; i < nombreDet; i++){
 			int choix = (int) (Math.random()*getJeu().getListAretes().size());
 			while(det.contains(getJeu().getListAretes().get(choix))){
+				// Le choix doit toujours etre different
 				choix = (int) (Math.random()*getJeu().getListAretes().size());
 			}
 			det.add(getJeu().getListAretes().get(choix));
 		}
 		for(int i = 0; i < nombre; i++){
+			// Le graphe actuel change plein de fois pour prendre en compte les valeurs devenues stochastiques : Florian 
+			// TODO il y a un problème ici car on modifie à chaque fois le graph parser (voir Graphe_Complet(Jeu, var, liste_des_arretes_stochqstiques), je pense que seul les données deterministes ne changes pas mais le reste vaut 0 comme on peut le voir dans les logs du problème
+			// Losrqu'on relance la résolution, les données stochastiques changes et seul les arretes qui étaient deterministes et le restent ne valent pas 0 d'ou la baisse de la fonction objectif à cahque relance : Florian
 			Graphe_Complet scen = new Graphe_Complet(getJeu(), variation, det);
 			scenarios.put(scen, new PhiLambda(det));
 		}
@@ -176,8 +180,8 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 				b = (int) (Math.random()*solution.getNombreNoeuds());
 
 			}while(a == b && !intouchable.contains(solution.getOrdre().get(a)) && !intouchable.contains(solution.getOrdre().get(b)));
-		}while(getTr().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
-				&& getTr().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
+		}while(getTourRef().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
+				&& getTourRef().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
 
 		Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
 		ret.swapNoeud(a, b);
@@ -194,8 +198,8 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 				b = (int) (Math.random()*solution.getNombreNoeuds());
 
 			}while(a == b && !intouchable.contains(solution.getOrdre().get(b)));
-		}while(getTr().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
-				&& getTr().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
+		}while(getTourRef().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
+				&& getTourRef().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
 
 		Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
 		ret.swapNoeud(a, b);

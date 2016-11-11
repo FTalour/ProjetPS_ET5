@@ -57,10 +57,10 @@ public class Graphe extends Donnees{
         DAinit = false;
     }
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public Graphe(Graphe g, double variation, HashSet<Arete> valDet) {
         super();
-        listNoeuds = (ArrayList<Noeud>) g.listNoeuds.clone();
+        listNoeuds =  (ArrayList<Noeud>) g.listNoeuds.clone();
         mapAretes = (HashMap<Integer, Arete>) g.mapAretes.clone();
         for(Arete a:g.mapAretes.values()){
         	if(!valDet.contains(a))

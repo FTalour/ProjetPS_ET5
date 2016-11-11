@@ -37,16 +37,16 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		solveurSecondaire.setAffiche(false);
 
 		getProbleme().initialiserScenarios(20, 20, 10);
-		getProbleme().initialiserTourRef(getProbleme().getDs(),	getProbleme().getJeu());
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(),	getProbleme().getJeu());
 
 		// di yi ci zhu shi
-		int nombreDeScenario = getProbleme().getDs().getScenarios().size();
+		int nombreDeScenario = getProbleme().getDonnees().getScenarios().size();
 		// Il faut changer 5 pour ce qu'on a entrer
 		int nombreDeEchantillon = 5;
 
 		int increment = nombreDeScenario / nombreDeEchantillon;
 		Echantillon echantillon = new Echantillon();
-		for (Graphe_Complet scen : (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
+		for (Graphe_Complet scen : (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 			referanceEchantillon.add(scen);
 			if (nombreDeScenario / nombreDeEchantillon == increment) {
 				echantillon = new Echantillon();

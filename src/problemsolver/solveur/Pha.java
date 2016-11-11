@@ -47,56 +47,59 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		this(nbrS, secondS, DEFVAR, DEFPER);
 	}
 
+	
+	// dinittiales ne sert jamais, c'est pas normal, on ne devrait pas le modifié, il contient les données parser, on devrait modifier une copie
+	// Pour le SAA il vaudrait mieux que resoudre prenne directement une liste de scenarios
 	@Override
 	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
 		double t = 0;
-		double t_max = 1000;
+		double t_max = 10000;
 		boolean continuer;
 
-		// Création des scénarios
+		// Configurer le problème comme stochastique
+		getProbleme().setUseStochastique(true);
+		
+		// Création des scénarios et transformation du graphe actuel en stochastique avec les variations indiquées
 		getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios);
 		
 		//Initialisation du tour de référence
-		getProbleme().initialiserTourRef(getProbleme().getDs(), getProbleme().getJeu());
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
 
 		// Création des scénarios avec les solutions du recuit
 		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
-		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()) {
+		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 			listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser));
 		}
 
 		// Création et calcul du tour de référence à partir des scénarios initiés
-		// Les solutions initiales sont deterministes
-		getProbleme().getTr().calculer(listSolution.values());
-		getProbleme().setUseStochastique(true);
-
+		getProbleme().getTourRef().calculer(listSolution.values());
+		
 		do{
 			t = t + 1;
 			
-			// Nettoyer les solutions initiales des scénarios deterministes
+			// Nettoyer les solutions initiales des scénarios
 			listSolution.clear();
 
-			// Recalculer les solutions des scénarios de données deterministes avec le recuit
-			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
+			// Recalculer les solutions des scénarios de données avec le recuit
+			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
 				listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser));		    	
 			}
 			
 			// Création et calcul du tour de référence à partir des scénarios initiés
-			// Les solutions sont calculés avec les scénarios deterministes
-			getProbleme().getTr().calculer(listSolution.values());
+			getProbleme().getTourRef().calculer(listSolution.values());
 			
 			continuer = true;
 			for(Graphe_Complet d:listSolution.keySet()){
 				// Permet de garder b à false pour la suite de la boucle en calculant les pénalités
-				continuer = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && continuer);
+				continuer = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && continuer);
 				// Calcul des pénalités
-				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
+				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
-		}while(!continuer && t_max < 10000);
+		}while(!continuer && t < t_max);
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 		
 		// Renvoyer le tour de référence
-		return getProbleme().getTr();
+		return getProbleme().getTourRef();
 	}
 
 	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
@@ -107,24 +110,24 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		for(Graphe_Complet scen: echantillon){
 			listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 		}
-		getProbleme().getTr().calculer(listSolution.values());
+		getProbleme().getTourRef().calculer(listSolution.values());
 		getProbleme().setUseStochastique(true);
 		do{
 			t = t + 1;
 			listSolution.clear();
 
-			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDs().getScenarios()){
+			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
 				listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
 			}
-			getProbleme().getTr().calculer(listSolution.values());
+			getProbleme().getTourRef().calculer(listSolution.values());
 			b = true;
 			for(Graphe_Complet d:listSolution.keySet()){
-				b = (getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d)) && b);
-				getProbleme().getDs().getPenalites(d).ajuster(getProbleme().getTr(),listSolution.get(d));
+				b = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && b);
+				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
 		}while(!b);
 		// Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
-		return getProbleme().getTr();
+		return getProbleme().getTourRef();
 	}
 
 	@Override
