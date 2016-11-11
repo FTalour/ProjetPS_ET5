@@ -20,28 +20,28 @@ import problemsolver.donnees.solutions.TourReference;
  * @param <V> Le type de pénalités
  */
 public class DonneesScenario<T extends Donnees, U extends Donnees, V extends Penalites<? extends TourReference<?, ?>, ? extends Donnees>> {
-    protected HashMap<T, V> scenarios; // un ensemble de scénarios
-    protected HashSet<U> donneesDeterministes; // un hashset des données déterministes
+    protected HashMap<T, V> scenariosWithPenalities; // un ensemble de scénarios
+    protected HashSet<U> aretesDeterministes; // un hashset des données deterministes
     
     public DonneesScenario(HashMap <T, V> pScenario, HashSet<U> lArete){
-        scenarios = pScenario;
-        donneesDeterministes = lArete;
+        scenariosWithPenalities = pScenario;
+        aretesDeterministes = lArete;
     }
     
     public HashMap<T, V> getHashMapScenarios(){
-    	return scenarios;
+    	return scenariosWithPenalities;
     }
     
 	public Set<T> getScenarios(){
-        return scenarios.keySet();
+        return scenariosWithPenalities.keySet();
     }
     
     public V getPenalites(T d){
-        return scenarios.get(d);
+        return scenariosWithPenalities.get(d);
     }
     
-    public HashSet<U> getDonneesDeterministes(){
-        return donneesDeterministes;
+    public HashSet<U> getAretesStochastiques(){
+        return aretesDeterministes;
     }
     
 }

@@ -39,7 +39,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	protected double fonctionObjectifStochastique(Graphe_Complet gC, Circuit_Hamiltonien circuit) {
 		double valeurTotale = this.fonctionObjectif(gC, circuit);
 		double valeurPhi = 0;
-		HashSet<Arete> hashSetAretes = getDonnees().getDonneesDeterministes();
+		HashSet<Arete> hashSetAretes = getDonnees().getAretesStochastiques();
 		for(Arete arete : hashSetAretes){
 			if(circuit.getParcourt().contains(arete)){
 				valeurTotale += (1 - this.getTourRef().getValeur(arete)) * this.getDonnees().getPenalites(gC).getLambda(arete);
@@ -59,33 +59,35 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	 */
 	@Override
 	protected DonneesScenario<Graphe_Complet, Arete, PhiLambda> creerScenarios(double variation, double pourcentDet, int nombre) throws ErreurDonneesException {
-		HashMap<Graphe_Complet, PhiLambda> scenarios = new HashMap<Graphe_Complet, PhiLambda>();
+		HashMap<Graphe_Complet, PhiLambda> hashMapscenariosAndPenality = new HashMap<Graphe_Complet, PhiLambda>();
 		int nombreDet = (int) (getJeu().getListAretes().size()*(pourcentDet/100));
-		HashSet<Arete> det = new HashSet<Arete>();
+		HashSet<Arete> hashSetArretesDetSelected = new HashSet<Arete>();
 		for(int i = 0; i < nombreDet; i++){
 			int choix = (int) (Math.random()*getJeu().getListAretes().size());
-			while(det.contains(getJeu().getListAretes().get(choix))){
+			while(hashSetArretesDetSelected.contains(getJeu().getListAretes().get(choix))){
 				// Le choix doit toujours etre different
 				choix = (int) (Math.random()*getJeu().getListAretes().size());
 			}
-			det.add(getJeu().getListAretes().get(choix));
+			hashSetArretesDetSelected.add(getJeu().getListAretes().get(choix));
 		}
 		for(int i = 0; i < nombre; i++){
 			// Le graphe actuel change plein de fois pour prendre en compte les valeurs devenues stochastiques : Florian 
 			// TODO il y a un problème ici car on modifie à chaque fois le graph parser (voir Graphe_Complet(Jeu, var, liste_des_arretes_stochqstiques), je pense que seul les données deterministes ne changes pas mais le reste vaut 0 comme on peut le voir dans les logs du problème
 			// Losrqu'on relance la résolution, les données stochastiques changes et seul les arretes qui étaient deterministes et le restent ne valent pas 0 d'ou la baisse de la fonction objectif à cahque relance : Florian
-			Graphe_Complet scen = new Graphe_Complet(getJeu(), variation, det);
-			scenarios.put(scen, new PhiLambda(det));
+			Graphe_Complet graphe = new Graphe_Complet(getJeu(), variation, hashSetArretesDetSelected);
+			// Je voudrais afficher le graphe cree pour voir ce qu'il donne
+			hashMapscenariosAndPenality.put(graphe, new PhiLambda(hashSetArretesDetSelected));
 		}
 
-		return new DonneesScenario<Graphe_Complet, Arete, PhiLambda>(scenarios, det);
+		// DonneesScenario regroupe des graphes et leurs pénalités
+		return new DonneesScenario<Graphe_Complet, Arete, PhiLambda>(hashMapscenariosAndPenality, hashSetArretesDetSelected);
 	}
 
 	/**
 	 * retourne un tour de référence à partir des données fournises
 	 */
 	protected Circuit_TourReference creerTourRef(DonneesScenario<Graphe_Complet, Arete, PhiLambda> ar, Graphe_Complet d) throws ErreurDonneesException{
-		Circuit_TourReference ret = new Circuit_TourReference(ar.getDonneesDeterministes(), d);
+		Circuit_TourReference ret = new Circuit_TourReference(ar.getAretesStochastiques(), d);
 		return ret;
 	}
 
