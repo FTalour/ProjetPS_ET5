@@ -95,7 +95,7 @@ public class Arete extends Donnees{
     
     @Override
     public String toString(){
-        String ret=noeudA + "; " + noeudB+"; \t"+Afficheur.DF.format(poids);
+        String ret=noeudA + "; \t"+ noeudB+"; \t" + Afficheur.DF.format(poids);
         return ret;
     }
     

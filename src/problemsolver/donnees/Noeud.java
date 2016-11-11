@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import problemsolver.Graphismes.GraphicComponent;
-import ui.Afficheur;
+//import ui.Afficheur; //TODO voir dans toString pour remettre l'affichage précédant
 
 /**
  *
@@ -83,7 +83,7 @@ public class Noeud extends Donnees {
     
     @Override
     public String toString(){
-    	return nom+"("+Afficheur.DF.format(x)+";"+Afficheur.DF.format(y)+")";
+    	return nom/*+"("+Afficheur.DF.format(x)+";"+Afficheur.DF.format(y)+")"*/; //TODO enlever le commentaire pour reactiver l'affichage des coordonnées 
     }
 
 	@Override

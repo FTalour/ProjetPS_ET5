@@ -54,25 +54,39 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
-
+		
+		// Timer
+		long startTime;
+		long endTime;
+		
 		// Configurer le problème comme stochastique
 		getProbleme().setUseStochastique(true);
 		
+		startTime = System.nanoTime();
 		// Création des scénarios et transformation du graphe actuel en stochastique avec les variations indiquées
 		getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios);
+		endTime = System.nanoTime();
+		System.out.println("Duree initialistion scenarios: " + (endTime-startTime)/1000000.0);
 		
+		startTime = System.nanoTime();
 		//Initialisation du tour de référence
 		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
+		endTime = System.nanoTime();
+		System.out.println("Duree initialistion tour de référence: " + (endTime-startTime)/1000000.0);
 
+		startTime = System.nanoTime();
 		// Création des scénarios avec les solutions du recuit
 		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
 		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 			listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser));
 		}
-
+		endTime = System.nanoTime();
+		System.out.println("Duree initialistion des solutions: " + (endTime-startTime)/1000000.0);
+		
 		// Création et calcul du tour de référence à partir des scénarios initiés
 		getProbleme().getTourRef().calculer(listSolution.values());
 		
+		long startTimeBoucle = System.nanoTime();
 		do{
 			t = t + 1;
 			
@@ -80,21 +94,30 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			listSolution.clear();
 
 			// Recalculer les solutions des scénarios de données avec le recuit
+			startTime = System.nanoTime();
 			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
 				listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser));		    	
 			}
+			endTime = System.nanoTime();
+			System.out.println("Duree calcul des solutions de la boucle '" + t +"' : temps: " + (endTime-startTime)/1000000.0);
 			
 			// Création et calcul du tour de référence à partir des scénarios initiés
 			getProbleme().getTourRef().calculer(listSolution.values());
 			
+			startTime = System.nanoTime();
 			continuer = true;
 			for(Graphe_Complet d:listSolution.keySet()){
 				// Permet de garder b à false pour la suite de la boucle en calculant les pénalités
 				continuer = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && continuer);
 				// Calcul des pénalités
-				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
+				// getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
+			endTime = System.nanoTime();
+			System.out.println("Duree calcul des penalités de la boucle '" + t +"' : temps: " + (endTime-startTime)/1000000.0);
 		}while(!continuer && t < t_max);
+		long endTimeBoucle = System.nanoTime();
+		System.out.println("Duree de la boucle principale du Pha: " + (endTimeBoucle-startTimeBoucle)/1000000.0);
+		
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 		
 		// Renvoyer le tour de référence
@@ -106,12 +129,14 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		double t = 0;
 		boolean b;
 
+		getProbleme().setUseStochastique(true);
+		
 		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
 		for(Graphe_Complet scen: echantillon){
 			listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
 		}
 		getProbleme().getTourRef().calculer(listSolution.values());
-		getProbleme().setUseStochastique(true);
+		
 		do{
 			t = t + 1;
 			listSolution.clear();
@@ -146,4 +171,5 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	public Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
 		return secondSolveur;
 	}
+	
 }
