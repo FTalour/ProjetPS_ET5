@@ -100,7 +100,7 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
     }
 
    	@Override
-       public Circuit_TourReference clone() throws CloneNotSupportedException {
+       public Circuit_TourReference clone() {
     	return (Circuit_TourReference) super.clone();
    	}
     

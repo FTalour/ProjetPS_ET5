@@ -21,13 +21,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 
 	@Override
 	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionInitiale, boolean minimiser) throws ErreurDonneesException {
-		Circuit_Hamiltonien solutionCourante = null;
-		try {
-			solutionCourante = solutionInitiale.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Circuit_Hamiltonien solutionCourante = solutionInitiale.clone();
 		
 		int tailleProbleme 		= getProbleme().getTaille();
 		
@@ -38,14 +32,13 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		double deltaF = 0;
 		double valeurSolutionInitiale = 0;
 
-		Circuit_Hamiltonien solutionInitiale_saved 	= null;
+		Circuit_Hamiltonien solutionCourante_saved 	= null;
 		Circuit_Hamiltonien solution_temp 			= null;
 		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
 
-		long startTime = System.nanoTime();
-		while(T > T0/100 && solutionCourante!=solutionInitiale_saved) {
+		while(T > T0/100 && solutionCourante!=solutionCourante_saved) {
 			int i = 0;
-			solutionInitiale_saved = solutionCourante;
+			solutionCourante_saved = solutionCourante;
 			
 			while (i < tailleProbleme * tailleProbleme) {
 				solution_temp = getProbleme().voisinage(solutionCourante);
@@ -68,8 +61,6 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 			
 			T = 0.85 * T;
 		}
-		long endTime = System.nanoTime();
-		System.out.println("Duree initialistion des solutions d'un scénario: " + (endTime-startTime)/1000000.0);
 		
 		return solutionMeilleure;
 	}

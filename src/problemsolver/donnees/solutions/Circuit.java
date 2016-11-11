@@ -35,9 +35,10 @@ public class Circuit extends Donnees {
 	protected static final int GRAPHICSIZE = 8;
 
 
+	@SuppressWarnings("unchecked")
 	public Circuit(ArrayList<Noeud> _listNoeuds, Graphe _graphe){
 		super();
-		ordre = _listNoeuds;
+		ordre = (ArrayList<Noeud>) _listNoeuds.clone();
 		graphe = _graphe;
 		maxX = graphe.getMaxX();
 		maxY = graphe.getMaxY();
@@ -153,7 +154,7 @@ public class Circuit extends Donnees {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Circuit clone() throws CloneNotSupportedException {
+	public Circuit clone() {
 		Circuit cloned = (Circuit) super.clone();
 		cloned.ordre = (ArrayList<Noeud>) ordre.clone();
 		cloned.graphe = graphe.clone();

@@ -229,19 +229,25 @@ public class Graphe extends Donnees{
     }
     
     @Override
-    public Graphe clone() throws CloneNotSupportedException {
-    	try{
-    		Graphe cloned = (Graphe) super.clone();
-    		cloned.setCoordonnees(poidsArretes);
-    		cloned.DAinit = DAinit;
-    		cloned.maxX = maxX;
-    		cloned.maxY = maxY;
-    		cloned.minX = minX;
-    		cloned.minY = minY;
-	    	return cloned;
-		} catch (final CloneNotSupportedException ex) {
-			throw new CloneNotSupportedException();
-		}
+    public Graphe clone() {
+		Graphe cloned = (Graphe) super.clone();
+		cloned.poidsArretes = poidsArretes.clone();
+		cloned.DAinit = DAinit;
+		cloned.maxX = Double.MIN_VALUE;
+		cloned.maxY = Double.MIN_VALUE;
+		cloned.minX = Double.MAX_VALUE;
+		cloned.minY = Double.MAX_VALUE;
+		for(Noeud n : cloned.listNoeuds){
+            if(n.getX() > maxX)
+            	cloned.maxX = n.getX();
+            if(n.getY() > maxY)
+            	cloned.maxY = n.getY();
+            if(n.getX() < minX)
+            	cloned.minX = n.getX();
+            if(n.getY() < minY)
+            	cloned.minY = n.getY();
+        }
+    	return cloned;
     }
 
 	@Override

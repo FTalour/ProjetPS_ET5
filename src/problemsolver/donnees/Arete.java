@@ -105,7 +105,7 @@ public class Arete extends Donnees{
     }
     
     @Override
-    public Arete clone() throws CloneNotSupportedException {
+    public Arete clone() {
 		Arete cloned = (Arete) super.clone();
 		cloned.setNoeudA((Noeud) noeudA.clone());
 		cloned.setNoeudB((Noeud) noeudB.clone());

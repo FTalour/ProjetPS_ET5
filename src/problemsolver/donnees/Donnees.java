@@ -37,8 +37,14 @@ public abstract class Donnees implements Affichable, Cloneable{
     }
     
     @Override
-    public Donnees clone() throws CloneNotSupportedException {
-    	return (Donnees) super.clone();
+    public Donnees clone() {
+    	try {
+			return (Donnees) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
     
     public abstract int getSize();

@@ -80,7 +80,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			listSolution.put(scen, resultat);
 		}
 		endTime = System.nanoTime();
-		System.out.println("Duree initialistion des solutions: " + (endTime-startTime)/1000000.0);
+		System.out.println("Duree initialistion des solutions des '" + getProbleme().getDonnees().getScenarios().size() + "' scenarios, temps: " + (endTime-startTime)/1000000.0);
 		
 		// Création et calcul du tour de référence à partir des scénarios initiés
 		getProbleme().getTourRef().calculer(listSolution.values());

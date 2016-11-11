@@ -87,7 +87,7 @@ public class Noeud extends Donnees {
     }
     
     @Override
-    public Noeud clone() throws CloneNotSupportedException{
+    public Noeud clone() {
 		Noeud cloned = (Noeud) super.clone();
 		cloned.setX(x);
 		cloned.setY(y);
