@@ -44,7 +44,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 			valeurSolutionCouranteSaved = valeurSolutionCourante;
 			while (i < tailleProbleme * tailleProbleme) {
 				long startTime1 = System.nanoTime();
-				solution_temp = getProbleme().voisinage(solutionInitiale);
+				solution_temp = getProbleme().voisinage(solutionCourante);
 				long endTime1 = System.nanoTime();
 				//System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
 				
@@ -55,7 +55,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 				//System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
 				
 				if ((deltaF < 0) == minimiser){
-					solutionInitiale = solution_temp;
+					solutionCourante = solution_temp;
 					valeurSolutionCourante = fsolinit;
 					
 					if (valeurSolutionCourante < fMin){
@@ -78,6 +78,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		}while(T > T0/100 && (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme));
 		long endTime = System.nanoTime();
 		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
+		return solutionMeilleure;
 	}
 
 	private double calculTemperature(Circuit_Hamiltonien solutionInitiale, int n){
