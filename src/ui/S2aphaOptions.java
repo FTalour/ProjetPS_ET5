@@ -101,7 +101,8 @@ public class S2aphaOptions extends javax.swing.JDialog {
         spinnerEchantillon.setModel(new javax.swing.SpinnerNumberModel(5, 1, 500, 1));
         spinnerEchantillon.setRequestFocusEnabled(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderEchantillon, org.jdesktop.beansbinding.ObjectProperty.create(), spinnerEchantillon, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        @SuppressWarnings("rawtypes")
+		org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderEchantillon, org.jdesktop.beansbinding.ObjectProperty.create(), spinnerEchantillon, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         jLabel5.setText("Quantité d'échantillons:");
