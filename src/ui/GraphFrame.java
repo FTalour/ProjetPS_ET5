@@ -337,6 +337,21 @@ public class GraphFrame extends javax.swing.JFrame {
             setLocationRelativeTo(null);
             setVisible(true);
         }
+        // d est soit un Circuit soit un Graphe_Complet
+        setText(index, d.toString());
+        panel.setSelectedIndex(index);
+        if(d.getSize()>=ProblemSolver.MAX_SIZE)
+        	return;
+		
+		d.affiche(getGraph(index), 1, 1, 0, 0, c);
+    }
+    
+    public void addShowDonnees(int index, Donnees d, Color c){
+        if(!isVisible()){
+            setLocationRelativeTo(null);
+            setVisible(true);
+        }
+        // d est soit un Circuit soit un Graphe_Complet
         setText(index, d.toString());
         panel.setSelectedIndex(index);
         if(d.getSize()>=ProblemSolver.MAX_SIZE)

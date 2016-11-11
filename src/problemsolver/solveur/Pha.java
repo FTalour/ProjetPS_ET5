@@ -46,7 +46,6 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	public Pha(int nbrS, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondS) {
 		this(nbrS, secondS, DEFVAR, DEFPER);
 	}
-
 	
 	// dinittiales ne sert jamais, c'est pas normal, on ne devrait pas le modifié, il contient les données parser, on devrait modifier une copie
 	// Pour le SAA il vaudrait mieux que resoudre prenne directement une liste de scenarios
@@ -102,6 +101,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		return getProbleme().getTourRef();
 	}
 
+	// n'est jamais utilisé ...
 	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
 		double t = 0;
 		boolean b;

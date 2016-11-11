@@ -18,7 +18,7 @@ import javax.swing.Timer;
 
 import problemsolver.Manager;
 import problemsolver.TSP.TSP;
-import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe_Complet;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.exceptions.IGotItException;
 import problemsolver.solveur.*;
@@ -439,7 +439,7 @@ public class MainFrame extends javax.swing.JFrame {
 			@Override
 			public void run() {
 				try{
-					Donnees d = manager.getDonnees();
+					Graphe_Complet d = manager.getDonnees();
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
 						public void run() {
