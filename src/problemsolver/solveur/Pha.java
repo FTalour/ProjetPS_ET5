@@ -147,6 +147,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
 		}while(!b);
+
 		// Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 		return getProbleme().getTourRef();
 	}

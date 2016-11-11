@@ -15,6 +15,7 @@ import problemsolver.probleme.PhiLambda;
 import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
 import problemsolver.solveur.Recuit;
+import problemsolver.solveur.RecuitPha;
 import problemsolver.solveur.Solveur;
 
 @SuppressWarnings("serial")
@@ -215,7 +216,7 @@ public class SaaOptions extends javax.swing.JDialog {
                 	PhaOptions optPha = new PhaOptions(this);
                     optPha.setLocationRelativeTo(null);
                     optPha.setVisible(true);
-                    second = optPha.getPha();
+                    second = new RecuitPha(optPha.getPha());
                     break;
                 default:
                     second = null;

@@ -30,37 +30,53 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		double T 	= T0;
 		double fMin = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 		double deltaF = 0;
-		double valeurSolutionInitiale = 0;
+		double valeurSolutionCourante = 0;
+		double valeurSolutionCouranteSaved = 0;
+		double fsolinit = 0;
 
-		Circuit_Hamiltonien solutionCourante_saved 	= null;
 		Circuit_Hamiltonien solution_temp 			= null;
 		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
 
-		while(T > T0/100 && solutionCourante!=solutionCourante_saved) {
+		//valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale && valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme
+		long startTime = System.nanoTime();
+		do{
 			int i = 0;
-			solutionCourante_saved = solutionCourante;
-			
+			valeurSolutionCouranteSaved = valeurSolutionCourante;
 			while (i < tailleProbleme * tailleProbleme) {
+				System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionCourante);
+				System.nanoTime();
 				
-				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionCourante);
+				System.nanoTime();
+				fsolinit = getProbleme().callFonctionObjectif(graphe, solutionCourante);
+				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - fsolinit;
+				System.nanoTime();
 				
 				if ((deltaF < 0) == minimiser){
 					solutionCourante = solution_temp;
-					valeurSolutionInitiale = getProbleme().callFonctionObjectif(graphe, solutionCourante);
-					if (valeurSolutionInitiale < fMin){
-						fMin = valeurSolutionInitiale;
+					valeurSolutionCourante = fsolinit;
+					
+					if (valeurSolutionCourante < fMin){
+						fMin = valeurSolutionCourante;
 						solutionMeilleure = solutionCourante;
 					}
 				}
 				else if (Math.random() < Math.exp(-deltaF/T)){
 					solutionCourante = solution_temp;
+					valeurSolutionCourante = fsolinit;
 				}
 				i = i + 1;
 			}
-			
-			T = 0.85 * T;
-		}
+
+			T = 0.75 * T;
+			System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionCouranteSaved);
+			System.out.println("valeurSolutionInitiale : " + valeurSolutionCourante);
+			boolean b = valeurSolutionCouranteSaved-0.001*tailleProbleme>=valeurSolutionCourante;
+			boolean	c = valeurSolutionCourante>=valeurSolutionCouranteSaved+0.001*tailleProbleme;
+			System.out.println("b : " + b + "    c : " + c);
+		}while(T > T0/100 && (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme));
+		long endTime = System.nanoTime();
+		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
 		
 		return solutionMeilleure;
 	}

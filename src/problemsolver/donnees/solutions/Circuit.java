@@ -20,10 +20,6 @@ import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe;
 import problemsolver.donnees.Noeud;
 
-/**
- *
- * @author Clément
- */
 public class Circuit extends Donnees {
 	private ArrayList<Noeud> ordre;
 	private Graphe graphe;
@@ -116,7 +112,7 @@ public class Circuit extends Donnees {
 		pan.setBackground(new Color(255, 255, 255, 0));
 		pan.setInitSize(j.getSize());
 		SwingUtilities.invokeLater(new Runnable(){
-
+			
 			@Override
 			public void run() {
 				j.add(pan);

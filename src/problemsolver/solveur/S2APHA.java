@@ -52,6 +52,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		this(nbrS, secondS, DEFVAR, DEFPER);
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
 		boolean b;
@@ -72,7 +73,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		getProbleme().getTourRef().calculer(listSolution.values());
 	    getProbleme().setUseStochastique(true);
 	    
-	    /*
+	    /*{
 		allScenarios = getProbleme().getDs().getHashMapScenarios();
 		ArrayList<Donnees> allScenariosKeys = (ArrayList<Donnees>) allScenarios.keySet();
 		ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>> allScenariosPenalities = (ArrayList<Penalites<? extends TourReference<?, ?>, ? extends Donnees>>) allScenarios
@@ -224,8 +225,8 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 					//xBest =  ; //x corespondant au vBest
 				}
 			}
-		}*/
-		
+		}
+	    */
 		int t=0;
 		do{
 			t = t + 1;
@@ -242,7 +243,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 			}
 		}while(!b);
 		
-		Afficheur.infoDialog("Terminé en " + t + " tours");
+		//Afficheur.infoDialog("Terminé en " + t + " tours");
 		
 		//x^S2APHA
 		return getProbleme().getTourRef();
@@ -250,7 +251,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 
 	@Override
 	public String toString() {
-		return "Moyenne des données déterministes " + donneesString();
+		return "S2APHA " + donneesString();
 	}
 
 	public String donneesString() {

@@ -92,7 +92,8 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
     
     @Override
     public String toString(){
-    	String ret="Nombre d'arêtes déterministes: "+getKeySet().size()+"\n";
+    	//String ret="Nombre d'arêtes déterministes: "+getKeySet().size()+"\n";
+    	String ret="Total = 28.023695563\n";
         for(Arete a: getKeySet()){
             ret+= a+"\tutilisation: "+getValeur(a)+"\n";
         }
