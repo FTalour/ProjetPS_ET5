@@ -21,41 +21,47 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 
 	@Override
 	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionInitiale, boolean minimiser) throws ErreurDonneesException {
-		
+		Circuit_Hamiltonien solutionCourante = null;
+		try {
+			solutionCourante = solutionInitiale.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int tailleProbleme 		= getProbleme().getTaille();
 		
 		T0 = calculTemperature(getProbleme().solutionInitial(), tailleProbleme);
 		
 		double T 	= T0;
-		double fMin = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+		double fMin = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 		double deltaF = 0;
 		double valeurSolutionInitiale = 0;
 
 		Circuit_Hamiltonien solutionInitiale_saved 	= null;
 		Circuit_Hamiltonien solution_temp 			= null;
-		Circuit_Hamiltonien solutionMeilleure  		= solutionInitiale;
+		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
 
 		long startTime = System.nanoTime();
-		while(T > T0/100 && solutionInitiale!=solutionInitiale_saved) {
+		while(T > T0/100 && solutionCourante!=solutionInitiale_saved) {
 			int i = 0;
-			solutionInitiale_saved = solutionInitiale;
+			solutionInitiale_saved = solutionCourante;
 			
 			while (i < tailleProbleme * tailleProbleme) {
-				solution_temp = getProbleme().voisinage(solutionInitiale);
+				solution_temp = getProbleme().voisinage(solutionCourante);
 				
-				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionCourante);
 				
 				if ((deltaF < 0) == minimiser){
-					solutionInitiale = solution_temp;
-					valeurSolutionInitiale = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+					solutionCourante = solution_temp;
+					valeurSolutionInitiale = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 					if (valeurSolutionInitiale < fMin){
 						fMin = valeurSolutionInitiale;
-						solutionMeilleure = solutionInitiale;
+						solutionMeilleure = solutionCourante;
 					}
 				}
 				else if (Math.random() < Math.exp(-deltaF/T)){
-					solutionInitiale = solution_temp;
+					solutionCourante = solution_temp;
 				}
 				i = i + 1;
 			}
