@@ -21,6 +21,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 
 	@Override
 	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionCourante, boolean minimiser) throws ErreurDonneesException {
+
 		
 		int tailleProbleme 		= getProbleme().getTaille();
 		
