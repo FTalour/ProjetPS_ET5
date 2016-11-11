@@ -22,15 +22,10 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 	@Override
 	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionInitiale, boolean minimiser) throws ErreurDonneesException {
 		
-		long startTime;
-		long endTime;
 		
 		int tailleProbleme 		= getProbleme().getTaille();
 		
-		startTime = System.nanoTime();
 		T0 = calculTemperature(getProbleme().solutionInitial(), tailleProbleme);
-		endTime = System.nanoTime();
-		System.out.println("Duree initialistion température: " + (endTime-startTime)/1000000.0);
 		
 		double T 	= T0;
 		double fMin = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
@@ -41,28 +36,19 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		Circuit_Hamiltonien solution_temp 			= null;
 		Circuit_Hamiltonien solutionMeilleure  		= solutionInitiale;
 
-		startTime = System.nanoTime();
+		long startTime = System.nanoTime();
 		while(T > T0/100 && solutionInitiale!=solutionInitiale_saved) {
 			int i = 0;
 			solutionInitiale_saved = solutionInitiale;
+			
 			while (i < tailleProbleme * tailleProbleme) {
-				long startTime1 = System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionInitiale);
-				long endTime1 = System.nanoTime();
-				System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
 				
-				startTime1 = System.nanoTime();
 				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionInitiale);
-				endTime1 = System.nanoTime();
-				System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
 				
 				if ((deltaF < 0) == minimiser){
 					solutionInitiale = solution_temp;
-					startTime1 = System.nanoTime();
 					valeurSolutionInitiale = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
-					endTime1 = System.nanoTime();
-					System.out.println("\t\tDuree de calcul de fonction obj si delta < 0 : " + (endTime1-startTime1)/1000000.0);
-					
 					if (valeurSolutionInitiale < fMin){
 						fMin = valeurSolutionInitiale;
 						solutionMeilleure = solutionInitiale;
@@ -73,10 +59,12 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 				}
 				i = i + 1;
 			}
+			
 			T = 0.85 * T;
 		}
-		endTime = System.nanoTime();
-		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
+		long endTime = System.nanoTime();
+		System.out.println("Duree initialistion des solutions d'un scénario: " + (endTime-startTime)/1000000.0);
+		
 		return solutionMeilleure;
 	}
 

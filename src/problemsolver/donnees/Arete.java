@@ -104,6 +104,15 @@ public class Arete extends Donnees{
         return getHashCode(noeudA, noeudB);
     }
     
+    @Override
+    public Arete clone() throws CloneNotSupportedException {
+		Arete cloned = (Arete) super.clone();
+		cloned.setNoeudA((Noeud) noeudA.clone());
+		cloned.setNoeudB((Noeud) noeudB.clone());
+		cloned.setPoids(poids);
+    	return cloned;
+    }
+    
     public static int getHashCode(Noeud nA, Noeud nB){
         int a, b;
         if(nA.getID() > nB.getID()){

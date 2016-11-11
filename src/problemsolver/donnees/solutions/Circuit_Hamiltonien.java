@@ -40,14 +40,8 @@ public class Circuit_Hamiltonien extends Circuit{
 
     }
     
-    @SuppressWarnings("unchecked")
 	@Override
-    public Object clone(){
-    	try {
-			return new Circuit_Hamiltonien((ArrayList<Noeud>) getOrdre().clone(), getGraphe());
-		} catch (ErreurDonneesException e) {
-			e.printStackTrace();
-		}
-		return null;
+    public Circuit_Hamiltonien clone() throws CloneNotSupportedException {
+    	return (Circuit_Hamiltonien) super.clone();
     }
 }

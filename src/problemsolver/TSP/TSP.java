@@ -122,7 +122,15 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 			b = (int) (Math.random()*solution.getNombreNoeuds());
 		}while(a == b);
 
-		Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
+		Circuit_Hamiltonien ret = null;
+		
+		try {
+			ret = (Circuit_Hamiltonien) solution.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		ret.swapNoeud(a, b);
 
 		return ret;
@@ -185,7 +193,13 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 		}while(getTourRef().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
 				&& getTourRef().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
 
-		Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
+		Circuit_Hamiltonien ret = null;
+		try {
+			ret = (Circuit_Hamiltonien) solution.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ret.swapNoeud(a, b);
 
 		return ret;
@@ -203,7 +217,13 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 		}while(getTourRef().getKeySet().contains(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b)))
 				&& getTourRef().getValeur(getJeu().getArete(solution.getOrdre().get(a), solution.getOrdre().get(b))) == 0.);
 
-		Circuit_Hamiltonien ret = (Circuit_Hamiltonien) solution.clone();
+		Circuit_Hamiltonien ret = null;
+		try {
+			ret = (Circuit_Hamiltonien) solution.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ret.swapNoeud(a, b);
 
 
