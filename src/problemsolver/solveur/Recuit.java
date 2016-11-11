@@ -49,19 +49,19 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 				long startTime1 = System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionInitiale);
 				long endTime1 = System.nanoTime();
-				System.out.println("Duree de calcul du voisinage de la boucle : " + (endTime1-startTime1)/1000000.0);
+				System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
 				
 				startTime1 = System.nanoTime();
 				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionInitiale);
 				endTime1 = System.nanoTime();
-				System.out.println("Duree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
+				System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
 				
 				if ((deltaF < 0) == minimiser){
 					solutionInitiale = solution_temp;
 					startTime1 = System.nanoTime();
 					valeurSolutionInitiale = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
 					endTime1 = System.nanoTime();
-					System.out.println("Duree de calcul de fonction obj si delta < 0 : " + (endTime1-startTime1)/1000000.0);
+					System.out.println("\t\tDuree de calcul de fonction obj si delta < 0 : " + (endTime1-startTime1)/1000000.0);
 					
 					if (valeurSolutionInitiale < fMin){
 						fMin = valeurSolutionInitiale;
