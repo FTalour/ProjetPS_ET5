@@ -63,7 +63,7 @@ public abstract class TourReference<T extends Arete, U extends Circuit> extends 
     
     @SuppressWarnings("unchecked")
 	@Override
-    public TourReference<T, U> clone() throws CloneNotSupportedException {
+    public TourReference<T, U> clone() {
     	TourReference<T, U> cloned = (TourReference<T, U>) super.clone();
 		cloned.moyenneTour = (HashMap<T, Double>) moyenneTour.clone();
 		return cloned;

@@ -10,7 +10,6 @@ import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.probleme.Probleme;
 import problemsolver.solveur.Pha;
 import problemsolver.solveur.Recuit;
-import problemsolver.solveur.RecuitPha;
 import problemsolver.solveur.Solveur;
 
 @SuppressWarnings("serial")

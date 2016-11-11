@@ -33,26 +33,23 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		double valeurSolutionCouranteSaved = 0;
 		double fsolinit = 0;
 
-		Circuit_Hamiltonien solutionCourante_saved 	= null;
 		Circuit_Hamiltonien solution_temp 			= null;
 		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
+
 		//valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale && valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme
 		long startTime = System.nanoTime();
 		while(T > T0/100){
 			int i = 0;
-			solutionCourante_saved = solutionCourante;
 			valeurSolutionCouranteSaved = valeurSolutionCourante;
 			while (i < tailleProbleme * tailleProbleme) {
-				long startTime1 = System.nanoTime();
+				System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionCourante);
-				long endTime1 = System.nanoTime();
-				//System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
+				System.nanoTime();
 				
-				startTime1 = System.nanoTime();
+				System.nanoTime();
 				fsolinit = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - fsolinit;
-				endTime1 = System.nanoTime();
-				//System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
+				System.nanoTime();
 				
 				if ((deltaF < 0) == minimiser){
 					solutionCourante = solution_temp;
@@ -73,6 +70,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		}
 		long endTime = System.nanoTime();
 		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
+		
 		return solutionMeilleure;
 	}
 

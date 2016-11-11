@@ -40,9 +40,8 @@ public class Graphe_Complet extends Graphe{
     }
     
     @Override
-    public Graphe_Complet clone() throws CloneNotSupportedException {
-		Graphe_Complet cloned = (Graphe_Complet) super.clone();
-    	return cloned;
+    public Graphe_Complet clone() {
+    	return (Graphe_Complet) super.clone();
     }
     
     @Override

@@ -41,7 +41,7 @@ public class Circuit_Hamiltonien extends Circuit{
     }
     
 	@Override
-    public Circuit_Hamiltonien clone() throws CloneNotSupportedException {
+    public Circuit_Hamiltonien clone() {
     	return (Circuit_Hamiltonien) super.clone();
     }
 }
