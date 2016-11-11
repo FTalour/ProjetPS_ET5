@@ -85,6 +85,15 @@ public class Noeud extends Donnees {
     public String toString(){
     	return nom/*+"("+Afficheur.DF.format(x)+";"+Afficheur.DF.format(y)+")"*/; //TODO enlever le commentaire pour reactiver l'affichage des coordonnées 
     }
+    
+    @Override
+    public Noeud clone() throws CloneNotSupportedException{
+		Noeud cloned = (Noeud) super.clone();
+		cloned.setX(x);
+		cloned.setY(y);
+		cloned.setNom(nom);
+    	return cloned;
+    }
 
 	@Override
 	public int getSize() {

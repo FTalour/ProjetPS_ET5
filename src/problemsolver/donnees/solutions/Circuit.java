@@ -146,6 +146,15 @@ public class Circuit extends Donnees {
 		}
 		return ret;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Circuit clone() throws CloneNotSupportedException {
+		Circuit cloned = (Circuit) super.clone();
+		cloned.ordre = (ArrayList<Noeud>) ordre.clone();
+		cloned.graphe = graphe.clone();
+		return cloned;
+	}
 
 	@Override
 	public int getSize() {

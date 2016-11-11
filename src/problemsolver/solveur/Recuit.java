@@ -20,34 +20,28 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 	private double T0;
 
 	@Override
-	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionInitiale, boolean minimiser) throws ErreurDonneesException {
-		
-		long startTime;
-		long endTime;
+	public Circuit_Hamiltonien resoudre(Graphe_Complet graphe, Circuit_Hamiltonien solutionCourante, boolean minimiser) throws ErreurDonneesException {
 		
 		int tailleProbleme 		= getProbleme().getTaille();
 		
-		startTime = System.nanoTime();
 		T0 = calculTemperature(getProbleme().solutionInitial(), tailleProbleme);
-		endTime = System.nanoTime();
-		System.out.println("Duree initialistion température: " + (endTime-startTime)/1000000.0);
 		
 		double T 	= T0;
-		double fMin = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+		double fMin = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 		double deltaF = 0;
-		double valeurSolutionInitiale = 0;
-		double valeurSolutionInitialeSaved = 0;
+		double valeurSolutionCourante = 0;
+		double valeurSolutionCouranteSaved = 0;
 		double fsolinit = 0;
 
-		Circuit_Hamiltonien solutionInitiale_saved 	= null;
+		Circuit_Hamiltonien solutionCourante_saved 	= null;
 		Circuit_Hamiltonien solution_temp 			= null;
-		Circuit_Hamiltonien solutionMeilleure  		= solutionInitiale;
+		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
 		//valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale && valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme
-		startTime = System.nanoTime();
+		long startTime = System.nanoTime();
 		do{
 			int i = 0;
-			solutionInitiale_saved = solutionInitiale;
-			valeurSolutionInitialeSaved = valeurSolutionInitiale;
+			solutionCourante_saved = solutionCourante;
+			valeurSolutionCouranteSaved = valeurSolutionCourante;
 			while (i < tailleProbleme * tailleProbleme) {
 				long startTime1 = System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionInitiale);
@@ -55,36 +49,35 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 				//System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
 				
 				startTime1 = System.nanoTime();
-				fsolinit = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+				fsolinit = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - fsolinit;
 				endTime1 = System.nanoTime();
 				//System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
 				
 				if ((deltaF < 0) == minimiser){
 					solutionInitiale = solution_temp;
-					valeurSolutionInitiale = fsolinit;
+					valeurSolutionCourante = fsolinit;
 					
-					if (valeurSolutionInitiale < fMin){
-						fMin = valeurSolutionInitiale;
-						solutionMeilleure = solutionInitiale;
+					if (valeurSolutionCourante < fMin){
+						fMin = valeurSolutionCourante;
+						solutionMeilleure = solutionCourante;
 					}
 				}
 				else if (Math.random() < Math.exp(-deltaF/T)){
-					solutionInitiale = solution_temp;
-					valeurSolutionInitiale = fsolinit;
+					solutionCourante = solution_temp;
+					valeurSolutionCourante = fsolinit;
 				}
 				i = i + 1;
 			}
 			T = 0.75 * T;
-			System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionInitialeSaved);
-			System.out.println("valeurSolutionInitiale : " + valeurSolutionInitiale);
-			boolean b = valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale;
-			boolean	c = valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme;
+			System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionCouranteSaved);
+			System.out.println("valeurSolutionInitiale : " + valeurSolutionCourante);
+			boolean b = valeurSolutionCouranteSaved-0.001*tailleProbleme>=valeurSolutionCourante;
+			boolean	c = valeurSolutionCourante>=valeurSolutionCouranteSaved+0.001*tailleProbleme;
 			System.out.println("b : " + b + "    c : " + c);
-		}while(T > T0/100 && (valeurSolutionInitialeSaved-0.5*tailleProbleme>=valeurSolutionInitiale || valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.5*tailleProbleme));
-		endTime = System.nanoTime();
+		}while(T > T0/100 && (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme));
+		long endTime = System.nanoTime();
 		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
-		return solutionMeilleure;
 	}
 
 	private double calculTemperature(Circuit_Hamiltonien solutionInitiale, int n){

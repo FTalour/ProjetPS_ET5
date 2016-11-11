@@ -60,8 +60,8 @@ public class Graphe extends Donnees{
 	@SuppressWarnings("unchecked")
 	public Graphe(Graphe g, double variation, HashSet<Arete> aretesSelectedAsDeteterministes) {
         super();
-        listNoeuds =  (ArrayList<Noeud>) g.listNoeuds.clone(); // Ca marche ???
-        mapAretes = (HashMap<Integer, Arete>) g.mapAretes.clone(); // Ca marche ???
+        listNoeuds =  (ArrayList<Noeud>) g.listNoeuds.clone();
+        mapAretes = (HashMap<Integer, Arete>) g.mapAretes.clone();
         for(Arete a:g.mapAretes.values()){
         	if(!aretesSelectedAsDeteterministes.contains(a)) // on ne change que les aretes non deterministes
         		a.setPoids(a.getPoids() + a.getPoids() * ((Math.random()*variation*2-variation)/(100.0)));
@@ -226,6 +226,22 @@ public class Graphe extends Donnees{
             ret+= a+"\n";
         }
         return ret;
+    }
+    
+    @Override
+    public Graphe clone() throws CloneNotSupportedException {
+    	try{
+    		Graphe cloned = (Graphe) super.clone();
+    		cloned.setCoordonnees(poidsArretes);
+    		cloned.DAinit = DAinit;
+    		cloned.maxX = maxX;
+    		cloned.maxY = maxY;
+    		cloned.minX = minX;
+    		cloned.minY = minY;
+	    	return cloned;
+		} catch (final CloneNotSupportedException ex) {
+			throw new CloneNotSupportedException();
+		}
     }
 
 	@Override

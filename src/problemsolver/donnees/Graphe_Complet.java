@@ -40,6 +40,12 @@ public class Graphe_Complet extends Graphe{
     }
     
     @Override
+    public Graphe_Complet clone() throws CloneNotSupportedException {
+		Graphe_Complet cloned = (Graphe_Complet) super.clone();
+    	return cloned;
+    }
+    
+    @Override
 	public int getSize() {
 		int nbSommet = getListNoeuds().size();
 		return nbSommet*(nbSommet-1);

@@ -19,7 +19,7 @@ import ui.MainFrame;
  */
 public class ProblemSolver {
 
-    private static final MainFrame MAINFRAME = new MainFrame(new Manager(null, new TSP(), new Recuit(), true));
+    private static final MainFrame MAINFRAME = new MainFrame( new Manager(null, new TSP(), new Recuit(), true));
     public static final boolean DEBUG = true;
     public static final int MAX_SIZE = 100000;
     /**
