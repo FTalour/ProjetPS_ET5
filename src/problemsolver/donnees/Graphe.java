@@ -25,12 +25,13 @@ import ui.Afficheur;
 public class Graphe extends Donnees{
     private final ArrayList<Noeud> listNoeuds;
     private final HashMap<Integer, Arete> mapAretes;
+    private double[][] poidsArretes;
+    private boolean DAinit;
+    
     private double maxX;
     private double maxY;
     private double minX;
     private double minY;
-    private double[][] doubleArray;
-    private boolean DAinit;
     private static final int GRAPHICSIZE = 8;
     
     @SuppressWarnings("unchecked")
@@ -52,7 +53,7 @@ public class Graphe extends Donnees{
             if(n.getY() < minY)
                 minY = n.getY();
         }
-        doubleArray = new double[listNoeuds.size()][listNoeuds.size()];
+        poidsArretes = new double[listNoeuds.size()][listNoeuds.size()];
         DAinit = false;
     }
 
@@ -69,7 +70,7 @@ public class Graphe extends Donnees{
         maxY = g.maxY;
         minX = g.minX;
         minY = g.minY;
-        doubleArray = new double[listNoeuds.size()][listNoeuds.size()];
+        poidsArretes = new double[listNoeuds.size()][listNoeuds.size()];
         DAinit = false;
     }
     
@@ -98,7 +99,7 @@ public class Graphe extends Donnees{
     
     public double[][] getDoubleArray(){
         if(DAinit){
-            return doubleArray;
+            return poidsArretes;
         }
         DAinit = true;
         int i = 0;
@@ -106,19 +107,19 @@ public class Graphe extends Donnees{
             int j = 0;
             for(Noeud m:listNoeuds){
                 if(n == m){
-                    doubleArray[i][j] = 0.;
+                    poidsArretes[i][j] = 0.;
                 }else{
                     Arete a = getArete(n, m);
                     if(a == null)
-                        doubleArray[i][j] = Double.MAX_VALUE;
+                        poidsArretes[i][j] = Double.MAX_VALUE;
                     else
-                    	doubleArray[i][j] = a.getPoids();
+                    	poidsArretes[i][j] = a.getPoids();
                 }
                 j++;
             }
             i++;
         }
-        return doubleArray;
+        return poidsArretes;
     }
     
     public void setCoordonnees(double coord[][]){

@@ -31,7 +31,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	private HashSet<Noeud> intouchable;
 
 	public TSP() {
-		super(new Parse_Graphe_SAX()); //TODO change to Parse_Graphe to come back to previous version
+		super(new Parse_Graphe_SAX()); //TODO change to Parse_Graphe() to come back to previous version
 		intouchable = new HashSet<Noeud>();
 	}
 
@@ -39,14 +39,14 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 	protected double fonctionObjectifStochastique(Graphe_Complet gC, Circuit_Hamiltonien circuit) {
 		double valeurTotale = this.fonctionObjectif(gC, circuit);
 		double valeurPhi = 0;
-		HashSet<Arete> lA= getDs().getDonneesDeterministes();
-		for(Arete a:lA){
-			if(circuit.getParcourt().contains(a)){
-				valeurTotale += (1 - this.getTr().getValeur(a)) * this.getDs().getPenalites(gC).getLambda(a);
-				valeurPhi += Math.pow((1 - this.getTr().getValeur(a)) * this.getDs().getPenalites(gC).getPhi(a), 2);
+		HashSet<Arete> hashSetAretes = getDs().getDonneesDeterministes();
+		for(Arete arete : hashSetAretes){
+			if(circuit.getParcourt().contains(arete)){
+				valeurTotale += (1 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getLambda(arete);
+				valeurPhi += Math.pow((1 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getPhi(arete), 2);
 			}else{
-				valeurTotale += (0 - this.getTr().getValeur(a)) * this.getDs().getPenalites(gC).getLambda(a);
-				valeurPhi += Math.pow((0 - this.getTr().getValeur(a)) * this.getDs().getPenalites(gC).getPhi(a), 2);
+				valeurTotale += (0 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getLambda(arete);
+				valeurPhi += Math.pow((0 - this.getTr().getValeur(arete)) * this.getDs().getPenalites(gC).getPhi(arete), 2);
 			}
 		}
 

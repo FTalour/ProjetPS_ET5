@@ -32,12 +32,6 @@ public class RecuitPha extends Solveur<Probleme<Graphe_Complet, Circuit_Hamilton
 		return r.resoudre(minimiser);
 	}
 	
-	@Override
-	public void init() throws ErreurDonneesException {
-		// TODO Auto-generated method stub
-		
-	}
-	
     @Override
     public String toString(){
         return "Pha "+p.donneesString();

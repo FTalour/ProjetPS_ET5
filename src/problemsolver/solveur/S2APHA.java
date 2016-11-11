@@ -57,7 +57,7 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 		boolean b;
 		secondSolveur.setProbleme(getProbleme());
 		secondSolveur.setAffiche(false);
-		secondSolveur.init();
+		
 		HashMap<DonneesScenario<Graphe, Arete, PhiLambda>, Donnees> solutionsCalculees = new HashMap<DonneesScenario<Graphe, Arete, PhiLambda>, Donnees>();
 
 		// prépartition du problème
@@ -263,11 +263,6 @@ public class S2APHA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circui
 
 	public Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
 		return secondSolveur;
-	}
-
-	@Override
-	public void init() throws ErreurDonneesException {
-
 	}
 
 }

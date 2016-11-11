@@ -53,8 +53,6 @@ public abstract class Solveur<T extends Probleme<Graphe_Complet, Circuit_Hamilto
     }
     
     public boolean getAffiche(){return affiche;}
-    
-    public abstract void init() throws ErreurDonneesException;
 
 	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser, Echantillon echantillon)
 			throws ErreurDonneesException {

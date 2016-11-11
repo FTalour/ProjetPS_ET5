@@ -25,7 +25,7 @@ public class Solving extends Thread {
         @Override
 	public void run(){
 		try {
-			Donnees d =solveur.resoudre(min);
+			Donnees d = solveur.resoudre(min);
 			SwingUtilities.invokeLater(() -> {
                             ProblemSolver.getMainFrame().getGFrame().showDonnees(GraphFrame.TAB_SOLUTION, d, Color.BLACK);
                             //ProblemSolver.getMainFrame().getGFrame().setText(GraphFrame.TAB_SOLUTION, "TonTexte");

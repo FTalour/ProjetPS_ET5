@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 
 import problemsolver.Graphismes.GraphicComponent;
 import problemsolver.donnees.Arete;
+import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe;
 import problemsolver.donnees.Noeud;
 
@@ -23,29 +24,30 @@ import problemsolver.donnees.Noeud;
  *
  * @author Clément
  */
-public class Circuit extends AbstractCircuit{
+public class Circuit extends Donnees {
     private ArrayList<Noeud> ordre;
     private Graphe graphe;
-    protected final double maxX;
+
+	protected final double maxX;
     protected final double maxY;
     protected final double minX;
     protected final double minY;
-    protected static final int GRAPHICSIZE = 8;	
+    protected static final int GRAPHICSIZE = 8;
     
     
-    public Circuit(ArrayList<Noeud> listNoeuds, Graphe graphe){
+    public Circuit(ArrayList<Noeud> _listNoeuds, Graphe _graphe){
         super();
-        ordre = listNoeuds;
-        this.graphe = graphe;
+        ordre = _listNoeuds;
+        graphe = _graphe;
         maxX = graphe.getMaxX();
         maxY = graphe.getMaxY();
         minX = graphe.getMinX();
         minY = graphe.getMinY();
     }
     
-    public Circuit(Graphe graphe){
+    public Circuit(Graphe _graphe){
     	super();
-    	this.graphe = graphe;
+    	graphe = _graphe;
         maxX = graphe.getMaxX();
         maxY = graphe.getMaxY();
         minX = graphe.getMinX();
@@ -62,18 +64,18 @@ public class Circuit extends AbstractCircuit{
     
     
     public ArrayList<Arete> getParcourt(){
-        ArrayList<Arete> ret = new ArrayList<Arete>();
-        for(int i = 0; i < ordre.size(); i++){
-            Noeud a = ordre.get(i);
-            Noeud b;
-            if(i+1 == ordre.size())
-             b = ordre.get(0);
-            else
-             b = ordre.get(i+1);
-            
-               ret.add(graphe.getArete(a, b));
-           }
-        return ret;
+    	ArrayList<Arete> ret = new ArrayList<Arete>();
+    	for(int i = 0; i < ordre.size(); i++){
+    		Noeud a = ordre.get(i);
+    		Noeud b;
+    		if(i+1 == ordre.size())
+    			b = ordre.get(0);
+    		else
+    			b = ordre.get(i+1);
+
+    		ret.add(graphe.getArete(a, b));
+    	}
+    	return ret;
     }
     
     public double distanceTotale(){

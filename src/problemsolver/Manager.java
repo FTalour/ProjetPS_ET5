@@ -56,7 +56,6 @@ public class Manager{
 		probleme.setUseHeuristique(false);
 		probleme.setUseStochastique(false);
         solveur.setProbleme(probleme);
-        solveur.init();
         
         new Solving(solveur, minimiser).run();
         

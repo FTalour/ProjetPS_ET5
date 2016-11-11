@@ -25,6 +25,8 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	public SAA(int nbrS, Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> secondS) {
 		nombreEchantillons = nbrS;
 		solveurSecondaire = secondS;
+
+		listeEchantillon = new ArrayList<Echantillon>();
 	}
 
 	@Override
@@ -33,7 +35,6 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 
 		solveurSecondaire.setProbleme(getProbleme());
 		solveurSecondaire.setAffiche(false);
-		solveurSecondaire.init();
 
 		getProbleme().initialiserScenarios(20, 20, 10);
 		getProbleme().initialiserTourRef(getProbleme().getDs(),	getProbleme().getJeu());
@@ -83,11 +84,4 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}
 		return distance;
 	}
-
-	@Override
-	public void init() throws ErreurDonneesException {
-		// TODO Auto-generated method stub
-		listeEchantillon = new ArrayList<Echantillon>();
-	}
-
 }
