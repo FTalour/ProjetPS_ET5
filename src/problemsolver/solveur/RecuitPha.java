@@ -36,6 +36,5 @@ public class RecuitPha extends Solveur<Probleme<Graphe_Complet, Circuit_Hamilton
     public String toString(){
         return "Pha "+p.donneesString();
     }
-
-
+    
 }
