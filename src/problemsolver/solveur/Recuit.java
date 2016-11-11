@@ -36,32 +36,33 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		double fMin = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
 		double deltaF = 0;
 		double valeurSolutionInitiale = 0;
+		double valeurSolutionInitialeSaved = 0;
+		double fsolinit = 0;
 
 		Circuit_Hamiltonien solutionInitiale_saved 	= null;
 		Circuit_Hamiltonien solution_temp 			= null;
 		Circuit_Hamiltonien solutionMeilleure  		= solutionInitiale;
-
+		//valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale && valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme
 		startTime = System.nanoTime();
-		while(T > T0/100 && solutionInitiale!=solutionInitiale_saved) {
+		do{
 			int i = 0;
 			solutionInitiale_saved = solutionInitiale;
+			valeurSolutionInitialeSaved = valeurSolutionInitiale;
 			while (i < tailleProbleme * tailleProbleme) {
 				long startTime1 = System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionInitiale);
 				long endTime1 = System.nanoTime();
-				System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
+				//System.out.println("\tDuree de calcul du voisinage de la boucle '" + i + "' temps: " + (endTime1-startTime1)/1000000.0);
 				
 				startTime1 = System.nanoTime();
-				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+				fsolinit = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
+				deltaF = getProbleme().callFonctionObjectif(graphe, solution_temp) - fsolinit;
 				endTime1 = System.nanoTime();
-				System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
+				//System.out.println("\t\tDuree de calcul de deltaf : " + (endTime1-startTime1)/1000000.0);
 				
 				if ((deltaF < 0) == minimiser){
 					solutionInitiale = solution_temp;
-					startTime1 = System.nanoTime();
-					valeurSolutionInitiale = getProbleme().callFonctionObjectif(graphe, solutionInitiale);
-					endTime1 = System.nanoTime();
-					System.out.println("\t\tDuree de calcul de fonction obj si delta < 0 : " + (endTime1-startTime1)/1000000.0);
+					valeurSolutionInitiale = fsolinit;
 					
 					if (valeurSolutionInitiale < fMin){
 						fMin = valeurSolutionInitiale;
@@ -70,11 +71,17 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 				}
 				else if (Math.random() < Math.exp(-deltaF/T)){
 					solutionInitiale = solution_temp;
+					valeurSolutionInitiale = fsolinit;
 				}
 				i = i + 1;
 			}
-			T = 0.85 * T;
-		}
+			T = 0.75 * T;
+			System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionInitialeSaved);
+			System.out.println("valeurSolutionInitiale : " + valeurSolutionInitiale);
+			boolean b = valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale;
+			boolean	c = valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme;
+			System.out.println("b : " + b + "    c : " + c);
+		}while(T > T0/100 && (valeurSolutionInitialeSaved-0.5*tailleProbleme>=valeurSolutionInitiale || valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.5*tailleProbleme));
 		endTime = System.nanoTime();
 		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
 		return solutionMeilleure;
