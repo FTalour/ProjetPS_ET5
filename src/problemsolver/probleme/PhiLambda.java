@@ -13,6 +13,7 @@ public class PhiLambda extends Penalites<Circuit_TourReference, Circuit>{
 	private HashMap<Arete, Double> phi;
 	private HashMap<Arete, Double> lambda;
 	private static final double ALPHA = 1.55;
+	@SuppressWarnings("unused")
 	private static final double PRECISION = 0.99; // Si x > y, et x * précision < y alors x = y, autrement dit 99% pareil.
 	
 	
@@ -24,8 +25,6 @@ public class PhiLambda extends Penalites<Circuit_TourReference, Circuit>{
 			lambda.put(a, 0.);
 		}
 	}
-	
-	
 	
 	public HashMap<Arete, Double> getPhi() {
 		return phi;
@@ -61,10 +60,7 @@ public class PhiLambda extends Penalites<Circuit_TourReference, Circuit>{
 		return ALPHA;
 	}
 
-
-
 	@Override
-
 	public boolean ajuster(Circuit_TourReference tr, Circuit solution) {
 		ArrayList<Arete> tour = solution.getParcourt();
 		boolean ret = true;

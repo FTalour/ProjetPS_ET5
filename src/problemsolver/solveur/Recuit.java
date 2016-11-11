@@ -5,37 +5,32 @@
  */
 package problemsolver.solveur;
 
-import java.awt.Color;
-
 import javax.swing.SwingUtilities;
 
-import problemsolver.ProblemSolver;
-import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe_Complet;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.Probleme;
-import ui.Afficheur;
-import ui.GraphFrame;
 
 /**
  *
  * @author Clément
  */
-public class Recuit extends Solveur<Probleme>{
+public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>>{
 	private double T0;
 	
-	
 	@Override
-    public Donnees resoudre(Donnees d, Donnees x, boolean minimiser) throws ErreurDonneesException {
-    	Donnees xLast = null;
+    public Circuit_Hamiltonien resoudre(Graphe_Complet d, Circuit_Hamiltonien x, boolean minimiser) throws ErreurDonneesException {
+		Circuit_Hamiltonien xLast = null;
     	int n = getProbleme().getTaille();
     	double T = T0;
-    	Donnees xMeilleur = x;
+    	Circuit_Hamiltonien xMeilleur = x;
     	double fMin = getProbleme().callFonctionObjectif(d, x);
     	while(T > T0/100 && x!=xLast){
     		int i = 0;
     		xLast = x;
     		while(i<n*n){
-    			Donnees xPrime = getProbleme().voisinage(x);
+    			Circuit_Hamiltonien xPrime = getProbleme().voisinage(x);
     			double deltaF = getProbleme().callFonctionObjectif(d, xPrime) - getProbleme().callFonctionObjectif(d, x);
     			if ((deltaF < 0) == minimiser){
     				x = xPrime;
@@ -54,9 +49,9 @@ public class Recuit extends Solveur<Probleme>{
     	return xMeilleur;
     }
     
-    private double calculTemperature(Donnees solutionInitiale, int n){
-    	Donnees x = solutionInitiale;
-    	Donnees xPrime = null;
+    private double calculTemperature(Circuit_Hamiltonien solutionInitiale, int n){
+    	Circuit_Hamiltonien x = solutionInitiale;
+    	Circuit_Hamiltonien xPrime = null;
     	boolean lastP = getProbleme().getStochastique();
     	getProbleme().setUseStochastique(false);
     	double df = 0;
@@ -83,7 +78,9 @@ public class Recuit extends Solveur<Probleme>{
     	return T0;
     }
     
-    private void criticalGraph(Donnees d, String s){
+    
+    @SuppressWarnings("unused")
+	private void criticalGraph(Circuit_Hamiltonien d, String s){
     	SwingUtilities.invokeLater(new Runnable(){
     		public void run(){
     			//ProblemSolver.getMainFrame().getGFrame().showDonnees(GraphFrame.TAB_RESOLUTION, d, Color.BLACK);

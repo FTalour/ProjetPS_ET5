@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import javax.swing.JPanel;
@@ -28,17 +27,26 @@ import problemsolver.donnees.Noeud;
 public class Circuit extends Donnees{
     private ArrayList<Noeud> ordre;
     private Graphe graphe;
-    private final double maxX;
-    private final double maxY;
-    private final double minX;
-    private final double minY;
-    private static final int GRAPHICSIZE = 8;	
+    protected final double maxX;
+    protected final double maxY;
+    protected final double minX;
+    protected final double minY;
+    protected static final int GRAPHICSIZE = 8;	
     
     
     public Circuit(ArrayList<Noeud> listNoeuds, Graphe graphe){
         super();
         ordre = listNoeuds;
         this.graphe = graphe;
+        maxX = graphe.getMaxX();
+        maxY = graphe.getMaxY();
+        minX = graphe.getMinX();
+        minY = graphe.getMinY();
+    }
+    
+    public Circuit(Graphe graphe){
+    	super();
+    	this.graphe = graphe;
         maxX = graphe.getMaxX();
         maxY = graphe.getMaxY();
         minX = graphe.getMinX();

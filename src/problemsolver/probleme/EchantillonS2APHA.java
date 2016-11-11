@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import problemsolver.donnees.Donnees;
 import problemsolver.donnees.solutions.TourReference;
 
+@SuppressWarnings("serial")
 public class EchantillonS2APHA extends ArrayList<DonneesScenario<Donnees, Donnees, Penalites<? extends TourReference<?,?>,? extends Donnees>>> {
-	private TourReference tourReference;
+	private TourReference<?, ?> tourReference;
 	
-	public TourReference getTr() {
+	public TourReference<?, ?> getTr() {
 		return tourReference;
 	}
 	
-	public void setTr(TourReference a_tourRef) {
+	public void setTr(TourReference<?, ?> a_tourRef) {
 		this.tourReference = a_tourRef;
 	}
 

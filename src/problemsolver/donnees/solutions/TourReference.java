@@ -5,27 +5,26 @@
  */
 package problemsolver.donnees.solutions;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JPanel;
-
+import problemsolver.donnees.Arete;
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe;
 
 /**
  *
  * @author Clément
- * @param <T> le type de données
- * @param <U> le type d'extraction
+ * @param <T> le type de données Arete
+ * @param <U> le type d'extraction Circuit
  */
-public abstract class TourReference<T extends Donnees, U extends Donnees> extends Donnees{
+public abstract class TourReference<T extends Arete, U extends Circuit> extends Circuit{
     private HashMap<T, Double> moyenneTour;
     
-    public TourReference(HashSet<T> l){
-        super();
+    public TourReference(HashSet<T> l, Graphe g){
+        super(g);
         moyenneTour = new HashMap<>();
         l.stream().forEach((d) -> {
             moyenneTour.put(d, 0.);
@@ -44,7 +43,7 @@ public abstract class TourReference<T extends Donnees, U extends Donnees> extend
         return moyenneTour.keySet();
     }
     
-    public abstract void calculer(Collection<U> collection);
+    public abstract void calculer(Collection<? extends Circuit> collection);
     
     @Override
 	public int getSize() {
@@ -61,4 +60,6 @@ public abstract class TourReference<T extends Donnees, U extends Donnees> extend
     		val+=d;
     	return val;
     }
+
+	
 }

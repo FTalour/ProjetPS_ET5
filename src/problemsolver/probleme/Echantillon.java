@@ -2,26 +2,28 @@ package problemsolver.probleme;
 
 import java.util.ArrayList;
 
-import problemsolver.donnees.Donnees;
-import problemsolver.donnees.solutions.Circuit_TourReference;
+import problemsolver.donnees.Arete;
+import problemsolver.donnees.Graphe_Complet;
+import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.TourReference;
 
-public class Echantillon extends ArrayList<Donnees>{
-	private TourReference tourReference;
+@SuppressWarnings("serial")
+public class Echantillon extends ArrayList<Graphe_Complet>{
+	private TourReference<Arete, Circuit> tourReference;
 
-	public TourReference getResultat() {
+	public TourReference<Arete, Circuit> getResultat() {
 		return tourReference;
 	}
 
-	public void setResultat(TourReference a_tourRef) {
+	public void setResultat(TourReference<Arete, Circuit> a_tourRef) {
 		this.tourReference = a_tourRef;
 	}
 	
-	public TourReference getTr() {
+	public TourReference<Arete, Circuit> getTr() {
 		return tourReference;
 	}
 	
-	public void setTr(TourReference a_tourRef) {
+	public void setTr(TourReference<Arete, Circuit> a_tourRef) {
 		this.tourReference = a_tourRef;
 	}
 

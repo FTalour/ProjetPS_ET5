@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import problemsolver.donnees.Donnees;
+import problemsolver.donnees.Graphe_Complet;
+import problemsolver.donnees.solutions.Circuit_Hamiltonien;
 import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.exceptions.IGotItException;
 import problemsolver.probleme.Probleme;
@@ -22,12 +24,12 @@ import ui.Afficheur;
  */
 public class Manager{
     private File fichier;
-    private Probleme probleme;
-    private Solveur solveur;
+    private Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme;
+    private Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur;
     private boolean minimiser;
-    Donnees donnees;
+    Graphe_Complet donnees;
     
-    public Manager(File fichier, Probleme probleme, Solveur solveur, boolean minimiser){
+    public Manager(File fichier, Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur, boolean minimiser) {
         this.fichier = fichier;
         this.probleme = probleme;
         this.solveur = solveur;
@@ -69,19 +71,19 @@ public class Manager{
         donnees = null;
     }
 
-    public Probleme getProbleme() {
+    public Probleme<Graphe_Complet, Circuit_Hamiltonien> getProbleme() {
         return probleme;
     }
 
-    public void setProbleme(Probleme probleme) {
+    public void setProbleme(Probleme<Graphe_Complet, Circuit_Hamiltonien> probleme) {
         this.probleme = probleme;
     }
 
-    public Solveur getSolveur() {
+    public Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
         return solveur;
     }
 
-    public void setSolveur(Solveur solveur) {
+    public void setSolveur(Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur) {
         this.solveur = solveur;
     }
 

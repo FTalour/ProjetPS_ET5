@@ -5,6 +5,8 @@ import java.util.HashSet;
 
 import problemsolver.donnees.Arete;
 import problemsolver.donnees.Graphe;
+import problemsolver.donnees.solutions.Circuit;
+import problemsolver.donnees.solutions.Circuit_TourReference;
 
 public class ScenarioTSP extends DonneesScenario<Graphe, Arete, PhiLambda> {
 
