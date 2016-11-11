@@ -38,7 +38,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		Circuit_Hamiltonien solutionMeilleure  		= solutionCourante;
 		//valeurSolutionInitialeSaved-0.001*tailleProbleme>=valeurSolutionInitiale && valeurSolutionInitiale>=valeurSolutionInitialeSaved+0.001*tailleProbleme
 		long startTime = System.nanoTime();
-		do{
+		while(T > T0/100){
 			int i = 0;
 			solutionCourante_saved = solutionCourante;
 			valeurSolutionCouranteSaved = valeurSolutionCourante;
@@ -69,13 +69,8 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 				}
 				i = i + 1;
 			}
-			T = 0.75 * T;
-			System.out.println("valeurSolutionInitialeSaved : " + valeurSolutionCouranteSaved);
-			System.out.println("valeurSolutionInitiale : " + valeurSolutionCourante);
-			boolean b = valeurSolutionCouranteSaved-0.001*tailleProbleme>=valeurSolutionCourante;
-			boolean	c = valeurSolutionCourante>=valeurSolutionCouranteSaved+0.001*tailleProbleme;
-			System.out.println("b : " + b + "    c : " + c);
-		}while(T > T0/100 && (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme));
+			T = 0.75 * T;	
+		}
 		long endTime = System.nanoTime();
 		System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
 		return solutionMeilleure;
