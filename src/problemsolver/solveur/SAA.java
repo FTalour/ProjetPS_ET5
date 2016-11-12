@@ -13,33 +13,31 @@ import problemsolver.exceptions.ErreurDonneesException;
 import problemsolver.probleme.DonneesScenario;
 import problemsolver.probleme.Echantillon;
 import problemsolver.probleme.PhiLambda;
+import problemsolver.probleme.Probleme;
 import problemsolver.probleme.Probleme_Stochastique;
 
 public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> {
 	int nombreEchantillons;
-	ArrayList<Echantillon> listeEchantillon;
+	ArrayList<Echantillon> listeEchantillon = new ArrayList<Echantillon>();;
 	Echantillon referanceEchantillon = new Echantillon();
 	Echantillon EchRef;
-	Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> solveurSecondaire;
+	Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveurSecondaire;
 
 	public SAA(int nbrS, Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>> secondS) {
 		nombreEchantillons = nbrS;
-		solveurSecondaire = secondS;
-
-		listeEchantillon = new ArrayList<Echantillon>();
+		//solveurSecondaire = secondS;
 	}
 
 	@Override
 	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser) throws ErreurDonneesException {
-
+		solveurSecondaire = new Recuit();
 		solveurSecondaire.setProbleme(getProbleme());
 		solveurSecondaire.getProbleme().setUseStochastique(false);
 		solveurSecondaire.setAffiche(false);
 		getProbleme().setUseStochastique(false);
 
 		getProbleme().initialiserScenarios(20, 100, nombreEchantillons*nombreEchantillons);
-		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
-
+		//getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
 
 		Circuit_Hamiltonien meilleurSolution = solution;
 		Circuit_Hamiltonien realBestSolution = solution;
@@ -54,7 +52,7 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}
 
 		// Création et calcul du tour de référence à partir des scénarios initiés
-		getProbleme().getTourRef().calculer(listSolution.values());
+		//getProbleme().getTourRef().calculer(listSolution.values());
 		
 		return realBestSolution;
 		

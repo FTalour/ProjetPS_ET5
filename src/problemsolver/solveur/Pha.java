@@ -58,7 +58,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		getProbleme().setUseStochastique(false);
 
 		// Création des scénarios et transformation du graphe actuel en stochastique avec les variations indiquées
-		getProbleme().initialiserScenarios(variation, 100, nombreScenarios); //OK
+		getProbleme().initialiserScenarios(variation, 100, nombreScenarios);
 		
 		//Initialisation du tour de référence
 		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu().clone());
