@@ -29,7 +29,7 @@ public class RecuitPha extends Solveur<Probleme<Graphe_Complet, Circuit_Hamilton
 		Circuit bestSolution = p.resoudre(graphe, solution, minimiser);
 		p.getProbleme().setUseHeuristique(true);
 		p.getProbleme().setUseStochastique(false);
-		return bestSolution; // r.resoudre(minimiser);
+		return bestSolution; //r.resoudre(bestSolution, minimiser);
 	}
 	
     @Override

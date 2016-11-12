@@ -1,7 +1,7 @@
 package problemsolver.solveur;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Set;
 
 import problemsolver.donnees.Arete;
@@ -30,25 +30,43 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	}
 
 	@Override
-	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser)
-			throws ErreurDonneesException {
+	public Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser) throws ErreurDonneesException {
 
 		solveurSecondaire.setProbleme(getProbleme());
+		solveurSecondaire.getProbleme().setUseStochastique(false);
 		solveurSecondaire.setAffiche(false);
+		getProbleme().setUseStochastique(false);
 
-		getProbleme().initialiserScenarios(20, 20, 10);
+		getProbleme().initialiserScenarios(20, 100, nombreEchantillons*nombreEchantillons);
 		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
 
+
+		Circuit_Hamiltonien meilleurSolution = solution;
+		Circuit_Hamiltonien realBestSolution = solution;
+		// Création des scénarios avec les solutions du recuit
+		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
+		for(Graphe_Complet graphe: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
+			meilleurSolution = (Circuit_Hamiltonien) solveurSecondaire.resoudre(graphe.clone(), meilleurSolution.clone(), minimiser);
+			listSolution.put(graphe, meilleurSolution.clone());
+			
+			if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
+				realBestSolution = meilleurSolution.clone();
+		}
+
+		// Création et calcul du tour de référence à partir des scénarios initiés
+		getProbleme().getTourRef().calculer(listSolution.values());
+		
+		return realBestSolution;
+		
+		/*
 		// di yi ci zhu shi
 		int nombreDeScenario = getProbleme().getDonnees().getScenarios().size();
-		// Il faut changer 5 pour ce qu'on a entrer
-		int nombreDeEchantillon = 5;
 
-		int increment = nombreDeScenario / nombreDeEchantillon;
+		int increment = nombreDeScenario / nombreEchantillons;
 		Echantillon echantillon = new Echantillon();
 		for (Graphe_Complet scen : (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
 			referanceEchantillon.add(scen);
-			if (nombreDeScenario / nombreDeEchantillon == increment) {
+			if (nombreDeScenario / nombreEchantillons == increment) {
 				echantillon = new Echantillon();
 				listeEchantillon.add(echantillon);
 				increment = 0;
@@ -57,34 +75,27 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			increment++;
 		}
 
-		
 		Circuit_Hamiltonien min_CR = null;
-		for (int i = 0; i < listeEchantillon.size()-1; i++) {
-			Circuit_Hamiltonien echantillonTr =  (Circuit_Hamiltonien) solveurSecondaire.resoudre(donnees,solution, minimiser, listeEchantillon.get(i));
-			HashSet<Arete> hashSet = new HashSet<Arete>();
-			hashSet.addAll(echantillonTr.getParcourt());
+		for (Echantillon ech : listeEchantillon) {
+			//Circuit_Hamiltonien echantillonTr =  (Circuit_Hamiltonien) solveurSecondaire.resoudre(donnees,solution, minimiser, listeEchantillon.get(i));
+			//HashSet<Arete> hashSet = new HashSet<Arete>();
+			//hashSet.addAll(echantillonTr.getParcourt());
 			//getProbleme().initialiserTourRefSaa(new Circuit_TourReference(hashSet, echantillonTr.getGraphe()));
-			Circuit_Hamiltonien resultatRr = (Circuit_Hamiltonien) solveurSecondaire.resoudre(donnees,solution, minimiser, listeEchantillon.get(i));
+			Circuit_Hamiltonien resultatRr = (Circuit_Hamiltonien) solveurSecondaire.resoudre(donnees.clone(),solution.clone(), minimiser, ech);
 			if(min_CR==null)
 				min_CR = resultatRr;
-			else if (getDistance(resultatRr.getParcourt()) < getDistance(resultatRr.getParcourt())) { 
+			else if (resultatRr.distanceTotale() < resultatRr.distanceTotale()) { 
 				min_CR = resultatRr;
 			}
 		}
 		//System.out.println("min_CR:"+getDistance(min_CR.getKeySet()));
-		return min_CR;
+		return min_CR;*/
 	}
 
-	private double getDistance(ArrayList<Arete> p) {
-		double distance = 0;
-		for (Arete a : p) {
-			distance = distance + a.getPoids();
-		}
-		return distance;
-	}
 	
 	@Override
 	public String toString(){
 		return "saa";
 	}
+
 }

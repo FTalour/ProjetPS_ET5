@@ -5,7 +5,6 @@
  */
 package problemsolver.solveur;
 
-import problemsolver.donnees.Donnees;
 import problemsolver.donnees.Graphe_Complet;
 import problemsolver.donnees.solutions.Circuit;
 import problemsolver.donnees.solutions.Circuit_Hamiltonien;
@@ -25,6 +24,10 @@ public abstract class Solveur<T extends Probleme<Graphe_Complet, Circuit_Hamilto
     public Solveur(){
     	affiche = true;
     }
+    
+    public Circuit resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser, Echantillon echantillon) throws ErreurDonneesException {
+		return null;
+	}
     
     public abstract Circuit resoudre(Graphe_Complet donnees, Circuit_Hamiltonien solution, boolean minimiser) throws ErreurDonneesException;
     public Circuit resoudre(Circuit_Hamiltonien circuitH, boolean minimiser) throws ErreurDonneesException{
@@ -54,9 +57,5 @@ public abstract class Solveur<T extends Probleme<Graphe_Complet, Circuit_Hamilto
     
     public boolean getAffiche(){return affiche;}
 
-	public Donnees resoudre(Donnees dinitiales, Donnees solInit, boolean minimiser, Echantillon echantillon)
-			throws ErreurDonneesException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }

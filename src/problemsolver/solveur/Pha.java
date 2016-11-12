@@ -49,13 +49,13 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	// dinittiales ne sert jamais, c'est pas normal, on ne devrait pas le modifié, il contient les données parser, on devrait modifier une copie
 	// Pour le SAA il vaudrait mieux que resoudre prenne directement une liste de scenarios
 	@Override
-	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
+	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
 		
 		// Configurer le problème comme stochastique
-		getProbleme().setUseStochastique(true);
+		getProbleme().setUseStochastique(false);
 
 		// Création des scénarios et transformation du graphe actuel en stochastique avec les variations indiquées
 		getProbleme().initialiserScenarios(variation, 100, nombreScenarios); //OK
@@ -106,10 +106,11 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}while(!continuer && t < t_max);
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 
-		return realBestSolution; //getProbleme().getTourRef();
+		return getProbleme().getTourRef();
 	}
 	
-	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
+	@Override
+	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
@@ -161,7 +162,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}while(!continuer && t < t_max);
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 
-		return realBestSolution; //getProbleme().getTourRef();
+		return getProbleme().getTourRef();
 	}
 
 	public String toStringAvgDet(){
@@ -183,5 +184,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	public Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> getSolveur() {
 		return secondSolveur;
 	}
+
+	
 	
 }
