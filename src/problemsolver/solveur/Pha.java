@@ -49,7 +49,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	// dinittiales ne sert jamais, c'est pas normal, on ne devrait pas le modifié, il contient les données parser, on devrait modifier une copie
 	// Pour le SAA il vaudrait mieux que resoudre prenne directement une liste de scenarios
 	@Override
-	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
+	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
@@ -106,11 +106,11 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}while(!continuer && t < t_max);
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 
-		return getProbleme().getTourRef();
+		return realBestSolution; //getProbleme().getTourRef();
 	}
 	
 	@Override
-	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
+	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
@@ -162,7 +162,7 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}while(!continuer && t < t_max);
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 
-		return getProbleme().getTourRef();
+		return realBestSolution; //getProbleme().getTourRef();
 	}
 
 	public String toStringAvgDet(){
