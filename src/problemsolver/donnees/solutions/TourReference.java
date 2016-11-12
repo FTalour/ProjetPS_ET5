@@ -43,6 +43,10 @@ public abstract class TourReference<T extends Arete, U extends Circuit> extends 
         return moyenneTour.keySet();
     }
     
+    public Collection<Double> getValues(){
+    	return moyenneTour.values();
+    }
+    
     public abstract void calculer(Collection<? extends Circuit> collection);
     
     @Override

@@ -1,7 +1,6 @@
 package problemsolver;
 
 import java.awt.Color;
-import java.io.File;
 
 import javax.swing.SwingUtilities;
 
@@ -17,12 +16,10 @@ import ui.GraphFrame;
 public class Solving extends Thread {
 	private final Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur;
 	private final boolean min;
-	private File file;
 
-	public Solving(File fichier, Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur2, boolean m) {
+	public Solving(Solveur<? extends Probleme<Graphe_Complet, Circuit_Hamiltonien>> solveur2, boolean m) {
 		solveur = solveur2;
 		min = m;
-		file = fichier;
 	}
 
 	@Override
@@ -40,37 +37,4 @@ public class Solving extends Thread {
 			Afficheur.erreurFataleDialog(e);
 		}
 	}
-	/*
-	private double parseByFile(File file) {
-		if(solveur.toString() == "recuit") return -1;
-		String filename = file.getName();
-		double coeff = switchSolveur(solveur.toString());
-		double valeur=0;
-		switch (filename) {
-		case "br17":
-			valeur = 39;
-			break;
-		case "a280":
-			valeur = 2579;
-			break;
-		default:
-			break;
-		}
-		return valeur * coeff;
-	}
-	
-	private double switchSolveur(String solveurName){
-		double valeur=0;
-		switch (solveurName) {
-		case "pha":
-			valeur = 1.1;
-			break;
-		case "saa":
-			valeur = 1.05;
-			break;
-		default:
-			break;
-		}
-		return valeur;
-	}*/
 }

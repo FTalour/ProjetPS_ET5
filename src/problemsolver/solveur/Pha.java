@@ -50,16 +50,15 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	// Pour le SAA il vaudrait mieux que resoudre prenne directement une liste de scenarios
 	@Override
 	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
-		
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
 		
 		// Configurer le problème comme stochastique
-		//getProbleme().setUseStochastique(true);
+		getProbleme().setUseStochastique(true);
 
 		// Création des scénarios et transformation du graphe actuel en stochastique avec les variations indiquées
-		getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios); //OK
+		getProbleme().initialiserScenarios(variation, 100, nombreScenarios); //OK
 		
 		//Initialisation du tour de référence
 		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu().clone());
@@ -75,10 +74,10 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
 				realBestSolution = meilleurSolution.clone();
 		}
-		
 
 		// Création et calcul du tour de référence à partir des scénarios initiés
 		getProbleme().getTourRef().calculer(listSolution.values());
+		
 		do{
 			t = t + 1;
 			
@@ -87,8 +86,8 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 
 			// Recalculer les solutions des scénarios de données avec le recuit
 			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
-				meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(scen, meilleurSolution,minimiser);
-				listSolution.put(scen, meilleurSolution);	
+				meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(scen.clone(), meilleurSolution.clone(), minimiser);
+				listSolution.put(scen, meilleurSolution);
 				
 				if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
 					realBestSolution = meilleurSolution;
@@ -97,7 +96,8 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			getProbleme().getTourRef().calculer(listSolution.values());
 			
 			continuer = true;
-			for(Graphe_Complet d:listSolution.keySet()){
+			for(Graphe_Complet d : listSolution.keySet()){
+				
 				// Permet de garder b à false pour la suite de la boucle en calculant les pénalités
 				continuer = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && continuer);
 				// Calcul des pénalités
@@ -108,38 +108,60 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 
 		return realBestSolution; //getProbleme().getTourRef();
 	}
-
-	// n'est jamais utilisé ...
-	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
-		System.out.println("On m'utilise contre mon gré");
+	
+	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
 		double t = 0;
-		boolean b;
-
+		double t_max = 10000;
+		boolean continuer;
+		
+		// Configurer le problème comme stochastique
 		getProbleme().setUseStochastique(true);
 		
+		Circuit_Hamiltonien meilleurSolution = solInit;
+		Circuit_Hamiltonien realBestSolution = solInit;
+		// Création des scénarios avec les solutions du recuit
 		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
-		for(Graphe_Complet scen: echantillon){
-			listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP
+		for(Graphe_Complet graphe: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
+			meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(graphe.clone(), meilleurSolution.clone(), minimiser);
+			listSolution.put(graphe, meilleurSolution.clone());
+			
+			if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
+				realBestSolution = meilleurSolution.clone();
 		}
+		
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu().clone());
+		// Création et calcul du tour de référence à partir des scénarios initiés
 		getProbleme().getTourRef().calculer(listSolution.values());
 		
 		do{
 			t = t + 1;
+			
+			// Nettoyer les solutions initiales des scénarios
 			listSolution.clear();
 
+			// Recalculer les solutions des scénarios de données avec le recuit
 			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
-				listSolution.put(scen, secondSolveur.resoudre(scen,solInit,minimiser)); //TSP		    	
+				meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(scen.clone(), meilleurSolution.clone(), minimiser);
+				listSolution.put(scen, meilleurSolution);
+				
+				if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
+					realBestSolution = meilleurSolution;
 			}
+			// Création et calcul du tour de référence à partir des scénarios initiés
 			getProbleme().getTourRef().calculer(listSolution.values());
-			b = true;
-			for(Graphe_Complet d:listSolution.keySet()){
-				b = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && b);
-				getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
+			
+			continuer = true;
+			for(Graphe_Complet d : listSolution.keySet()){
+				
+				// Permet de garder b à false pour la suite de la boucle en calculant les pénalités
+				continuer = (getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d)) && continuer);
+				// Calcul des pénalités
+				// getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
-		}while(!b);
+		}while(!continuer && t < t_max);
+		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
 
-		// Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
-		return getProbleme().getTourRef();
+		return realBestSolution; //getProbleme().getTourRef();
 	}
 
 	public String toStringAvgDet(){

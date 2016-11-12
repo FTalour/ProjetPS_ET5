@@ -46,6 +46,14 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
     	}
 	}
     
+    private double valNotZero(){
+    	double somme = 0;
+    	for (double valeur : getValues()){
+			if(valeur != 0) somme  += valeur;
+    	}
+    	return somme;
+    }
+    
     @SuppressWarnings("serial")
 	@Override
     public void affiche(JPanel j, double echelleLargeur, double echelleHauteur, double translationX, double translationY, Color c) {
@@ -93,7 +101,7 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
     @Override
     public String toString(){
     	//String ret="Nombre d'arêtes déterministes: "+getKeySet().size()+"\n";
-    	String ret="Total = 28.023695563\n";
+    	String ret="Total = " + this.valNotZero() + "\n";
         for(Arete a: getKeySet()){
             ret+= a+"\tutilisation: "+getValeur(a)+"\n";
         }

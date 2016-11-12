@@ -62,7 +62,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 		HashMap<Graphe_Complet, PhiLambda> hashMapscenariosAndPenality = new HashMap<Graphe_Complet, PhiLambda>();
 		int nombreDet = (int) (getJeu().clone().getListAretes().size()*(pourcentDet/100));
 		HashSet<Arete> hashSetArretesDetSelected = new HashSet<Arete>();
-		HashSet<Arete> hashSetArretesStoSelected = new HashSet<Arete>();
+		//HashSet<Arete> hashSetArretesStoSelected = new HashSet<Arete>();
 		for(int i = 0; i < nombreDet; i++){
 			int choix = (int) (Math.random()*getJeu().getListAretes().size());
 			while(hashSetArretesDetSelected.contains(getJeu().getListAretes().get(choix))){
@@ -72,10 +72,11 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 			hashSetArretesDetSelected.add(getJeu().getListAretes().get(choix));
 		}
 		
+		/*
 		for (Arete arr : getJeu().clone().getListAretes()){
 			if(hashSetArretesDetSelected.contains(arr)){}
 			else hashSetArretesStoSelected.add(arr);
-		}
+		}*/
 		
 		for(int i = 0; i < nombre; i++){
 			// Le graphe actuel change plein de fois pour prendre en compte les valeurs devenues stochastiques : Florian 
@@ -84,7 +85,7 @@ public class TSP extends Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltoni
 			Graphe_Complet graphe = new Graphe_Complet(getJeu().clone(), variation, hashSetArretesDetSelected);
 			// Je voudrais afficher le graphe cree pour voir ce qu'il donne
 			
-			hashMapscenariosAndPenality.put(graphe, new PhiLambda(hashSetArretesStoSelected));
+			hashMapscenariosAndPenality.put(graphe, new PhiLambda(hashSetArretesDetSelected));
 		}
 
 		// DonneesScenario regroupe des graphes et leurs pénalités

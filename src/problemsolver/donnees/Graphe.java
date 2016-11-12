@@ -23,8 +23,8 @@ import ui.Afficheur;
  * @author Clément
  */
 public class Graphe extends Donnees{
-    private final ArrayList<Noeud> listNoeuds;
-    private final HashMap<Integer, Arete> mapAretes;
+    private ArrayList<Noeud> listNoeuds;
+    private HashMap<Integer, Arete> mapAretes;
     private double[][] poidsArretes;
     private boolean DAinit;
     
@@ -64,7 +64,7 @@ public class Graphe extends Donnees{
         mapAretes = (HashMap<Integer, Arete>) g.mapAretes.clone();
         for(Arete a:g.mapAretes.values()){
         	if(!aretesSelectedAsDeteterministes.contains(a)) // on ne change que les aretes non deterministes
-        		a.setPoids(a.getPoids() + a.getPoids() * ((Math.random()*variation*2-variation)/(100.0)));
+        		a.setPoids(a.getPoids() + a.getPoids() * ((Math.random()*variation )/(100.0)));
         }
         maxX = g.maxX;
         maxY = g.maxY;
@@ -228,10 +228,13 @@ public class Graphe extends Donnees{
         return ret;
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Graphe clone() {
 		Graphe cloned = (Graphe) super.clone();
 		cloned.poidsArretes = poidsArretes.clone();
+		cloned.listNoeuds = (ArrayList<Noeud>) listNoeuds.clone();
+		cloned.mapAretes = (HashMap<Integer, Arete>) mapAretes.clone();
 		cloned.DAinit = DAinit;
 		cloned.maxX = Double.MIN_VALUE;
 		cloned.maxY = Double.MIN_VALUE;

@@ -56,7 +56,7 @@ public class Manager{
 		probleme.setUseStochastique(false);
         solveur.setProbleme(probleme);
         
-        new Solving(fichier, solveur, minimiser).run(); // lance la résolution dans un thread séparer
+        new Solving(solveur, minimiser).run(); // lance la résolution dans un thread séparer
         
     }
     

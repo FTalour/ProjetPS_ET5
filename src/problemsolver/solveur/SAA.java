@@ -37,7 +37,7 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		solveurSecondaire.setAffiche(false);
 
 		getProbleme().initialiserScenarios(20, 20, 10);
-		getProbleme().initialiserTourRef(getProbleme().getDonnees(),	getProbleme().getJeu());
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
 
 		// di yi ci zhu shi
 		int nombreDeScenario = getProbleme().getDonnees().getScenarios().size();
@@ -59,12 +59,10 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 
 		
 		Circuit_Hamiltonien min_CR = null;
-		for (int i = 0; i < listeEchantillon.size(); i++) {
+		for (int i = 0; i < listeEchantillon.size()-1; i++) {
 			Circuit_Hamiltonien echantillonTr =  (Circuit_Hamiltonien) solveurSecondaire.resoudre(donnees,solution, minimiser, listeEchantillon.get(i));
 			HashSet<Arete> hashSet = new HashSet<Arete>();
-			for (int j = 0; j < echantillonTr.getParcourt().size(); j++) {
-				hashSet.add(echantillonTr.getParcourt().get(i)) ;
-			}
+			hashSet.addAll(echantillonTr.getParcourt());
 			//getProbleme().initialiserTourRefSaa(new Circuit_TourReference(hashSet, echantillonTr.getGraphe()));
 			Circuit_Hamiltonien resultatRr = (Circuit_Hamiltonien) solveurSecondaire.resoudre(donnees,solution, minimiser, listeEchantillon.get(i));
 			if(min_CR==null)
