@@ -29,7 +29,6 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		double fMin = getProbleme().callFonctionObjectif(graphe, solutionCourante);
 		double deltaF = 0;
 		double valeurSolutionCourante = 0;
-		double valeurSolutionCouranteSaved = 0;
 		double fsolinit = 0;
 
 		Circuit_Hamiltonien solution_temp 			= null;
@@ -39,7 +38,6 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 		//long startTime = System.nanoTime();
 		do{
 			int i = 0;
-			valeurSolutionCouranteSaved = valeurSolutionCourante;
 			while (i < tailleProbleme * tailleProbleme) {
 				System.nanoTime();
 				solution_temp = getProbleme().voisinage(solutionCourante);
@@ -72,7 +70,7 @@ public class Recuit extends Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien
 			//boolean b = valeurSolutionCouranteSaved-0.001*tailleProbleme>=valeurSolutionCourante;
 			//boolean	c = valeurSolutionCourante>=valeurSolutionCouranteSaved+0.001*tailleProbleme;
 			//System.out.println("b : " + b + "    c : " + c);
-		}while(T > T0/100 && (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme));
+		}while(T > T0/100 /*&& (valeurSolutionCouranteSaved-0.5*tailleProbleme>=valeurSolutionCourante || valeurSolutionCourante>=valeurSolutionCouranteSaved+0.5*tailleProbleme)*/);
 		//long endTime = System.nanoTime();
 		//System.out.println("Duree totale de la boucle : " + (endTime-startTime)/1000000.0);
 		

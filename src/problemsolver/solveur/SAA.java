@@ -84,4 +84,9 @@ public class SAA extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		}
 		return distance;
 	}
+	
+	@Override
+	public String toString(){
+		return "saa";
+	}
 }

@@ -28,11 +28,11 @@ public class RecuitPha extends Solveur<Probleme<Graphe_Complet, Circuit_Hamilton
 		p.setProbleme((Probleme_Stochastique<Graphe_Complet, Circuit_Hamiltonien, DonneesScenario<Graphe_Complet, Arete, PhiLambda>, Circuit_TourReference>) this.getProbleme());
 		r.setProbleme(this.getProbleme());
 		System.out.println("Appel p.resoudre");
-		p.resoudre(graphe, solution, minimiser);
+		Circuit bestSolution = p.resoudre(graphe, solution, minimiser);
 		p.getProbleme().setUseHeuristique(true);
 		p.getProbleme().setUseStochastique(false);
 		System.out.println("Appel r.resoudre");
-		return r.resoudre(minimiser);
+		return bestSolution; // r.resoudre(minimiser);
 	}
 	
     @Override

@@ -30,8 +30,8 @@ public class Circuit_TourReference extends TourReference<Arete, Circuit>{
     
     /**
      * calcul la moyenne sur la collection des valeurs des arrêtes selectionnés
+     * Ne calcule pas une valeur de circuit
      */
-    
     @Override
 	public void calculer(Collection<? extends Circuit> collection) {
     	double div = collection.size();

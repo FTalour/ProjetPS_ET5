@@ -30,7 +30,6 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	private int variation;
 	private int pourcentDet;
 	private static final int DEFVAR = 20, DEFPER = 20;
-	// UTILISER PLUSIEURS THREAD POUR FAIRE LES RECUITS EN MÊME TEMPS
 
 	public Pha(int nbrS, Solveur<Probleme<Graphe_Complet, Circuit_Hamiltonien>> secondS, int var, int pDet) {
 		nombreScenarios = nbrS;
@@ -50,44 +49,36 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 	// dinittiales ne sert jamais, c'est pas normal, on ne devrait pas le modifié, il contient les données parser, on devrait modifier une copie
 	// Pour le SAA il vaudrait mieux que resoudre prenne directement une liste de scenarios
 	@Override
-	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
+	public Circuit_Hamiltonien resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser) throws ErreurDonneesException {
+		
 		double t = 0;
 		double t_max = 10000;
 		boolean continuer;
 		
-		// Timer
-		long startTime;
-		long endTime;
-		
 		// Configurer le problème comme stochastique
-		getProbleme().setUseStochastique(true);
+		//getProbleme().setUseStochastique(true);
 
 		// Création des scénarios et transformation du graphe actuel en stochastique avec les variations indiquées
-		getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios);
+		getProbleme().initialiserScenarios(variation, pourcentDet, nombreScenarios); //OK
 		
 		//Initialisation du tour de référence
-		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu());
-
-		startTime = System.nanoTime();
+		getProbleme().initialiserTourRef(getProbleme().getDonnees(), getProbleme().getJeu().clone());
 		
 		Circuit_Hamiltonien meilleurSolution = solInit;
+		Circuit_Hamiltonien realBestSolution = solInit;
 		// Création des scénarios avec les solutions du recuit
 		HashMap<Graphe_Complet, Circuit> listSolution = new HashMap<Graphe_Complet, Circuit>();
-		for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
-			long startTime1 = System.nanoTime();
-			meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(scen, meilleurSolution, minimiser);
-			long endTime1 = System.nanoTime();
-			System.out.println("Duree resolution d'un scénario: " + (endTime1-startTime1)/1000000.0);
+		for(Graphe_Complet graphe: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()) {
+			meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(graphe.clone(), meilleurSolution.clone(), minimiser);
+			listSolution.put(graphe, meilleurSolution.clone());
 			
-			listSolution.put(scen, meilleurSolution);
+			if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
+				realBestSolution = meilleurSolution.clone();
 		}
-		endTime = System.nanoTime();
-		System.out.println("Duree initialistion des solutions des '" + getProbleme().getDonnees().getScenarios().size() + "' scenarios, temps: " + (endTime-startTime)/1000000.0);
 		
+
 		// Création et calcul du tour de référence à partir des scénarios initiés
 		getProbleme().getTourRef().calculer(listSolution.values());
-		
-		long startTimeBoucle = System.nanoTime();
 		do{
 			t = t + 1;
 			
@@ -95,14 +86,13 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 			listSolution.clear();
 
 			// Recalculer les solutions des scénarios de données avec le recuit
-			startTime = System.nanoTime();
 			for(Graphe_Complet scen: (Set<Graphe_Complet>) getProbleme().getDonnees().getScenarios()){
 				meilleurSolution = (Circuit_Hamiltonien) secondSolveur.resoudre(scen, meilleurSolution,minimiser);
-				listSolution.put(scen, meilleurSolution);		    	
+				listSolution.put(scen, meilleurSolution);	
+				
+				if(meilleurSolution.distanceTotale() < realBestSolution.distanceTotale())
+					realBestSolution = meilleurSolution;
 			}
-			endTime = System.nanoTime();
-			System.out.println("Duree calcul des solutions de la boucle '" + t +"' : temps: " + (endTime-startTime)/1000000.0);
-			
 			// Création et calcul du tour de référence à partir des scénarios initiés
 			getProbleme().getTourRef().calculer(listSolution.values());
 			
@@ -114,17 +104,14 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 				// getProbleme().getDonnees().getPenalites(d).ajuster(getProbleme().getTourRef(),listSolution.get(d));
 			}
 		}while(!continuer && t < t_max);
-		long endTimeBoucle = System.nanoTime();
-		System.out.println("Duree de la boucle principale du Pha: " + (endTimeBoucle-startTimeBoucle)/1000000.0);
-		
 		//Afficheur.infoDialog("Terminé en "+t+" tours"); // uncomment to get annoying messages popoing up into your face
-		
-		// Renvoyer le tour de référence
-		return getProbleme().getTourRef();
+
+		return realBestSolution; //getProbleme().getTourRef();
 	}
 
 	// n'est jamais utilisé ...
 	public Circuit_TourReference resoudre(Graphe_Complet dinitiales, Circuit_Hamiltonien solInit, boolean minimiser,Echantillon echantillon) throws ErreurDonneesException{
+		System.out.println("On m'utilise contre mon gré");
 		double t = 0;
 		boolean b;
 
@@ -155,9 +142,13 @@ public class Pha extends Solveur<Probleme_Stochastique<Graphe_Complet, Circuit_H
 		return getProbleme().getTourRef();
 	}
 
+	public String toStringAvgDet(){
+		return "Moyenne des données déterministes "+donneesString();
+	}
+	
 	@Override
 	public String toString(){
-		return "Moyenne des données déterministes "+donneesString();
+		return "pha";
 	}
 
 	public String donneesString(){

@@ -5,6 +5,7 @@
  */
 package problemsolver.probleme;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class DonneesScenario<T extends Donnees, U extends Donnees, V extends Pen
         aretesDeterministes = lArete;
     }
     
-    public HashMap<T, V> getHashMapScenarios(){
+    public HashMap<T, V> getDonneesScenarios(){
     	return scenariosWithPenalities;
     }
     
@@ -40,7 +41,11 @@ public class DonneesScenario<T extends Donnees, U extends Donnees, V extends Pen
         return scenariosWithPenalities.get(d);
     }
     
-    public HashSet<U> getAretesStochastiques(){
+    public Collection<V> getPenalites(){
+        return scenariosWithPenalities.values();
+    }
+    
+    public HashSet<U> getAretesDeterministes(){
         return aretesDeterministes;
     }
     
